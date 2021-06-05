@@ -28,8 +28,12 @@ class ToDoViewController: UIViewController {
         
     }
     
+    @IBOutlet weak var btnAddTask: UIButton!
     @IBAction func btnAddTask(_ sender: Any) {
-        
+        // Present Add To Do VC
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddToDoVC") as! AddToDoViewController
+        vc.modalTransitionStyle = .coverVertical
+        self.present(vc, animated: true, completion: nil)
     }
     
 }

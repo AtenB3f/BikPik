@@ -10,10 +10,48 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Add To Do View Controller-->
+        <scene sceneID="VKK-Gb-Tsm">
+            <objects>
+                <viewController storyboardIdentifier="AddToDoVC" id="lTo-3V-92w" customClass="AddToDoViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="G0c-a3-AgD">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VZe-9n-WfW">
+                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="Add Task" id="VDv-F0-fal">
+                                        <barButtonItem key="leftBarButtonItem" title="Cancle" id="tmI-t2-DSl">
+                                            <connections>
+                                                <action selector="btnCancle:" destination="lTo-3V-92w" id="gqX-eS-G46"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Add" id="sZP-j3-rQg">
+                                            <connections>
+                                                <action selector="btnAdd:" destination="lTo-3V-92w" id="U68-7m-qfd"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Nrj-AG-NmX"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <connections>
+                        <outlet property="navigationAddTask" destination="VZe-9n-WfW" id="vhX-Th-ZCz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="30r-Te-yzw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1235" y="18"/>
+        </scene>
         <!--To Do View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ToDoViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ToDoListVC" id="BYZ-38-t0r" customClass="ToDoViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -21,9 +59,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dUD-AO-YbL">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="120"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12/25 (일)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NKo-H8-7uA">
-                                        <rect key="frame" x="147.66666666666666" y="71.666666666666671" width="118.99999999999997" height="33.333333333333329"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12/25" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NKo-H8-7uA">
+                                        <rect key="frame" x="166.33333333333334" y="72.666666666666671" width="81.666666666666657" height="32.333333333333329"/>
+                                        <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="28"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -128,6 +166,7 @@
                     </view>
                     <connections>
                         <outlet property="Day" destination="NKo-H8-7uA" id="IMJ-34-bq0"/>
+                        <outlet property="btnAddTask" destination="J8R-Nf-4zg" id="3Lc-wg-Vfh"/>
                         <outlet property="scrlToDoList" destination="uuC-Jk-fJw" id="yCA-5e-Q4F"/>
                     </connections>
                 </viewController>
