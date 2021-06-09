@@ -10,7 +10,6 @@ import UIKit
 class ToDoViewController: UIViewController {
     
     @IBOutlet weak var Day: UILabel!
-    @IBOutlet weak var scrlToDoList: UIScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +34,6 @@ class ToDoViewController: UIViewController {
         vc.modalTransitionStyle = .coverVertical
         self.present(vc, animated: true, completion: nil)
     }
+
     
-    @IBAction func taskName(_ sender: Any) {
-    }
 }
