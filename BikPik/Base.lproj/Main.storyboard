@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -23,6 +24,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="ign-v5-m4V"/>
                                 </constraints>
+                                <color key="tintColor" name="BikPik Color"/>
                                 <items>
                                     <navigationItem title="Add Task" id="VDv-F0-fal">
                                         <barButtonItem key="leftBarButtonItem" title="Cancle" id="tmI-t2-DSl">
@@ -72,7 +74,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="31" id="n2m-hb-dHg"/>
                                                                 </constraints>
-                                                                <color key="onTintColor" systemColor="systemYellowColor"/>
+                                                                <color key="onTintColor" name="BikPik Color"/>
                                                                 <connections>
                                                                     <action selector="swtToday:" destination="lTo-3V-92w" eventType="valueChanged" id="whU-Lf-pwi"/>
                                                                 </connections>
@@ -83,18 +85,18 @@
                                                         <rect key="frame" x="22.666666666666657" y="171" width="330" height="50"/>
                                                         <subviews>
                                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="53p-96-4gf">
-                                                                <rect key="frame" x="10" y="0.0" width="320" height="50"/>
+                                                                <rect key="frame" x="-10" y="0.0" width="320" height="50"/>
+                                                                <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="50" id="EXX-wy-nn4"/>
                                                                 </constraints>
                                                             </datePicker>
                                                         </subviews>
-                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                        <color key="backgroundColor" name="Background Color"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="D39-Fq-tqL"/>
                                                             <constraint firstItem="53p-96-4gf" firstAttribute="centerY" secondItem="T5k-EL-LuR" secondAttribute="centerY" id="TEw-HN-xfo"/>
-                                                            <constraint firstItem="53p-96-4gf" firstAttribute="trailing" secondItem="T5k-EL-LuR" secondAttribute="trailing" id="dcm-kC-u1x"/>
-                                                            <constraint firstAttribute="trailing" secondItem="53p-96-4gf" secondAttribute="trailing" id="wOa-uz-WzP"/>
+                                                            <constraint firstItem="53p-96-4gf" firstAttribute="trailing" secondItem="T5k-EL-LuR" secondAttribute="trailing" constant="-20" id="dcm-kC-u1x"/>
                                                         </constraints>
                                                     </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3qh-OV-Syt" userLabel="Repeat Sel Stack View">
@@ -108,7 +110,7 @@
                                                             </label>
                                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="Repeat" translatesAutoresizingMaskIntoConstraints="NO" id="PUk-7k-o6R" userLabel="Repeat Switch">
                                                                 <rect key="frame" x="281" y="0.0" width="51" height="31"/>
-                                                                <color key="onTintColor" systemColor="systemYellowColor"/>
+                                                                <color key="onTintColor" name="BikPik Color"/>
                                                                 <connections>
                                                                     <action selector="swtRepeat:" destination="lTo-3V-92w" eventType="valueChanged" id="VDt-aR-WT6"/>
                                                                 </connections>
@@ -127,17 +129,17 @@
                                                                             <constraint firstAttribute="width" constant="50" id="rMD-hg-KRV"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <nil key="textColor"/>
-                                                                        <nil key="highlightedColor"/>
+                                                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </label>
                                                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="r4t-6X-nQy" userLabel="Start Date Picker">
                                                                         <rect key="frame" x="65" y="0.0" width="100" height="40"/>
+                                                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="100" id="H1M-Et-fvh"/>
                                                                         </constraints>
                                                                     </datePicker>
                                                                 </subviews>
-                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                <color key="backgroundColor" name="Background Color"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="1CV-tq-i4c"/>
                                                                     <constraint firstAttribute="trailing" secondItem="r4t-6X-nQy" secondAttribute="trailing" id="9Sx-9h-M8d"/>
@@ -157,17 +159,18 @@
                                                                             <constraint firstAttribute="width" constant="50" id="Vye-1X-zf2"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <nil key="textColor"/>
+                                                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <datePicker contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="4MY-Y4-Za4">
                                                                         <rect key="frame" x="65" y="0.0" width="100" height="40"/>
+                                                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="100" id="USM-5f-5i6"/>
                                                                         </constraints>
                                                                     </datePicker>
                                                                 </subviews>
-                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                <color key="backgroundColor" name="Background Color"/>
                                                                 <constraints>
                                                                     <constraint firstItem="4MY-Y4-Za4" firstAttribute="centerY" secondItem="eId-J6-Ss6" secondAttribute="centerY" id="5lm-5F-Coo"/>
                                                                     <constraint firstAttribute="height" constant="40" id="5sH-PW-cR8"/>
@@ -183,38 +186,75 @@
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgX-dc-tH1">
                                                                         <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
-                                                                        <color key="tintColor" systemColor="systemYellowColor"/>
                                                                         <state key="normal" title="All">
-                                                                            <color key="titleColor" systemColor="systemYellowColor"/>
+                                                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <connections>
+                                                                            <action selector="btnRepeat:" destination="lTo-3V-92w" eventType="touchUpInside" id="ROJ-dm-2IL"/>
+                                                                        </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lvh-kQ-Kib">
+                                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lvh-kQ-Kib">
                                                                         <rect key="frame" x="38" y="0.0" width="30.333333333333329" height="30"/>
-                                                                        <state key="normal" title="월"/>
+                                                                        <state key="normal" title="월">
+                                                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="btnRepeat:" destination="lTo-3V-92w" eventType="touchUpInside" id="Yt3-ea-psC"/>
+                                                                        </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5L-ar-iad" userLabel="화">
-                                                                        <rect key="frame" x="76.333333333333314" y="0.0" width="30" height="30"/>
-                                                                        <state key="normal" title="화"/>
+                                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5L-ar-iad" userLabel="Btn Repeat Tue">
+                                                                        <rect key="frame" x="76.333333333333329" y="0.0" width="30" height="30"/>
+                                                                        <state key="normal" title="화">
+                                                                            <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="btnRepeat:" destination="lTo-3V-92w" eventType="touchUpInside" id="9oi-f4-Fxw"/>
+                                                                        </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofF-Ww-uWu">
-                                                                        <rect key="frame" x="114.33333333333331" y="0.0" width="30.333333333333329" height="30"/>
-                                                                        <state key="normal" title="수"/>
+                                                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofF-Ww-uWu">
+                                                                        <rect key="frame" x="114.33333333333333" y="0.0" width="30.333333333333329" height="30"/>
+                                                                        <state key="normal" title="수">
+                                                                            <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="btnRepeat:" destination="lTo-3V-92w" eventType="touchUpInside" id="SOF-vf-tWB"/>
+                                                                        </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3T2-43-IW4">
-                                                                        <rect key="frame" x="152.66666666666663" y="0.0" width="30" height="30"/>
-                                                                        <state key="normal" title="목"/>
+                                                                    <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3T2-43-IW4" userLabel="Btn Repeat Thu">
+                                                                        <rect key="frame" x="152.66666666666666" y="0.0" width="30" height="30"/>
+                                                                        <state key="normal" title="목">
+                                                                            <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="btnRepeat:" destination="lTo-3V-92w" eventType="touchUpInside" id="jVN-ay-8zn"/>
+                                                                        </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K2w-Bx-ZQ8">
-                                                                        <rect key="frame" x="190.66666666666663" y="0.0" width="30" height="30"/>
-                                                                        <state key="normal" title="금"/>
+                                                                    <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K2w-Bx-ZQ8">
+                                                                        <rect key="frame" x="190.66666666666666" y="0.0" width="30" height="30"/>
+                                                                        <state key="normal" title="금">
+                                                                            <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="btnRepeat:" destination="lTo-3V-92w" eventType="touchUpInside" id="SOf-5s-suz"/>
+                                                                        </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCc-EM-8T3">
+                                                                    <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCc-EM-8T3">
                                                                         <rect key="frame" x="228.66666666666669" y="0.0" width="30.333333333333314" height="30"/>
-                                                                        <state key="normal" title="토"/>
+                                                                        <state key="normal" title="토">
+                                                                            <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="btnRepeat:" destination="lTo-3V-92w" eventType="touchUpInside" id="cIC-Ia-LTC"/>
+                                                                        </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ocn-PF-buT">
+                                                                    <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ocn-PF-buT">
                                                                         <rect key="frame" x="267" y="0.0" width="30" height="30"/>
-                                                                        <state key="normal" title="일"/>
+                                                                        <state key="normal" title="일">
+                                                                            <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="btnRepeat:" destination="lTo-3V-92w" eventType="touchUpInside" id="L5e-ag-4UC"/>
+                                                                        </connections>
                                                                     </button>
                                                                 </subviews>
                                                                 <constraints>
@@ -222,7 +262,7 @@
                                                                 </constraints>
                                                             </stackView>
                                                         </subviews>
-                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                        <color key="backgroundColor" name="Background Color"/>
                                                         <constraints>
                                                             <constraint firstItem="eId-J6-Ss6" firstAttribute="width" secondItem="8B3-H4-EIM" secondAttribute="width" multiplier="0.5" id="22a-sG-vgI"/>
                                                             <constraint firstItem="655-au-qBZ" firstAttribute="top" secondItem="eId-J6-Ss6" secondAttribute="bottom" constant="10" id="6K9-Q6-v6F"/>
@@ -247,6 +287,8 @@
                                                             </label>
                                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="Arlam" translatesAutoresizingMaskIntoConstraints="NO" id="qqJ-Sb-ojP" userLabel="Alram Switch">
                                                                 <rect key="frame" x="281" y="0.0" width="51" height="31"/>
+                                                                <color key="tintColor" name="BikPik Color"/>
+                                                                <color key="onTintColor" name="BikPik Color"/>
                                                                 <connections>
                                                                     <action selector="swtAlram:" destination="lTo-3V-92w" eventType="valueChanged" id="1ai-8w-0hf"/>
                                                                 </connections>
@@ -282,7 +324,7 @@
                                             </view>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="8v2-mr-Czi" secondAttribute="bottom" constant="-170" id="6Ae-Eg-kMa"/>
+                                            <constraint firstAttribute="bottom" secondItem="8v2-mr-Czi" secondAttribute="bottom" id="6Ae-Eg-kMa"/>
                                             <constraint firstItem="8v2-mr-Czi" firstAttribute="centerX" secondItem="BQi-G2-4Zc" secondAttribute="centerX" id="DAd-1y-2LQ"/>
                                             <constraint firstItem="8v2-mr-Czi" firstAttribute="top" secondItem="BQi-G2-4Zc" secondAttribute="top" id="DMc-wG-Ln4"/>
                                             <constraint firstAttribute="trailing" secondItem="8v2-mr-Czi" secondAttribute="trailing" constant="14" id="KxI-fb-ohp"/>
@@ -312,6 +354,14 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btnRepeatAll" destination="pgX-dc-tH1" id="FAf-6K-eFf"/>
+                        <outlet property="btnRepeatFri" destination="K2w-Bx-ZQ8" id="DDX-sh-8a3"/>
+                        <outlet property="btnRepeatMon" destination="lvh-kQ-Kib" id="gSJ-HZ-oQh"/>
+                        <outlet property="btnRepeatSat" destination="uCc-EM-8T3" id="E6k-gX-CgN"/>
+                        <outlet property="btnRepeatSun" destination="Ocn-PF-buT" id="BWE-4x-Z2w"/>
+                        <outlet property="btnRepeatThu" destination="3T2-43-IW4" id="dSV-Ad-esG"/>
+                        <outlet property="btnRepeatTue" destination="d5L-ar-iad" id="EqR-lk-8hp"/>
+                        <outlet property="btnRepeatWed" destination="ofF-Ww-uWu" id="taX-0i-fVa"/>
                         <outlet property="navigationAddTask" destination="VZe-9n-WfW" id="vhX-Th-ZCz"/>
                         <outlet property="swtAlram" destination="qqJ-Sb-ojP" id="moE-1e-w2H"/>
                         <outlet property="swtRepeat" destination="PUk-7k-o6R" id="x0a-uH-n1f"/>
@@ -338,14 +388,14 @@
                                 <rect key="frame" x="0.0" y="44" width="375" height="80"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12/25" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NKo-H8-7uA">
-                                        <rect key="frame" x="146.66666666666663" y="32.666666666666671" width="82" height="32.333333333333329"/>
+                                        <rect key="frame" x="146.66666666666666" y="32.666666666666671" width="82" height="32.333333333333329"/>
                                         <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="28"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFc-kO-BRP">
                                         <rect key="frame" x="331" y="38" width="24" height="22"/>
-                                        <color key="tintColor" systemColor="systemYellowColor"/>
+                                        <color key="tintColor" name="BikPik Color"/>
                                         <state key="normal">
                                             <imageReference key="image" image="square.grid.2x2.fill" catalog="system" symbolScale="large"/>
                                         </state>
@@ -389,7 +439,7 @@
                                             <constraint firstAttribute="width" constant="50" id="d2V-VE-tAg"/>
                                             <constraint firstAttribute="height" constant="50" id="hQa-LG-97H"/>
                                         </constraints>
-                                        <color key="tintColor" systemColor="systemYellowColor"/>
+                                        <color key="tintColor" name="BikPik Color"/>
                                         <state key="normal" backgroundImage="plus.circle.fill" catalog="system"/>
                                         <connections>
                                             <action selector="btnAddTask:" destination="BYZ-38-t0r" eventType="touchUpInside" id="21V-k7-aqq"/>
@@ -433,6 +483,12 @@
     <resources>
         <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
         <image name="square.grid.2x2.fill" catalog="system" width="128" height="114"/>
+        <namedColor name="Background Color">
+            <color red="0.94999999999999996" green="0.94999999999999996" blue="0.94999999999999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="BikPik Color">
+            <color red="1" green="0.83633309602737427" blue="0.38006824254989624" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

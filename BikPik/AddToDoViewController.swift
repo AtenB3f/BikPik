@@ -12,19 +12,19 @@ class AddToDoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewDate.layer.cornerRadius = 5
-        //viewDate.layer.borderWidth = 4
-        viewDate.layer.backgroundColor = UIColor.lightGray.cgColor
+        viewDate.layer.cornerRadius = 10
+        viewTimeSel.layer.cornerRadius = 10
+        viewStart.layer.cornerRadius = 10
+        viewEnd.layer.cornerRadius = 10
         
-        viewTimeSel.layer.cornerRadius = 5
-        //viewTimeSel.layer.borderWidth = 4
-        viewTimeSel.layer.backgroundColor = UIColor.lightGray.cgColor
-        
-        viewStart.layer.cornerRadius = 5
-        viewStart.layer.backgroundColor = UIColor.lightGray.cgColor
-        
-        viewEnd.layer.cornerRadius = 5
-        viewEnd.layer.backgroundColor = UIColor.lightGray.cgColor
+        btnRepeatAll.layer.cornerRadius = 6
+        btnRepeatMon.layer.cornerRadius = 6
+        btnRepeatTue.layer.cornerRadius = 6
+        btnRepeatWed.layer.cornerRadius = 6
+        btnRepeatThu.layer.cornerRadius = 6
+        btnRepeatFri.layer.cornerRadius = 6
+        btnRepeatSat.layer.cornerRadius = 6
+        btnRepeatSun.layer.cornerRadius = 6
     }
     
     // Navigation Add Task
@@ -57,6 +57,29 @@ class AddToDoViewController: UIViewController {
     @IBAction func swtRepeat(_ sender: Any) {
     }
     
+    
+    @IBOutlet weak var btnRepeatAll: UIButton!
+    @IBOutlet weak var btnRepeatMon: UIButton!
+    @IBOutlet weak var btnRepeatTue: UIButton!
+    @IBOutlet weak var btnRepeatWed: UIButton!
+    @IBOutlet weak var btnRepeatThu: UIButton!
+    @IBOutlet weak var btnRepeatFri: UIButton!
+    @IBOutlet weak var btnRepeatSat: UIButton!
+    @IBOutlet weak var btnRepeatSun: UIButton!
+    
+    
+    var btnRepeatSel = [Bool](repeating: false, count: 8)
+    @IBAction func btnRepeat(_ btn: UIButton) {
+        btnRepeatSel[btn.tag] = btnRepeatSel[btn.tag] ? false : true
+        
+        if btnRepeatSel[btn.tag] {
+            btn.layer.backgroundColor = UIColor.init(named: "BikPik Color")?.cgColor
+        }
+        else {
+            btn.layer.backgroundColor = UIColor.init(named: "Background Color")?.cgColor
+        }
+        
+    }
     
     @IBOutlet weak var viewDate: UIView!
     @IBOutlet weak var viewStart: UIView!
