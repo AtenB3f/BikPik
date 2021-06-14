@@ -21,6 +21,9 @@ class ToDoViewController: UIViewController {
         let strDate = dateFormatter.string(from: nowDate)
         Day.text = strDate
     }
+    override func viewWillAppear(_ animated: Bool) {
+        // To Do List Data Load
+    }
     
     
     @IBAction func btnMenu(_ sender: Any) {
