@@ -7,6 +7,8 @@
 
 import UIKit
 
+let AddToDoVC: Notification.Name = Notification.Name("AddToDoVC")
+
 class AddToDoViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -60,6 +62,8 @@ class AddToDoViewController: UIViewController {
         
         // Back to To Do LIst Page
         self.presentingViewController?.dismiss(animated: true)
+        
+        NotificationCenter.default.post(name: AddToDoVC, object: nil, userInfo: nil)
     }
     
     

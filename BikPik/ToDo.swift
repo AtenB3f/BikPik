@@ -107,6 +107,28 @@ class ToDoManager {
                 }
             }
         }
+        
+        sortTimeline(&list)
+    }
+    
+    func sortTimeline(_ taskArr: inout [String]) {
+        var tmpArr = taskArr
+        var sortArr: [String] = []
+        let cnt = taskArr.count - 1
+        var key: String
+        
+        // Seleted "in today"
+        for n in 0 ... cnt {
+            key = taskArr[n]
+            if tasks[key]?.inToday == true {
+                sortArr.append(taskArr[n])
+                tmpArr.remove(at: n)
+            }
+        }
+        
+        // Time Line
+        sortArr.append(contentsOf: tmpArr.sorted(by: <))
+        taskArr = sortArr
     }
     
     func SearchTask(_ date: String, _ taskName: String) -> Bool{

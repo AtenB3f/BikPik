@@ -24,10 +24,17 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // Today Date Change
         let _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerProc), userInfo: nil, repeats: true)
         timerProc()
-        
         mngToDo.LoadTask(Date.FullNowDate(), &taskList)
-        sortTimeline(&taskList)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: AddToDoVC, object: nil)
+        
     }
+    
+    @objc func didDismissPostCommentNotification(_1 noti: Notification) {
+        self.mngToDo.LoadTask(Date.FullNowDate(), &self.taskList)
+            OperationQueue.main.addOperation { // DispatchQueue도 가능.
+                self.ToDoTable.reloadData()
+            }
+        }
     
 
     @IBAction func btnMenu(_ sender: Any) {
@@ -78,25 +85,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return time!
     }
     
-    func sortTimeline(_ taskArr: inout [String]) {
-        var tmpArr = taskArr
-        var sortArr: [String] = []
-        let cnt = taskArr.count - 1
-        var key: String
-        
-        // Seleted "in today"
-        for n in 0 ... cnt {
-            key = taskArr[n]
-            if mngToDo.tasks[key]?.inToday == true {
-                sortArr.append(taskArr[n])
-                tmpArr.remove(at: n)
-            }
-        }
-        
-        // Time Line
-        sortArr.append(contentsOf: tmpArr.sorted(by: <))
-        taskArr = sortArr
-    }
+    
 }
 
 class ToDoCell: UITableViewCell {
