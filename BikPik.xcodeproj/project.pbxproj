@@ -7,18 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3141F0D62678965300E14EDF /* ToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3146791E266B6203008AEC4D /* ToDoViewController.swift */; };
+		3141F0D92678965F00E14EDF /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3141F0CF267874F000E14EDF /* DateFormat.swift */; };
 		3146790A266B6118008AEC4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31467909266B6118008AEC4D /* AppDelegate.swift */; };
 		3146790C266B6118008AEC4D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3146790B266B6118008AEC4D /* SceneDelegate.swift */; };
 		31467911266B6118008AEC4D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3146790F266B6118008AEC4D /* Main.storyboard */; };
 		31467913266B611B008AEC4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31467912266B611B008AEC4D /* Assets.xcassets */; };
 		31467916266B611B008AEC4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31467914266B611B008AEC4D /* LaunchScreen.storyboard */; };
-		3188ACA42671E617003239CC /* ToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3146791E266B6203008AEC4D /* ToDoViewController.swift */; };
 		3188ACA62671E61E003239CC /* AddToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31467922266BBABD008AEC4D /* AddToDoViewController.swift */; };
 		319DEF56267705C200299580 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF55267705C200299580 /* PageViewController.swift */; };
 		319DEF5C26770F4200299580 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF5B26770F4200299580 /* CalendarViewController.swift */; };
+		319DEF6126775F8100299580 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF6026775F8100299580 /* ToDo.swift */; };
+		319DEF65267782A200299580 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF64267782A200299580 /* Storage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3141F0CF267874F000E14EDF /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; usesTabs = 0; };
 		31467906266B6118008AEC4D /* BikPik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BikPik.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31467909266B6118008AEC4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3146790B266B6118008AEC4D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,6 +34,8 @@
 		31467922266BBABD008AEC4D /* AddToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoViewController.swift; sourceTree = "<group>"; };
 		319DEF55267705C200299580 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		319DEF5B26770F4200299580 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		319DEF6026775F8100299580 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
+		319DEF64267782A200299580 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,10 +74,13 @@
 				31467912266B611B008AEC4D /* Assets.xcassets */,
 				31467914266B611B008AEC4D /* LaunchScreen.storyboard */,
 				31467917266B611B008AEC4D /* Info.plist */,
+				3141F0CF267874F000E14EDF /* DateFormat.swift */,
 				319DEF55267705C200299580 /* PageViewController.swift */,
 				3146791E266B6203008AEC4D /* ToDoViewController.swift */,
 				31467922266BBABD008AEC4D /* AddToDoViewController.swift */,
 				319DEF5B26770F4200299580 /* CalendarViewController.swift */,
+				319DEF6026775F8100299580 /* ToDo.swift */,
+				319DEF64267782A200299580 /* Storage.swift */,
 			);
 			path = BikPik;
 			sourceTree = "<group>";
@@ -147,11 +156,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3188ACA62671E61E003239CC /* AddToDoViewController.swift in Sources */,
+				319DEF6126775F8100299580 /* ToDo.swift in Sources */,
 				319DEF56267705C200299580 /* PageViewController.swift in Sources */,
 				3146790A266B6118008AEC4D /* AppDelegate.swift in Sources */,
-				3188ACA42671E617003239CC /* ToDoViewController.swift in Sources */,
+				3141F0D62678965300E14EDF /* ToDoViewController.swift in Sources */,
+				319DEF65267782A200299580 /* Storage.swift in Sources */,
 				3146790C266B6118008AEC4D /* SceneDelegate.swift in Sources */,
 				319DEF5C26770F4200299580 /* CalendarViewController.swift in Sources */,
+				3141F0D92678965F00E14EDF /* DateFormat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
