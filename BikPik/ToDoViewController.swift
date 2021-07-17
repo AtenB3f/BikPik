@@ -88,7 +88,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         mngToDo.tasks[str]?.isDone = sender.isSelected
         
         //save data
-        mngToDo.saveTaskElement(mngToDo.tasks[str]!)
+        mngToDo.saveTask(mngToDo.tasks)
     }
     
     func displayTime(_ taskId: String) -> String{

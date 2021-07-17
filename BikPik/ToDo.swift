@@ -191,9 +191,6 @@ class ToDoManager {
         saveTaskList(taskList)
     }
     
-    func saveTaskElement (_ data: Task) {
-        storage.Save(data, "ToDoList.json")
-    }
     func saveTask (_ data: [String:Task]) {
         storage.Save(data, "ToDoList.json")
     }
