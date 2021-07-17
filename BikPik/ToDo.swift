@@ -69,7 +69,6 @@ class ToDoManager {
         } else {
             num = 0
         }
-        print("\(name) :: Load ID => \(num)")
         
         return num
     }
@@ -77,7 +76,6 @@ class ToDoManager {
     func LoadTaskList() {
         let file: String = "ToDoTaskList.json"
         taskList = storage.Search(file, as: [String].self) ?? []
-        print("LoadTaskList :: \(taskList)")
     }
     
     /*
@@ -94,7 +92,6 @@ class ToDoManager {
         list.removeAll()
         
         tasks = storage.Search(taskFile, as: [String: Task].self) ?? [:]
-        print("Load Task => \(tasks)")
         
         let numTask = taskList.count - 1
         if numTask >= 0 {
@@ -114,15 +111,28 @@ class ToDoManager {
     func sortTimeline(_ taskArr: inout [String]) {
         var tmpArr = taskArr
         var sortArr: [String] = []
-        let cnt = taskArr.count - 1
+        var deleteIdx: [Int] = []
+        var cnt = 0
         var key: String
         
-        // Seleted "in today"
-        for n in 0 ... cnt {
-            key = taskArr[n]
-            if tasks[key]?.inToday == true {
-                sortArr.append(taskArr[n])
-                tmpArr.remove(at: n)
+        cnt = taskArr.count - 1
+        if cnt >= 0 {
+            // Seleted "in today"
+            for n in 0 ... cnt {
+                key = taskArr[n]
+                if tasks[key]?.inToday == true {
+                    sortArr.append(taskArr[n])
+                    deleteIdx.append(n)
+                }
+            }
+        }
+        
+        // delete "In Today" Task
+        cnt = deleteIdx.count - 1
+        if cnt >= 0 {
+            for n in 0 ... cnt {
+                let idx = cnt - n
+                tmpArr.remove(at: deleteIdx[idx])
             }
         }
         
@@ -181,6 +191,9 @@ class ToDoManager {
         saveTaskList(taskList)
     }
     
+    func saveTaskElement (_ data: Task) {
+        storage.Save(data, "ToDoList.json")
+    }
     func saveTask (_ data: [String:Task]) {
         storage.Save(data, "ToDoList.json")
     }
