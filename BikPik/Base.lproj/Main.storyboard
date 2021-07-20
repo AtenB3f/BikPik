@@ -613,7 +613,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I8e-Ax-M0l">
                                 <rect key="frame" x="0.0" y="88" width="375" height="450"/>
                                 <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" placeholder="Task" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="eSW-ay-B0a">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" placeholder="Habit" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="eSW-ay-B0a">
                                         <rect key="frame" x="22.666666666666657" y="30" width="330" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="TdC-kN-uyR"/>
@@ -985,7 +985,6 @@
                             <constraint firstItem="C5s-EN-aSp" firstAttribute="centerX" secondItem="zzH-Lm-x3u" secondAttribute="centerX" id="0Bu-Sc-X7u"/>
                             <constraint firstItem="zzH-Lm-x3u" firstAttribute="bottom" secondItem="kCs-QX-Nxu" secondAttribute="bottom" constant="30" id="0vl-aD-hgD"/>
                             <constraint firstItem="inY-vl-ic1" firstAttribute="width" secondItem="sCM-9W-1Hb" secondAttribute="width" multiplier="0.9" id="3In-aa-XVI"/>
-                            <constraint firstItem="C5s-EN-aSp" firstAttribute="height" secondItem="sCM-9W-1Hb" secondAttribute="height" multiplier="0.0985222" id="8SV-Ow-ktf"/>
                             <constraint firstItem="zzH-Lm-x3u" firstAttribute="bottom" secondItem="inY-vl-ic1" secondAttribute="bottom" constant="10" id="CI8-P3-mpm"/>
                             <constraint firstItem="zzH-Lm-x3u" firstAttribute="trailing" secondItem="kCs-QX-Nxu" secondAttribute="trailing" constant="30" id="E4e-6y-2Uf"/>
                             <constraint firstItem="inY-vl-ic1" firstAttribute="centerX" secondItem="zzH-Lm-x3u" secondAttribute="centerX" id="fIq-3n-VFf"/>
