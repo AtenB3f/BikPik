@@ -19,7 +19,6 @@ class AddToDoViewController: UIViewController {
         viewTimeSel.layer.cornerRadius = 10
         viewStart.layer.cornerRadius = 10
         viewEnd.layer.cornerRadius = 10
-        btnRepeatAll.layer.cornerRadius = 6
         btnRepeatMon.layer.cornerRadius = 6
         btnRepeatTue.layer.cornerRadius = 6
         btnRepeatWed.layer.cornerRadius = 6
@@ -125,7 +124,6 @@ class AddToDoViewController: UIViewController {
     }
     
     // Select Repeat Days
-    @IBOutlet weak var btnRepeatAll: UIButton!
     @IBOutlet weak var btnRepeatMon: UIButton!
     @IBOutlet weak var btnRepeatTue: UIButton!
     @IBOutlet weak var btnRepeatWed: UIButton!

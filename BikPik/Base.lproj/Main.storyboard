@@ -193,17 +193,8 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="655-au-qBZ" userLabel="Repeat Sel Stack View">
                                                                 <rect key="frame" x="16.333333333333343" y="100" width="297" height="30"/>
                                                                 <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pgX-dc-tH1">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
-                                                                        <state key="normal" title="All">
-                                                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        </state>
-                                                                        <connections>
-                                                                            <action selector="btnRepeat:" destination="lTo-3V-92w" eventType="touchUpInside" id="ROJ-dm-2IL"/>
-                                                                        </connections>
-                                                                    </button>
                                                                     <button opaque="NO" tag="1" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lvh-kQ-Kib">
-                                                                        <rect key="frame" x="38" y="0.0" width="30.333333333333329" height="30"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="35.666666666666664" height="30"/>
                                                                         <state key="normal" title="월">
                                                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
@@ -212,7 +203,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d5L-ar-iad" userLabel="Btn Repeat Tue">
-                                                                        <rect key="frame" x="76.333333333333329" y="0.0" width="30" height="30"/>
+                                                                        <rect key="frame" x="43.666666666666671" y="0.0" width="35.333333333333329" height="30"/>
                                                                         <state key="normal" title="화">
                                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
@@ -221,7 +212,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofF-Ww-uWu">
-                                                                        <rect key="frame" x="114.33333333333333" y="0.0" width="30.333333333333329" height="30"/>
+                                                                        <rect key="frame" x="87" y="0.0" width="35.666666666666657" height="30"/>
                                                                         <state key="normal" title="수">
                                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
@@ -230,7 +221,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3T2-43-IW4" userLabel="Btn Repeat Thu">
-                                                                        <rect key="frame" x="152.66666666666666" y="0.0" width="30" height="30"/>
+                                                                        <rect key="frame" x="130.66666666666666" y="0.0" width="35.666666666666657" height="30"/>
                                                                         <state key="normal" title="목">
                                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
@@ -239,7 +230,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K2w-Bx-ZQ8">
-                                                                        <rect key="frame" x="190.66666666666666" y="0.0" width="30" height="30"/>
+                                                                        <rect key="frame" x="174.33333333333334" y="0.0" width="35.666666666666657" height="30"/>
                                                                         <state key="normal" title="금">
                                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
@@ -248,7 +239,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCc-EM-8T3">
-                                                                        <rect key="frame" x="228.66666666666669" y="0.0" width="30.333333333333314" height="30"/>
+                                                                        <rect key="frame" x="218" y="0.0" width="35.333333333333343" height="30"/>
                                                                         <state key="normal" title="토">
                                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
@@ -257,7 +248,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ocn-PF-buT">
-                                                                        <rect key="frame" x="267" y="0.0" width="30" height="30"/>
+                                                                        <rect key="frame" x="261.33333333333331" y="0.0" width="35.666666666666686" height="30"/>
                                                                         <state key="normal" title="일">
                                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
@@ -363,7 +354,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="btnRepeatAll" destination="pgX-dc-tH1" id="FAf-6K-eFf"/>
                         <outlet property="btnRepeatFri" destination="K2w-Bx-ZQ8" id="DDX-sh-8a3"/>
                         <outlet property="btnRepeatMon" destination="lvh-kQ-Kib" id="gSJ-HZ-oQh"/>
                         <outlet property="btnRepeatSat" destination="uCc-EM-8T3" id="E6k-gX-CgN"/>
