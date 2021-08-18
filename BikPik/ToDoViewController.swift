@@ -24,7 +24,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // Today Date Change
         let _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerProc), userInfo: nil, repeats: true)
         timerProc()
-        mngToDo.LoadTask(Date.FullNowDate(), &taskList)
+        mngToDo.loadTask(selDate, &taskList)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: AddToDoVC, object: nil)
         
@@ -32,7 +32,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     // 태스크 추가 후에 테이블 뷰 적용될 수 있게 하는 기능
     @objc func didDismissPostCommentNotification(_ noti: Notification) {
-        self.mngToDo.LoadTask(Date.FullNowDate(), &self.taskList)
+        self.mngToDo.loadTask(Date.FullNowDate(), &self.taskList)
             OperationQueue.main.addOperation {
                 self.ToDoTable.reloadData()
             }
@@ -53,8 +53,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var ToDoTable: UITableView!
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let cnt: Int = taskList.count
-        return cnt
+        return taskList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -67,6 +66,8 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             cell.time.text = displayTime(taskID)
             cell.isDone.tag = indexPath.row
             cell.isDone.addTarget(self, action: #selector(clickIsDone(_:)), for: .touchUpInside)
+            cell.setting.tag = indexPath.row
+            cell.setting.addTarget(self, action: #selector(clickSetting(_:)), for: .touchUpInside)
             
             return cell
         }else {
@@ -91,6 +92,16 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         mngToDo.saveTask(mngToDo.tasks)
     }
     
+    @objc func clickSetting (_ sender: UIButton) {
+        // 임시 삭제 함수.
+        //내일 하기, 수정하기, 삭제하기 등의 기능이 있는 뷰 띄우기 필요
+        let id = sender.tag
+        let taskName: String = taskList[id]
+        mngToDo.deleteTask(selDate, taskName)
+        mngToDo.loadTask(selDate, &taskList)
+        self.ToDoTable.reloadData()
+    }
+    
     func displayTime(_ taskId: String) -> String{
         var time: String?
         
@@ -99,7 +110,6 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else {
             time = mngToDo.tasks[taskId]?.time
         }
-        
         return time!
     }
 }
@@ -110,6 +120,7 @@ class ToDoCell: UITableViewCell {
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var isDone: UIButton!
     @IBOutlet weak var task: UILabel!
+    @IBOutlet weak var setting: UIButton!
     
     /*
      [isDone]

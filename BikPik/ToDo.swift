@@ -13,13 +13,17 @@ struct Task: Codable, Equatable{
     var inToday : Bool = false
     var date : String = ""
     var time : String = "00:00"
-    var habit : Bool = false
-    var start : String = ""
-    var end : String = ""
     var alram : Bool = false
-    var rptDay : [Bool] = [Bool](repeating: false, count: 8)
     var isDone : Bool = false
     var project : String?
+    var color : String?
+}
+
+struct Habit: Codable, Equatable {
+    var task: Task = Task()
+    var start : String
+    var end : String
+    var days : [Bool] = [Bool](repeating: false, count: 7)
 }
 
 /*
@@ -55,11 +59,11 @@ class ToDoManager {
     
     static let managerToDo: ToDoManager = ToDoManager()
     private init() {
-        LoadTaskList()
+        loadTaskList()
     }
 
     // return number of ID
-    func LoadId(_ name: String) -> Int {
+    func loadId(_ name: String) -> Int {
         var num: Int = 0
         let idFile: String = "ToDoIdList.json"
         idList = storage.Search(idFile, as: [String: Int].self) ?? [:]
@@ -73,7 +77,7 @@ class ToDoManager {
         return num
     }
     
-    func LoadTaskList() {
+    func loadTaskList() {
         let file: String = "ToDoTaskList.json"
         taskList = storage.Search(file, as: [String].self) ?? []
     }
@@ -84,7 +88,7 @@ class ToDoManager {
      date : "yyyyMMdd" Format   (ex)20200706
      list : String Array
      */
-    func LoadTask(_ date: String, _ list : inout [String]){
+    func loadTask(_ date: String, _ list : inout [String]){
         let taskFile: String = "ToDoList.json"
         var taskName: String
         
@@ -99,7 +103,7 @@ class ToDoManager {
                 taskName = taskList[n]
                 print("TASK NAME :: \(taskName)")
                 
-                if SearchTask(date, taskName) {
+                if searchTask(date, taskName) {
                     list.append(taskName)
                 }
             }
@@ -141,30 +145,33 @@ class ToDoManager {
         taskArr = sortArr
     }
     
-    func SearchTask(_ date: String, _ taskName: String) -> Bool{
+    func searchTask(_ date: String, _ taskName: String) -> Bool{
+        /*
         var intStart: Int
         var intEnd: Int
         let intDate: Int = Int(date) ?? 0
-        
+        */
         
         if tasks[taskName]?.date == date{
             return true
         }
         
+        /*
         if tasks[taskName]?.habit == false {
             return false
         }
         if let start = tasks[taskName]?.start {intStart = Int(start) ?? 0} else {return false}
         if let end = tasks[taskName]?.start {intEnd = Int(end) ?? 0} else {return false}
         
+        
         if intStart <= intDate || intDate <= intEnd {
             return true
         }
-        
+        */
         return false
     }
     
-    func CreateTask(_ data : inout Task) {
+    func createTask(_ data : inout Task) {
         var key: String = ""
         var id :Int = 0
         key = data.name
@@ -191,6 +198,31 @@ class ToDoManager {
         saveTaskList(taskList)
     }
     
+    func deleteTask(_ date : String, _ key: String) {
+        let taskName = tasks[key]!.name
+        
+        if tasks[key] != nil {
+            tasks.removeValue(forKey: key)
+            saveTask(tasks)
+        }
+        
+        if let id = idList[taskName] {
+            if id > 0 {
+                idList[taskName] = idList[date]! - 1
+            } else {
+                idList.removeValue(forKey: taskName)
+            }
+            saveID(idList)
+        }
+        
+        if let arrIdx = taskList.firstIndex(of: key) {
+            taskList.remove(at: arrIdx)
+            saveTaskList(taskList)
+        }
+        
+        tasks.removeValue(forKey: key)
+    }
+    
     func saveTask (_ data: [String:Task]) {
         storage.Save(data, "ToDoList.json")
     }
@@ -200,5 +232,6 @@ class ToDoManager {
     func saveTaskList (_ arr: [String]) {
         storage.Save(arr, "ToDoTaskList.json")
     }
+    
     
 }

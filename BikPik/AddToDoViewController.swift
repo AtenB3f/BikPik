@@ -14,33 +14,44 @@ class AddToDoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Radius Settings
-        viewDate.layer.cornerRadius = 10
-        viewTimeSel.layer.cornerRadius = 10
-        viewStart.layer.cornerRadius = 10
-        viewEnd.layer.cornerRadius = 10
-        btnRepeatMon.layer.cornerRadius = 6
-        btnRepeatTue.layer.cornerRadius = 6
-        btnRepeatWed.layer.cornerRadius = 6
-        btnRepeatThu.layer.cornerRadius = 6
-        btnRepeatFri.layer.cornerRadius = 6
-        btnRepeatSat.layer.cornerRadius = 6
-        btnRepeatSun.layer.cornerRadius = 6
-        
-        // view 초기 접기
-        //viewDate.frame.size.height = CGFloat(0)
+        setLayout()
         
         // Data Init
         data.date = Date.FullNowDate()
         data.time = Date.NowTime()
-        data.start = Date.FullNowDate()
-        data.end = Date.FullNowDate()
         
-        timePicker.frame.size.height = 0
-        viewTimeSel.frame.size.height = 0
     }
     
-    var data: Task! = Task()
+    
+    func setLayout() {
+        //fldTask.translatesAutoresizingMaskIntoConstraints = true
+        //fldTask.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive =  true
+        //fldTask.widthAnchor.constraint(equalTo: contentsView.widthAnchor, multiplier: 0.4 ).isActive = true
+        //fldTask.widthAnchor.constraint(equalTo: fldTask.superview?.widthAnchor ?? view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.5).isActive = true
+        
+        //fldTask.topAnchor.constraint(equalTo: navigationAddTask.bottomAnchor , constant: 30).isActive = true
+        
+        todayStackView.translatesAutoresizingMaskIntoConstraints = true
+        todayStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        
+        viewTimeSel.translatesAutoresizingMaskIntoConstraints = true
+        viewTimeSel.topAnchor.constraint(equalTo: todayStackView.bottomAnchor, constant: 20).isActive = true
+        viewTimeSel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
+        //viewTimeSel.widthAnchor.constraint(equalTo: todayStackView.widthAnchor, multiplier: 2.0).isActive = true
+        
+        timePicker.translatesAutoresizingMaskIntoConstraints = true
+        timePicker.trailingAnchor.constraint(equalTo: viewTimeSel.trailingAnchor, constant: 10.0).isActive = true
+        
+        viewAlram.translatesAutoresizingMaskIntoConstraints = true
+        viewAlram.centerXAnchor.constraint(equalTo: viewTimeSel.centerXAnchor).isActive = true
+        
+        // Radius Settings
+        viewTimeSel.layer.cornerRadius = 10
+
+        
+        timeSelViewSize = viewTimeSel.frame
+        print("FRAME SIZE IS \(timeSelViewSize)")
+    }
     
     // Navigation Cancle
     @IBOutlet weak var navigationAddTask: UINavigationBar!
@@ -57,7 +68,7 @@ class AddToDoViewController: UIViewController {
         data.name = name
         
         // Save Data
-        managerToDo.CreateTask(&data)
+        managerToDo.createTask(&data)
         
         // Back to To Do LIst Page
         self.presentingViewController?.dismiss(animated: true)
@@ -65,39 +76,75 @@ class AddToDoViewController: UIViewController {
         NotificationCenter.default.post(name: AddToDoVC, object: nil, userInfo: nil)
     }
     
+
+    @IBOutlet weak var contentsView: UIView!
+    
+    // timeSelView size copy
+    var timeSelViewSize: CGRect? = nil
+    var data: Task! = Task()
+    
     
     @IBOutlet weak var fldTask: UITextField!
     // Scroll View
     @IBAction func fldTask(_ sender: Any) {
     }
     
-    
+    @IBOutlet weak var todayStackView: UIStackView!
     @IBOutlet weak var swtToday: UISwitch!
     @IBOutlet weak var viewTimeSel: UIView!
     @IBAction func swtToday(_ sender: Any) {
         data.inToday = swtToday.isOn
         if swtToday.isOn {
-            // viewTimeSel open
-            
-            //var size: CGRect = viewTimeSel.frame
-            viewTimeSel.frame.size.height = 100
-            timePicker.frame.size.height = 60
-            
             data.time = "00:00"
+            closeSetTimeView()
         } else {
-            timePicker.frame.size.height = 0
-            viewTimeSel.frame.size.height = 0
-            
             data.time = Date.TimeForm(timePicker)
+            openSetTimeView()
         }
-    }
         
+        print(viewTimeSel.frame)
+    }
+    
+    func openSetTimeView() {
+        // setTimeView height = ??
+        // TimePicker height = ??
+        // Alram height = ??
+        
+        let sizeH: CGFloat = 110.0
+        viewTimeSel.frame.origin = timeSelViewSize!.origin
+        viewTimeSel.frame.size.height = sizeH
+        contentsView.addSubview(viewTimeSel)
+        timePicker.frame.size.height = 30.0
+        contentsView.addSubview(timePicker)
+        
+    }
+    
+    func closeSetTimeView() {
+        // setTimeView height = 0
+        // TimePicker height = 0
+        // Alram height = 0
+        let sizeH: CGFloat = 0.0
+        viewTimeSel.frame.origin = timeSelViewSize!.origin
+        viewTimeSel.frame.size.height = sizeH
+        contentsView.addSubview(viewTimeSel)
+        timePicker.frame.size.height = sizeH
+        contentsView.addSubview(timePicker)
+    }
+    
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBAction func timePicker(_ sender: Any) {
         data.date = Date.DateForm(timePicker)
         data.time = Date.TimeForm(timePicker)
     }
     
+    @IBOutlet weak var viewAlram: UIStackView!
+    // Button Alram
+    @IBOutlet weak var swtAlram: UISwitch!
+    @IBAction func swtAlram(_ sender: Any) {
+        data.alram = swtAlram.isOn
+    }
+    
+    /*
     @IBOutlet weak var swtRepeat: UISwitch!
     @IBOutlet weak var viewDate: UIView!
     @IBOutlet weak var viewStart: UIView!
@@ -142,12 +189,6 @@ class AddToDoViewController: UIViewController {
         else {
             btn.layer.backgroundColor = UIColor.init(named: "Background Color")?.cgColor
         }
-        
     }
-    
-    // Button Alram
-    @IBOutlet weak var swtAlram: UISwitch!
-    @IBAction func swtAlram(_ sender: Any) {
-        data.alram = swtAlram.isOn
-    }
+ */
 }
