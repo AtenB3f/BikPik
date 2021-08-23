@@ -28,6 +28,8 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: AddToDoVC, object: nil)
         
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell))
+        ToDoTable.addGestureRecognizer(longPress)
     }
     
     // 태스크 추가 후에 테이블 뷰 적용될 수 있게 하는 기능
@@ -97,6 +99,51 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //내일 하기, 수정하기, 삭제하기 등의 기능이 있는 뷰 띄우기 필요
         let id = sender.tag
         let taskName: String = taskList[id]
+        mngToDo.deleteTask(selDate, taskName)
+        mngToDo.loadTask(selDate, &taskList)
+        self.ToDoTable.reloadData()
+    }
+    
+    @objc func longPressCell (_ sender: UIGestureRecognizer) {
+        // 뷰 띄우기
+        let taskName: String
+
+        if sender.state == UIGestureRecognizer.State.began {
+            let touchPoint = sender.location(in: ToDoTable)
+            
+            if let row = ToDoTable.indexPathForRow(at: touchPoint) {
+                let idx = row[1]
+                taskName = taskList[idx]
+                
+                // ålert 출력 이름 뒤에 아이디 빼기
+                
+                let alert = UIAlertController(title: taskName, message: "", preferredStyle: .alert)
+                let actRevise = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertRevise(taskName)})
+                let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(taskName)})
+                let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(taskName)})
+                
+                alert.addAction(actRevise)
+                alert.addAction(actTomorrow)
+                alert.addAction(actDelete)
+                present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func alertRevise(_ taskname: String) {
+        print("revise")
+    }
+    
+    func alertTomorrow(_ taskName: String) {
+        let date = mngToDo.tasks[taskName]!.date
+        
+        mngToDo.tasks[taskName]!.date = Date.NextDay(date)
+        mngToDo.saveTask(mngToDo.tasks)
+        mngToDo.loadTask(selDate, &taskList)
+        self.ToDoTable.reloadData()
+    }
+    
+    func alertDelete(_ taskName: String) {
         mngToDo.deleteTask(selDate, taskName)
         mngToDo.loadTask(selDate, &taskList)
         self.ToDoTable.reloadData()

@@ -106,4 +106,65 @@ extension Date {
         month = Int(date[IdxYM..<IdxMD])!
         day = Int(date[IdxMD ..< date.endIndex])!
     }
+    
+    static func GetStringDate (_ year: Int, _ month: Int, _ day: Int) -> String {
+        var date: String = String(year)
+        
+        date = month >= 10 ? date+String(month) : date+"0"+String(month)
+        date = day >= 10 ? date+String(day) : date+"0"+String(day)
+        
+        return date
+    }
+    
+    static func NextDay(_ date: String) -> String {
+        var year: Int = 0
+        var month: Int = 0
+        var day: Int = 0
+        
+        self.GetIntDate(date, &year, &month, &day)
+        
+        switch month {
+        case 1,3,5,7,8,10,12 :
+            if day >= 31 {
+                day = 1
+                if month == 12 {
+                    month = 1
+                } else {
+                    month += 1
+                }
+            } else {
+                day += 1
+            }
+            break
+        case 2 :
+            if year % 4 == 0 {
+                if day >= 29 {
+                    month += 1
+                    day = 1
+                } else {
+                    day += 1
+                }
+            } else {
+                if day >= 30 {
+                    month += 1
+                    day = 1
+                } else {
+                    day += 1
+                }
+            }
+            break
+        case 4,6,9,11 :
+            if day >= 30 {
+                day = 1
+                month += 1
+            } else {
+                day += 1
+            }
+            break
+        default:
+           break
+        }
+        
+        return GetStringDate(year, month, day)
+    }
 }

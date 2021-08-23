@@ -208,7 +208,7 @@ class ToDoManager {
         
         if let id = idList[taskName] {
             if id > 0 {
-                idList[taskName] = idList[date]! - 1
+                idList[taskName] = idList[taskName]! - 1
             } else {
                 idList.removeValue(forKey: taskName)
             }
