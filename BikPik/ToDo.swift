@@ -19,13 +19,6 @@ struct Task: Codable, Equatable{
     var color : String?
 }
 
-struct Habit: Codable, Equatable {
-    var task: Task = Task()
-    var start : String
-    var end : String
-    var days : [Bool] = [Bool](repeating: false, count: 7)
-}
-
 /*
  [Save File]
  1. "ToDoIdList.json"

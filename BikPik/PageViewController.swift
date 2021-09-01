@@ -16,7 +16,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
     let viewList : [UIViewController] = {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let p1 = storyBoard.instantiateViewController(withIdentifier: "ToDoVC")
-        let p2 = storyBoard.instantiateViewController(withIdentifier: "Page2")
+        let p2 = storyBoard.instantiateViewController(withIdentifier: "HabitVC")
         return [p1,p2]
     } ()
    

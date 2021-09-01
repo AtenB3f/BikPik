@@ -15,6 +15,9 @@
 		31467913266B611B008AEC4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31467912266B611B008AEC4D /* Assets.xcassets */; };
 		31467916266B611B008AEC4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31467914266B611B008AEC4D /* LaunchScreen.storyboard */; };
 		3188ACA62671E61E003239CC /* AddToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31467922266BBABD008AEC4D /* AddToDoViewController.swift */; };
+		3199943826DF606000F4DD5D /* HabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3199943726DF606000F4DD5D /* HabitViewController.swift */; };
+		3199943A26DF658700F4DD5D /* AddHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3199943926DF658700F4DD5D /* AddHabitViewController.swift */; };
+		3199943C26DF65C400F4DD5D /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3199943B26DF65C400F4DD5D /* Habit.swift */; };
 		319DEF56267705C200299580 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF55267705C200299580 /* PageViewController.swift */; };
 		319DEF5C26770F4200299580 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF5B26770F4200299580 /* CalendarViewController.swift */; };
 		319DEF6126775F8100299580 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF6026775F8100299580 /* ToDo.swift */; };
@@ -32,6 +35,9 @@
 		31467917266B611B008AEC4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3146791E266B6203008AEC4D /* ToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewController.swift; sourceTree = "<group>"; };
 		31467922266BBABD008AEC4D /* AddToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoViewController.swift; sourceTree = "<group>"; };
+		3199943726DF606000F4DD5D /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
+		3199943926DF658700F4DD5D /* AddHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitViewController.swift; sourceTree = "<group>"; };
+		3199943B26DF65C400F4DD5D /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
 		319DEF55267705C200299580 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		319DEF5B26770F4200299580 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		319DEF6026775F8100299580 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
@@ -81,6 +87,9 @@
 				319DEF5B26770F4200299580 /* CalendarViewController.swift */,
 				319DEF6026775F8100299580 /* ToDo.swift */,
 				319DEF64267782A200299580 /* Storage.swift */,
+				3199943726DF606000F4DD5D /* HabitViewController.swift */,
+				3199943926DF658700F4DD5D /* AddHabitViewController.swift */,
+				3199943B26DF65C400F4DD5D /* Habit.swift */,
 			);
 			path = BikPik;
 			sourceTree = "<group>";
@@ -156,12 +165,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				3188ACA62671E61E003239CC /* AddToDoViewController.swift in Sources */,
+				3199943A26DF658700F4DD5D /* AddHabitViewController.swift in Sources */,
 				319DEF6126775F8100299580 /* ToDo.swift in Sources */,
 				319DEF56267705C200299580 /* PageViewController.swift in Sources */,
 				3146790A266B6118008AEC4D /* AppDelegate.swift in Sources */,
 				3141F0D62678965300E14EDF /* ToDoViewController.swift in Sources */,
+				3199943C26DF65C400F4DD5D /* Habit.swift in Sources */,
 				319DEF65267782A200299580 /* Storage.swift in Sources */,
 				3146790C266B6118008AEC4D /* SceneDelegate.swift in Sources */,
+				3199943826DF606000F4DD5D /* HabitViewController.swift in Sources */,
 				319DEF5C26770F4200299580 /* CalendarViewController.swift in Sources */,
 				3141F0D92678965F00E14EDF /* DateFormat.swift in Sources */,
 			);
