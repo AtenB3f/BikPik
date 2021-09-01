@@ -7,21 +7,21 @@
 
 import UIKit
 extension Date {
-    static func TimeForm(_ time: UIDatePicker) -> String {
+    static func TimeForm(_ picker: UIDatePicker) -> String {
         let dateFormatter = Foundation.DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         
-        return dateFormatter.string(from: time.date)
+        return dateFormatter.string(from: picker.date)
     }
     
-    static func DateForm(_ date: UIDatePicker) -> String {
+    static func DateForm(_ picker: UIDatePicker) -> String {
         let dateFormatter = Foundation.DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd"
         
-        return dateFormatter.string(from: date.date)
+        return dateFormatter.string(from: picker.date)
     }
     
-    static func UserNowDate() -> String {
+    static func GetUserDateForm() -> String {
         
         let nowDate = Date()
         
@@ -29,6 +29,23 @@ extension Date {
         dateFormatter.dateFormat = "M/d"
 
         return dateFormatter.string(from: nowDate)
+    }
+    
+    static func GetUserDateForm(_ picker: UIDatePicker) -> String {
+        let dateFormatter = Foundation.DateFormatter()
+        dateFormatter.dateFormat = "M/d"
+
+        return dateFormatter.string(from: picker.date)
+    }
+    
+    static func GetUserDate(_ date: String) -> String{
+        var year = 0
+        var month = 0
+        var day = 0
+        
+        GetIntDate(date, &year, &month, &day)
+        
+        return String(month) + "/" + String(day)
     }
     
     static func FullNowDate() -> String {
@@ -74,6 +91,22 @@ extension Date {
      return: "Mon" / "Tue" / ...
      */
     static func GetDayWeek (year: Int, month: Int, day: Int) -> String? {
+        
+        let dd = GetIntDayWeek(year: year, month: month, day: day) ?? 0
+        // "Sun" / "Mon" / "Tue" / "Wed" / "Thu" / "Fri"/ "Sat"
+        //Calendar.current.veryShortWeekdaySymbols[dd]
+        return Calendar.current.shortWeekdaySymbols[dd]
+    }
+    
+    static func MondayFirstInt(_ dayIdx: Int) -> Int {
+        if dayIdx == 1 {
+            return 7
+        } else {
+            return dayIdx - 1
+        }
+    }
+    
+    static func GetIntDayWeek (year: Int, month: Int, day: Int) -> Int? {
         let calendar = Calendar(identifier: .gregorian)
         
         guard let targetDate: Date = {
@@ -86,8 +119,17 @@ extension Date {
             dd -= 1
         }
         
-        // "Sun" / "Mon" / "Tue" / "Wed" / "Thu" / "Fri"/ "Sat"
-        return Calendar.current.shortWeekdaySymbols[dd]
+        return MondayFirstInt(dd)
+    }
+    
+    static func GetIntDayWeek (_ date: String) -> Int? {
+        var year = 0
+        var month = 0
+        var day = 0
+        
+        GetIntDate(date, &year, &month, &day)
+        
+        return GetIntDayWeek(year: year, month: month, day: day)
     }
     
     /*
@@ -116,55 +158,97 @@ extension Date {
         return date
     }
     
-    static func NextDay(_ date: String) -> String {
+    static func GetNextDay(_ date: String) -> String {
         var year: Int = 0
         var month: Int = 0
         var day: Int = 0
         
         self.GetIntDate(date, &year, &month, &day)
         
-        switch month {
-        case 1,3,5,7,8,10,12 :
-            if day >= 31 {
-                day = 1
-                if month == 12 {
-                    month = 1
-                } else {
-                    month += 1
-                }
-            } else {
-                day += 1
+        CalculateDate(&year, &month, &day, true)
+        
+        return GetStringDate(year, month, day)
+    }
+    
+    static func GetNextDay (_ date: String, _ fewDays: Int) -> String {
+        var year: Int = 0
+        var month: Int = 0
+        var day: Int = 0
+        
+        GetIntDate(date, &year, &month, &day)
+        
+        let cnt: Int = (fewDays >= 0) ? fewDays : 0 - fewDays
+        let oper = fewDays >= 0 ? true : false
+        
+        if cnt > 0 {
+            for _ in 1 ... cnt {
+                CalculateDate(&year, &month, &day, oper)
             }
-            break
-        case 2 :
-            if year % 4 == 0 {
-                if day >= 29 {
-                    month += 1
-                    day = 1
-                } else {
-                    day += 1
-                }
-            } else {
-                if day >= 30 {
-                    month += 1
-                    day = 1
-                } else {
-                    day += 1
-                }
-            }
-            break
-        case 4,6,9,11 :
-            if day >= 30 {
-                day = 1
-                month += 1
-            } else {
-                day += 1
-            }
-            break
-        default:
-           break
         }
         
         return GetStringDate(year, month, day)
     }
+    
+    static func CalculateDate (_ year: inout Int, _ month: inout Int, _ day: inout Int, _ oper: Bool) {
+        var carry = false
+        
+        if oper {
+            // + 1
+            switch month {
+            case 1,3,5,7,8,10:
+                carry = day >= 31 ? true : false
+                break
+            case 2:
+                let standard = (year % 4) == 0 ? 29 : 28
+                carry = day >= standard ? true : false
+                break
+            case 4,6,9,11:
+                carry = day >= 30 ? true : false
+                break
+            case 12:
+                carry = day >= 31 ? true : false
+                if carry {
+                    year = 1
+                }
+                break
+            default :
+                break
+            }
+            
+            if carry {
+                month += 1
+                day = 1
+            } else {
+                day += 1
+            }
+            
+        } else {
+            // - 1
+            if day == 1 {
+                switch month {
+                case 1 :
+                    year -= 1
+                    month = 12
+                    day = 31
+                    break
+                case 5,7,8,10,12:
+                    month -= 1
+                    day = 30
+                    break
+                case 2,4,6,9,11:
+                    month -= 1
+                    day = 31
+                    break
+                case 3:
+                    month = 2
+                    day = (year % 4) == 0 ? 29 : 28
+                default:
+                    break
+                }
+            } else {
+                day -= 1
+            }
+        }
+    }
+    
 }

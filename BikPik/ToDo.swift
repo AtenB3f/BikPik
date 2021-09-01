@@ -9,7 +9,7 @@ import UIKit
 
 struct Task: Codable, Equatable{
     var id : Int = 0
-    var name : String = ""
+    var name : String? = nil
     var inToday : Bool = false
     var date : String = ""
     var time : String = "00:00"
@@ -174,7 +174,7 @@ class ToDoManager {
     func createTask(_ data : inout Task) {
         var key: String = ""
         var id :Int = 0
-        key = data.name
+        key = data.name!
         
         // Find same named Task
         if idList[key] == nil {
@@ -199,7 +199,7 @@ class ToDoManager {
     }
     
     func deleteTask(_ date : String, _ key: String) {
-        let taskName = tasks[key]!.name
+        guard let taskName = tasks[key]!.name else {return}
         
         if tasks[key] != nil {
             tasks.removeValue(forKey: key)

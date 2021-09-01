@@ -48,10 +48,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="690"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8v2-mr-Czi">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="540"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="690"/>
                                                 <subviews>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" placeholder="Task" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="QWd-Dh-68B">
-                                                        <rect key="frame" x="22.666666666666657" y="30" width="330" height="50"/>
+                                                        <rect key="frame" x="37.666666666666657" y="50" width="300" height="50"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="LqD-yw-3RH"/>
                                                         </constraints>
@@ -61,17 +61,23 @@
                                                             <action selector="fldTask:" destination="lTo-3V-92w" eventType="editingDidEnd" id="E8n-ra-ugd"/>
                                                         </connections>
                                                     </textField>
+                                                    <datePicker contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="inline" translatesAutoresizingMaskIntoConstraints="NO" id="t3l-Qd-9h8">
+                                                        <rect key="frame" x="8" y="88" width="375" height="162"/>
+                                                        <connections>
+                                                            <action selector="pickerDate:" destination="lTo-3V-92w" eventType="valueChanged" id="at9-bK-2Rv"/>
+                                                        </connections>
+                                                    </datePicker>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="FmO-Fa-Bka" userLabel="Today Stack View">
-                                                        <rect key="frame" x="22.666666666666657" y="130" width="330" height="31"/>
+                                                        <rect key="frame" x="37.666666666666657" y="426.66666666666663" width="300" height="31"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="하루 동안" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="keh-2r-prW">
-                                                                <rect key="frame" x="0.0" y="5.3333333333333428" width="63.333333333333336" height="20.333333333333332"/>
+                                                                <rect key="frame" x="0.0" y="5.3333333333333712" width="63.333333333333336" height="20.333333333333332"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="Time" translatesAutoresizingMaskIntoConstraints="NO" id="Jxg-PB-Zs7" userLabel="Today Switch">
-                                                                <rect key="frame" x="281" y="0.0" width="51" height="31"/>
+                                                                <rect key="frame" x="251" y="0.0" width="51" height="31"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="31" id="n2m-hb-dHg"/>
                                                                 </constraints>
@@ -82,65 +88,70 @@
                                                             </switch>
                                                         </subviews>
                                                     </stackView>
-                                                    <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="T5k-EL-LuR" userLabel="Time Sel">
-                                                        <rect key="frame" x="39" y="171" width="297" height="110"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="U0U-bT-4Kp" userLabel="Alram Stack View">
+                                                        <rect key="frame" x="37.666666666666657" y="527.66666666666663" width="300" height="31"/>
                                                         <subviews>
-                                                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="53p-96-4gf">
-                                                                <rect key="frame" x="10" y="10" width="297" height="50"/>
-                                                                <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="50" id="EXX-wy-nn4"/>
-                                                                </constraints>
-                                                            </datePicker>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="U0U-bT-4Kp" userLabel="Alram Stack View">
-                                                                <rect key="frame" x="17.666666666666657" y="70" width="261.66666666666674" height="31"/>
-                                                                <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="알람" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Ea-aO-a6F">
-                                                                        <rect key="frame" x="0.0" y="5.3333333333333144" width="212.66666666666666" height="20.333333333333332"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                        <nil key="textColor"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="Arlam" translatesAutoresizingMaskIntoConstraints="NO" id="qqJ-Sb-ojP" userLabel="Alram Switch">
-                                                                        <rect key="frame" x="212.66666666666666" y="0.0" width="50.999999999999972" height="31"/>
-                                                                        <color key="tintColor" name="BikPik Color"/>
-                                                                        <color key="onTintColor" name="BikPik Color"/>
-                                                                        <connections>
-                                                                            <action selector="swtAlram:" destination="lTo-3V-92w" eventType="valueChanged" id="9uH-5s-er2"/>
-                                                                        </connections>
-                                                                    </switch>
-                                                                </subviews>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="31" id="ACx-1k-iRi"/>
-                                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="31" id="RKL-YK-2Qi"/>
-                                                                </constraints>
-                                                            </stackView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="알람" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Ea-aO-a6F">
+                                                                <rect key="frame" x="0.0" y="5.3333333333333712" width="251" height="20.333333333333332"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" title="Arlam" translatesAutoresizingMaskIntoConstraints="NO" id="qqJ-Sb-ojP" userLabel="Alram Switch">
+                                                                <rect key="frame" x="251" y="0.0" width="51" height="31"/>
+                                                                <color key="tintColor" name="BikPik Color"/>
+                                                                <color key="onTintColor" name="BikPik Color"/>
+                                                                <connections>
+                                                                    <action selector="swtAlram:" destination="lTo-3V-92w" eventType="valueChanged" id="9uH-5s-er2"/>
+                                                                </connections>
+                                                            </switch>
                                                         </subviews>
-                                                        <color key="backgroundColor" name="Background Color"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="110" id="D39-Fq-tqL"/>
-                                                            <constraint firstItem="U0U-bT-4Kp" firstAttribute="width" secondItem="T5k-EL-LuR" secondAttribute="width" multiplier="0.88" id="Ijt-vV-DeT"/>
-                                                            <constraint firstItem="53p-96-4gf" firstAttribute="top" secondItem="T5k-EL-LuR" secondAttribute="top" constant="10" id="TEw-HN-xfo"/>
-                                                            <constraint firstItem="53p-96-4gf" firstAttribute="width" secondItem="T5k-EL-LuR" secondAttribute="width" id="UzN-x9-i4O"/>
-                                                            <constraint firstItem="53p-96-4gf" firstAttribute="leading" secondItem="T5k-EL-LuR" secondAttribute="leading" constant="10" id="dcm-kC-u1x"/>
-                                                            <constraint firstItem="U0U-bT-4Kp" firstAttribute="top" secondItem="53p-96-4gf" secondAttribute="bottom" constant="10" id="dmg-rm-61j"/>
-                                                            <constraint firstItem="U0U-bT-4Kp" firstAttribute="centerX" secondItem="T5k-EL-LuR" secondAttribute="centerX" id="e4c-31-U9o"/>
+                                                            <constraint firstAttribute="height" constant="31" id="ACx-1k-iRi"/>
                                                         </constraints>
-                                                    </view>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="WBf-YS-oYg" userLabel="Time Stack View">
+                                                        <rect key="frame" x="30" y="385" width="300" height="50"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="시간" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hRJ-uq-a2K">
+                                                                <rect key="frame" x="0.0" y="0.0" width="150" height="50"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="inline" translatesAutoresizingMaskIntoConstraints="NO" id="ECe-Iu-fNo" userLabel="Time Picker">
+                                                                <rect key="frame" x="150" y="0.0" width="150" height="50"/>
+                                                                <connections>
+                                                                    <action selector="pickerTime:" destination="lTo-3V-92w" eventType="valueChanged" id="lCn-dB-W4V"/>
+                                                                </connections>
+                                                            </datePicker>
+                                                        </subviews>
+                                                    </stackView>
                                                 </subviews>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="540" id="3bD-8j-f0V"/>
-                                                    <constraint firstItem="QWd-Dh-68B" firstAttribute="top" secondItem="8v2-mr-Czi" secondAttribute="top" constant="30" id="7BW-G0-bjr"/>
-                                                    <constraint firstItem="QWd-Dh-68B" firstAttribute="width" secondItem="8v2-mr-Czi" secondAttribute="width" multiplier="0.88" id="BoV-dA-AW6"/>
+                                                    <constraint firstItem="QWd-Dh-68B" firstAttribute="top" secondItem="8v2-mr-Czi" secondAttribute="top" constant="50" id="7BW-G0-bjr"/>
+                                                    <constraint firstItem="QWd-Dh-68B" firstAttribute="width" secondItem="8v2-mr-Czi" secondAttribute="width" multiplier="0.8" id="BoV-dA-AW6"/>
                                                     <constraint firstItem="QWd-Dh-68B" firstAttribute="centerX" secondItem="8v2-mr-Czi" secondAttribute="centerX" id="Exz-lc-o10"/>
-                                                    <constraint firstItem="FmO-Fa-Bka" firstAttribute="top" secondItem="QWd-Dh-68B" secondAttribute="bottom" constant="50" id="KIu-Ni-05T"/>
-                                                    <constraint firstItem="FmO-Fa-Bka" firstAttribute="width" secondItem="QWd-Dh-68B" secondAttribute="width" id="LeF-Th-3pe"/>
-                                                    <constraint firstItem="T5k-EL-LuR" firstAttribute="top" secondItem="FmO-Fa-Bka" secondAttribute="bottom" constant="10" id="MAX-0D-0VO"/>
-                                                    <constraint firstItem="FmO-Fa-Bka" firstAttribute="leading" secondItem="QWd-Dh-68B" secondAttribute="leading" id="ZdH-YT-991"/>
-                                                    <constraint firstItem="T5k-EL-LuR" firstAttribute="centerX" secondItem="FmO-Fa-Bka" secondAttribute="centerX" id="ah4-NB-Nzg"/>
-                                                    <constraint firstItem="T5k-EL-LuR" firstAttribute="width" secondItem="FmO-Fa-Bka" secondAttribute="width" multiplier="0.9" id="wtN-qZ-pWk"/>
+                                                    <constraint firstItem="FmO-Fa-Bka" firstAttribute="width" secondItem="t3l-Qd-9h8" secondAttribute="width" id="FQ8-vx-n9f"/>
+                                                    <constraint firstItem="WBf-YS-oYg" firstAttribute="width" secondItem="FmO-Fa-Bka" secondAttribute="width" id="JTe-0K-zGZ"/>
+                                                    <constraint firstItem="t3l-Qd-9h8" firstAttribute="top" secondItem="QWd-Dh-68B" secondAttribute="bottom" constant="30" id="KyP-5W-Rvc"/>
+                                                    <constraint firstItem="FmO-Fa-Bka" firstAttribute="top" secondItem="t3l-Qd-9h8" secondAttribute="bottom" constant="10" id="MqU-8s-SBw"/>
+                                                    <constraint firstItem="t3l-Qd-9h8" firstAttribute="width" secondItem="QWd-Dh-68B" secondAttribute="width" id="WPl-x2-PRy"/>
+                                                    <constraint firstItem="FmO-Fa-Bka" firstAttribute="centerX" secondItem="QWd-Dh-68B" secondAttribute="centerX" id="ZdH-YT-991"/>
+                                                    <constraint firstItem="U0U-bT-4Kp" firstAttribute="width" secondItem="WBf-YS-oYg" secondAttribute="width" id="i5d-Ob-t73"/>
+                                                    <constraint firstItem="WBf-YS-oYg" firstAttribute="centerX" secondItem="FmO-Fa-Bka" secondAttribute="centerX" id="mXu-nG-IM6"/>
+                                                    <constraint firstItem="WBf-YS-oYg" firstAttribute="top" secondItem="FmO-Fa-Bka" secondAttribute="bottom" constant="10" id="oO6-Ie-PgE"/>
+                                                    <constraint firstItem="t3l-Qd-9h8" firstAttribute="centerX" secondItem="QWd-Dh-68B" secondAttribute="centerX" id="sWp-s7-NRt"/>
+                                                    <constraint firstItem="U0U-bT-4Kp" firstAttribute="centerX" secondItem="FmO-Fa-Bka" secondAttribute="centerX" id="wtr-8v-ETZ"/>
+                                                    <constraint firstItem="U0U-bT-4Kp" firstAttribute="top" secondItem="WBf-YS-oYg" secondAttribute="bottom" constant="10" id="znY-fe-ocQ"/>
                                                 </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="3bD-8j-f0V"/>
+                                                    </mask>
+                                                </variation>
                                             </view>
                                         </subviews>
                                         <constraints>
@@ -149,6 +160,7 @@
                                             <constraint firstItem="8v2-mr-Czi" firstAttribute="top" secondItem="BQi-G2-4Zc" secondAttribute="top" id="DMc-wG-Ln4"/>
                                             <constraint firstAttribute="trailing" secondItem="8v2-mr-Czi" secondAttribute="trailing" id="KxI-fb-ohp"/>
                                             <constraint firstItem="8v2-mr-Czi" firstAttribute="width" secondItem="BQi-G2-4Zc" secondAttribute="width" id="MKn-2H-4fh"/>
+                                            <constraint firstItem="8v2-mr-Czi" firstAttribute="height" secondItem="BQi-G2-4Zc" secondAttribute="height" id="brq-0H-mFj"/>
                                         </constraints>
                                     </scrollView>
                                 </subviews>
@@ -174,16 +186,18 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="TodayStackView" destination="FmO-Fa-Bka" id="RZZ-ct-82L"/>
                         <outlet property="contentsView" destination="sga-SU-iZ8" id="5JV-eD-EgB"/>
                         <outlet property="fldTask" destination="QWd-Dh-68B" id="7DK-So-IAs"/>
+                        <outlet property="labelAlram" destination="9Ea-aO-a6F" id="AWT-MT-qmq"/>
+                        <outlet property="labelInToday" destination="keh-2r-prW" id="Uie-Au-GLu"/>
+                        <outlet property="labelTime" destination="hRJ-uq-a2K" id="nqw-G9-SfC"/>
                         <outlet property="navigationAddTask" destination="VZe-9n-WfW" id="vhX-Th-ZCz"/>
+                        <outlet property="pickerDate" destination="t3l-Qd-9h8" id="lKp-St-X9e"/>
+                        <outlet property="pickerTime" destination="ECe-Iu-fNo" id="o8D-db-kfs"/>
                         <outlet property="swtAlram" destination="qqJ-Sb-ojP" id="aYM-xT-c4Y"/>
                         <outlet property="swtToday" destination="Jxg-PB-Zs7" id="6TD-Y4-TpR"/>
-                        <outlet property="timePicker" destination="53p-96-4gf" id="aaA-0q-llI"/>
                         <outlet property="todayStackView" destination="FmO-Fa-Bka" id="a75-Y6-mIa"/>
                         <outlet property="viewAlram" destination="U0U-bT-4Kp" id="JXl-Am-5xP"/>
-                        <outlet property="viewTimeSel" destination="T5k-EL-LuR" id="8oM-3H-JPb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="30r-Te-yzw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -199,17 +213,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dUD-AO-YbL" userLabel="Top View">
-                                <rect key="frame" x="0.0" y="44" width="375" height="80"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="140"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12/25" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NKo-H8-7uA">
-                                        <rect key="frame" x="146.66666666666666" y="32.666666666666671" width="82" height="32.333333333333329"/>
-                                        <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="28"/>
-                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1nV-a0-5ee" userLabel="Day">
+                                        <rect key="frame" x="149.66666666666666" y="15" width="76" height="48"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="12/25">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="btnDay:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oTg-h7-Mxd"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFc-kO-BRP">
-                                        <rect key="frame" x="321" y="38" width="24" height="22"/>
-                                        <color key="tintColor" name="BikPik Color"/>
+                                        <rect key="frame" x="321.33333333333331" y="20" width="23.666666666666686" height="22"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal">
                                             <imageReference key="image" image="square.grid.2x2.fill" catalog="system" symbolScale="large"/>
                                         </state>
@@ -217,21 +236,160 @@
                                             <action selector="btnMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="b6u-ye-gjB"/>
                                         </connections>
                                     </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gan-bg-mKI" userLabel="WeekView">
+                                        <rect key="frame" x="37.666666666666657" y="80" width="300" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZQ-ZS-NRx" userLabel="Mon">
+                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" title="M">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PQw-UE-nuJ" userLabel="Tue">
+                                                <rect key="frame" x="45.000000000000007" y="0.0" width="29.999999999999993" height="30"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" title="T">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDR-2L-pt4" userLabel="Wed">
+                                                <rect key="frame" x="90" y="0.0" width="30" height="30"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" title="W">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zNN-Jr-kUV" userLabel="Thu">
+                                                <rect key="frame" x="135" y="0.0" width="30" height="30"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" title="T">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rOX-NT-PQg" userLabel="Fei">
+                                                <rect key="frame" x="180" y="0.0" width="30" height="30"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" title="F">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PC6-2a-UUH" userLabel="Sat">
+                                                <rect key="frame" x="225.00000000000003" y="0.0" width="30" height="30"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" title="S">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y1E-KH-0Zn" userLabel="Sun">
+                                                <rect key="frame" x="270" y="0.0" width="30" height="30"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                <state key="normal" title="S">
+                                                    <color key="titleColor" systemColor="systemRedColor"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="gEH-av-pUh"/>
+                                        </constraints>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="G96-L8-LU9" userLabel="DateView">
+                                        <rect key="frame" x="37.666666666666657" y="110" width="300" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DsM-hC-0l6" userLabel="MonD">
+                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="1">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rcd-69-ijM"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WYd-dF-hp6" userLabel="TueD">
+                                                <rect key="frame" x="45.000000000000007" y="0.0" width="29.999999999999993" height="30"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="2">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="28T-2a-nSK"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wHA-ag-Vqb" userLabel="WedD">
+                                                <rect key="frame" x="90" y="0.0" width="30" height="30"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="3">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="U2g-2A-EOj"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jNl-gR-VoD" userLabel="ThuD">
+                                                <rect key="frame" x="135" y="0.0" width="30" height="30"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="4">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qb2-as-l27"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EUO-4Q-bje" userLabel="FriD">
+                                                <rect key="frame" x="180" y="0.0" width="30" height="30"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="5">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dTM-AC-cht"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nkX-Nb-w5n" userLabel="SatD">
+                                                <rect key="frame" x="225.00000000000003" y="0.0" width="30" height="30"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="6">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VNb-HI-Mqc"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gIM-a6-ZVS" userLabel="SunD">
+                                                <rect key="frame" x="270" y="0.0" width="30" height="30"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="7">
+                                                    <color key="titleColor" systemColor="systemRedColor"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="goE-y5-oe9"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="BikPik Color"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="dFc-kO-BRP" secondAttribute="bottom" constant="20" id="Cpq-I6-iLW"/>
+                                    <constraint firstAttribute="top" secondItem="dFc-kO-BRP" secondAttribute="top" constant="-20" id="Cpq-I6-iLW"/>
+                                    <constraint firstItem="G96-L8-LU9" firstAttribute="width" secondItem="gan-bg-mKI" secondAttribute="width" id="Lia-qF-p06"/>
+                                    <constraint firstItem="G96-L8-LU9" firstAttribute="top" secondItem="gan-bg-mKI" secondAttribute="bottom" id="Rrw-kU-9ii"/>
                                     <constraint firstAttribute="trailing" secondItem="dFc-kO-BRP" secondAttribute="trailing" constant="30" id="SEv-uw-Feu"/>
-                                    <constraint firstAttribute="height" constant="80" id="SML-9o-G0R"/>
-                                    <constraint firstItem="NKo-H8-7uA" firstAttribute="centerX" secondItem="dUD-AO-YbL" secondAttribute="centerX" id="fAN-Oc-ybJ"/>
-                                    <constraint firstAttribute="bottom" secondItem="NKo-H8-7uA" secondAttribute="bottom" constant="15" id="z7d-3i-Yua"/>
+                                    <constraint firstAttribute="height" constant="140" id="SML-9o-G0R"/>
+                                    <constraint firstItem="gan-bg-mKI" firstAttribute="centerX" secondItem="dUD-AO-YbL" secondAttribute="centerX" id="Vxd-lk-Q0x"/>
+                                    <constraint firstItem="G96-L8-LU9" firstAttribute="height" secondItem="gan-bg-mKI" secondAttribute="height" id="Wfd-bf-Ea1"/>
+                                    <constraint firstItem="1nV-a0-5ee" firstAttribute="centerX" secondItem="dUD-AO-YbL" secondAttribute="centerX" id="YX4-eh-EjZ"/>
+                                    <constraint firstItem="1nV-a0-5ee" firstAttribute="top" secondItem="dUD-AO-YbL" secondAttribute="top" constant="15" id="Yt5-q6-bdq"/>
+                                    <constraint firstItem="G96-L8-LU9" firstAttribute="centerX" secondItem="gan-bg-mKI" secondAttribute="centerX" id="huP-V6-d5R"/>
+                                    <constraint firstAttribute="bottom" secondItem="gan-bg-mKI" secondAttribute="bottom" constant="30" id="sHc-uy-0uR"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IXz-pS-gEh" userLabel="List View">
-                                <rect key="frame" x="0.0" y="124" width="375" height="654"/>
+                                <rect key="frame" x="0.0" y="199" width="375" height="579"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mup-g4-2J8">
-                                        <rect key="frame" x="30" y="0.0" width="315" height="654"/>
+                                        <rect key="frame" x="30" y="0.0" width="315" height="579"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="uFQ-W2-34M" customClass="ToDoCell" customModule="BikPik" customModuleProvider="target">
@@ -273,7 +431,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3pu-lL-pca" userLabel="Setting">
-                                                            <rect key="frame" x="280" y="11" width="20" height="22"/>
+                                                            <rect key="frame" x="280.33333333333331" y="11" width="19.666666666666686" height="22"/>
                                                             <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <state key="normal" image="x.circle" catalog="system"/>
                                                         </button>
@@ -304,7 +462,7 @@
                                         </connections>
                                     </tableView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8R-Nf-4zg">
-                                        <rect key="frame" x="295" y="575" width="50" height="48.666666666666686"/>
+                                        <rect key="frame" x="295" y="500.00000000000006" width="50" height="48.666666666666629"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="d2V-VE-tAg"/>
                                             <constraint firstAttribute="height" constant="50" id="hQa-LG-97H"/>
@@ -328,9 +486,9 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nSB-XO-XKX"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="BikPik Color"/>
                         <constraints>
-                            <constraint firstItem="IXz-pS-gEh" firstAttribute="top" secondItem="dUD-AO-YbL" secondAttribute="bottom" id="2Lx-Lr-p5P"/>
+                            <constraint firstItem="IXz-pS-gEh" firstAttribute="top" secondItem="dUD-AO-YbL" secondAttribute="bottom" constant="15" id="2Lx-Lr-p5P"/>
                             <constraint firstItem="dUD-AO-YbL" firstAttribute="top" secondItem="nSB-XO-XKX" secondAttribute="top" id="5ih-ph-ks0"/>
                             <constraint firstItem="IXz-pS-gEh" firstAttribute="centerX" secondItem="nSB-XO-XKX" secondAttribute="centerX" id="M0N-qb-oLO"/>
                             <constraint firstItem="dUD-AO-YbL" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="Xif-Dp-aHA"/>
@@ -340,9 +498,18 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="Day" destination="NKo-H8-7uA" id="IMJ-34-bq0"/>
+                        <outlet property="FriDate" destination="EUO-4Q-bje" id="2n8-M3-yLV"/>
+                        <outlet property="MonDate" destination="DsM-hC-0l6" id="uhE-AP-6hn"/>
+                        <outlet property="SatDate" destination="nkX-Nb-w5n" id="S1M-OM-igZ"/>
+                        <outlet property="SunDate" destination="gIM-a6-ZVS" id="Y7L-Fj-52p"/>
+                        <outlet property="ThuDate" destination="jNl-gR-VoD" id="fwb-2J-6BE"/>
                         <outlet property="ToDoTable" destination="mup-g4-2J8" id="dhq-Vc-QzS"/>
+                        <outlet property="TueDate" destination="WYd-dF-hp6" id="WDY-ZO-9RD"/>
+                        <outlet property="WedDate" destination="wHA-ag-Vqb" id="mEF-aC-dvP"/>
                         <outlet property="btnAddTask" destination="J8R-Nf-4zg" id="3Lc-wg-Vfh"/>
+                        <outlet property="btnDay" destination="1nV-a0-5ee" id="p0p-y1-i3L"/>
+                        <outlet property="topView" destination="dUD-AO-YbL" id="ZaU-aM-8SH"/>
+                        <outlet property="view" destination="8bC-Xf-vdC" id="CFX-H9-HPV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -637,9 +804,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="XuF-6w-dML"/>
                                                 </constraints>
-                                                <connections>
-                                                    <action selector="timePicker:" destination="lTo-3V-92w" eventType="valueChanged" id="Fql-8L-GM3"/>
-                                                </connections>
                                             </datePicker>
                                         </subviews>
                                         <color key="backgroundColor" name="Background Color"/>
@@ -679,16 +843,8 @@
                                 <color key="tintColor" name="BikPik Color"/>
                                 <items>
                                     <navigationItem title="Add Habit" id="P7P-zU-q4F">
-                                        <barButtonItem key="leftBarButtonItem" title="Cancle" id="8xF-qR-iKY">
-                                            <connections>
-                                                <action selector="btnCancle:" destination="lTo-3V-92w" id="iro-la-Mf4"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Add" id="lEW-eF-Ptu">
-                                            <connections>
-                                                <action selector="btnAdd:" destination="lTo-3V-92w" id="bNE-5Y-Ufe"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <barButtonItem key="leftBarButtonItem" title="Cancle" id="8xF-qR-iKY"/>
+                                        <barButtonItem key="rightBarButtonItem" title="Add" id="lEW-eF-Ptu"/>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -804,7 +960,7 @@
             <point key="canvasLocation" x="-111" y="751"/>
         </scene>
     </scenes>
-    <color key="tintColor" systemColor="systemYellowColor"/>
+    <color key="tintColor" name="BikPik Color"/>
     <resources>
         <image name="CheckBox" width="128" height="128"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
@@ -814,13 +970,13 @@
             <color red="0.94999998807907104" green="0.94999998807907104" blue="0.94999998807907104" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="BikPik Color">
-            <color red="1" green="0.7929999828338623" blue="0.27300000190734863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.74800002574920654" green="0.84500002861022949" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -22,35 +22,10 @@ class AddToDoViewController: UIViewController {
         
     }
     
+    var data: Task = Task()
     
     func setLayout() {
-        //fldTask.translatesAutoresizingMaskIntoConstraints = true
-        //fldTask.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive =  true
-        //fldTask.widthAnchor.constraint(equalTo: contentsView.widthAnchor, multiplier: 0.4 ).isActive = true
-        //fldTask.widthAnchor.constraint(equalTo: fldTask.superview?.widthAnchor ?? view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.5).isActive = true
         
-        //fldTask.topAnchor.constraint(equalTo: navigationAddTask.bottomAnchor , constant: 30).isActive = true
-        
-        todayStackView.translatesAutoresizingMaskIntoConstraints = true
-        todayStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        
-        viewTimeSel.translatesAutoresizingMaskIntoConstraints = true
-        viewTimeSel.topAnchor.constraint(equalTo: todayStackView.bottomAnchor, constant: 20).isActive = true
-        viewTimeSel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
-        //viewTimeSel.widthAnchor.constraint(equalTo: todayStackView.widthAnchor, multiplier: 2.0).isActive = true
-        
-        timePicker.translatesAutoresizingMaskIntoConstraints = true
-        timePicker.trailingAnchor.constraint(equalTo: viewTimeSel.trailingAnchor, constant: 10.0).isActive = true
-        
-        viewAlram.translatesAutoresizingMaskIntoConstraints = true
-        viewAlram.centerXAnchor.constraint(equalTo: viewTimeSel.centerXAnchor).isActive = true
-        
-        // Radius Settings
-        viewTimeSel.layer.cornerRadius = 10
-
-        
-        timeSelViewSize = viewTimeSel.frame
-        print("FRAME SIZE IS \(timeSelViewSize)")
     }
     
     // Navigation Cancle
@@ -64,6 +39,7 @@ class AddToDoViewController: UIViewController {
     @IBAction func btnAdd(_ sender: Any) {
 
         guard let name = fldTask.text else { return }
+        guard  name != "" else { return }
         
         data.name = name
         
@@ -78,117 +54,48 @@ class AddToDoViewController: UIViewController {
     
 
     @IBOutlet weak var contentsView: UIView!
-    
-    // timeSelView size copy
-    var timeSelViewSize: CGRect? = nil
-    var data: Task! = Task()
-    
-    
+
     @IBOutlet weak var fldTask: UITextField!
-    // Scroll View
     @IBAction func fldTask(_ sender: Any) {
     }
     
+    @IBOutlet weak var pickerDate: UIDatePicker!
+    @IBAction func pickerDate(_ sender: Any) {
+        data.date = Date.DateForm(pickerDate)
+    }
+    
     @IBOutlet weak var todayStackView: UIStackView!
+    @IBOutlet weak var labelInToday: UILabel!
     @IBOutlet weak var swtToday: UISwitch!
-    @IBOutlet weak var viewTimeSel: UIView!
     @IBAction func swtToday(_ sender: Any) {
         data.inToday = swtToday.isOn
         if swtToday.isOn {
             data.time = "00:00"
-            closeSetTimeView()
+            // pickerTime, swtAlram 비활성화
+            
         } else {
-            data.time = Date.TimeForm(timePicker)
-            openSetTimeView()
+            data.time = Date.TimeForm(pickerTime)
+            // pickerTime, swtAlram 활성화
         }
-        
-        print(viewTimeSel.frame)
     }
     
-    func openSetTimeView() {
-        // setTimeView height = ??
-        // TimePicker height = ??
-        // Alram height = ??
-        
-        let sizeH: CGFloat = 110.0
-        viewTimeSel.frame.origin = timeSelViewSize!.origin
-        viewTimeSel.frame.size.height = sizeH
-        contentsView.addSubview(viewTimeSel)
-        timePicker.frame.size.height = 30.0
-        contentsView.addSubview(timePicker)
-        
-    }
-    
-    func closeSetTimeView() {
-        // setTimeView height = 0
-        // TimePicker height = 0
-        // Alram height = 0
-        let sizeH: CGFloat = 0.0
-        viewTimeSel.frame.origin = timeSelViewSize!.origin
-        viewTimeSel.frame.size.height = sizeH
-        contentsView.addSubview(viewTimeSel)
-        timePicker.frame.size.height = sizeH
-        contentsView.addSubview(timePicker)
-    }
-    
-    @IBOutlet weak var timePicker: UIDatePicker!
-    @IBAction func timePicker(_ sender: Any) {
-        data.date = Date.DateForm(timePicker)
-        data.time = Date.TimeForm(timePicker)
+    @IBOutlet weak var labelTime: UILabel!
+    @IBOutlet weak var pickerTime: UIDatePicker!
+    @IBAction func pickerTime(_ sender: Any) {
+        data.time = Date.TimeForm(pickerTime)
+        print("time")
     }
     
     @IBOutlet weak var viewAlram: UIStackView!
-    // Button Alram
+    @IBOutlet weak var labelAlram: UILabel!
     @IBOutlet weak var swtAlram: UISwitch!
     @IBAction func swtAlram(_ sender: Any) {
         data.alram = swtAlram.isOn
-    }
-    
-    /*
-    @IBOutlet weak var swtRepeat: UISwitch!
-    @IBOutlet weak var viewDate: UIView!
-    @IBOutlet weak var viewStart: UIView!
-    @IBOutlet weak var viewEnd: UIView!
-    @IBAction func swtRepeat(_ sender: Any) {
-        //let width = viewDate.frame.size.width
-        data.habit = swtRepeat.isOn
-        if swtRepeat.isOn {
-            // viewDate Open
-            
+        print("alram")
+        if swtAlram.isOn {
+            // 알람 설정
         } else {
-            //viewDate.frame.size.height = 0.0
+            // 알람 해제
         }
     }
-    
-    // Select Start, End Day
-    @IBOutlet weak var startPicker: UIDatePicker!
-    @IBAction func startPicker(_ sender: Any) {
-        data.start = Date.DateForm(startPicker)
-    }
-    @IBOutlet weak var endPicker: UIDatePicker!
-    @IBAction func endPicker(_ sender: Any) {
-        data.end = Date.DateForm(endPicker)
-    }
-    
-    // Select Repeat Days
-    @IBOutlet weak var btnRepeatMon: UIButton!
-    @IBOutlet weak var btnRepeatTue: UIButton!
-    @IBOutlet weak var btnRepeatWed: UIButton!
-    @IBOutlet weak var btnRepeatThu: UIButton!
-    @IBOutlet weak var btnRepeatFri: UIButton!
-    @IBOutlet weak var btnRepeatSat: UIButton!
-    @IBOutlet weak var btnRepeatSun: UIButton!
-    
-    @IBAction func btnRepeat(_ btn: UIButton) {
-        // toggle switch
-        data.rptDay[btn.tag] = data.rptDay[btn.tag] ? false : true
-        
-        if data.rptDay[btn.tag] {
-            btn.layer.backgroundColor = UIColor.init(named: "BikPik Color")?.cgColor
-        }
-        else {
-            btn.layer.backgroundColor = UIColor.init(named: "Background Color")?.cgColor
-        }
-    }
- */
 }

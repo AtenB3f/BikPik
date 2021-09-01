@@ -13,32 +13,158 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var selDate: String = Date.FullNowDate()
     let mngToDo : ToDoManager = ToDoManager.managerToDo
     
-    @IBOutlet weak var Day: UILabel!
-    @objc func timerProc(){
-        Day.text = Date.UserNowDate()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        /*
+        // Timer 설정
         // Today Date Change
         let _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerProc), userInfo: nil, repeats: true)
         timerProc()
-        mngToDo.loadTask(selDate, &taskList)
+         */
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: AddToDoVC, object: nil)
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell))
         ToDoTable.addGestureRecognizer(longPress)
+        
+        setLayout()
+        
+        updateDate()
+        updateWeekDate()
+        btnWeekDate(Date.GetIntDayWeek(selDate) ?? 0)
+        
+        mngToDo.loadTask(selDate, &taskList)
+
     }
     
     // 태스크 추가 후에 테이블 뷰 적용될 수 있게 하는 기능
     @objc func didDismissPostCommentNotification(_ noti: Notification) {
         self.mngToDo.loadTask(Date.FullNowDate(), &self.taskList)
-            OperationQueue.main.addOperation {
-                self.ToDoTable.reloadData()
+        OperationQueue.main.addOperation {
+            self.ToDoTable.reloadData()
+        }
+    }
+    
+    @objc func timerProc(){
+        updateDate()
+    }
+    
+    func updateDate() {
+        btnDay.setTitle(Date.GetUserDateForm(), for: .normal)
+    }
+    func updateDate(_ date: String) {
+        btnDay.setTitle(date, for: .normal)
+    }
+    
+    @objc func handleDatePicker(_ sender: UIDatePicker) {
+        datePick = sender.date
+        selDate = Date.DateForm(sender)
+        btnDay.setTitle(Date.GetUserDateForm(sender), for: .normal)
+        //updateDate()
+        
+        // 데이트 뷰 삭제
+        for view in self.view.subviews {
+            if view.isEqual(datePicker) {
+                view.removeFromSuperview()
+                datePicker = nil
             }
         }
+        
+        // 주간 요일 바꾸기
+        updateWeekDate()
+        btnWeekDate(Date.GetIntDayWeek(selDate) ?? 0)
+        
+        // 테이블 뷰 리로드
+        mngToDo.loadTask(selDate, &taskList)
+        self.ToDoTable.reloadData()
+        
+    }
+    
+    @IBOutlet weak var topView: UIView!
+    func setLayout() {
+        topView.layer.cornerRadius = 20.0
+    }
+    
+    var datePick: Date = Date()
+    var datePicker: UIDatePicker? = nil
+    @IBOutlet weak var btnDay: UIButton!
+    @IBAction func btnDay(_ sender: Any) {
+        
+        if datePicker != nil { return }
+        
+        datePicker = UIDatePicker()
+        datePicker!.date = datePick
+        
+        // mode & style
+        datePicker!.preferredDatePickerStyle = .inline
+        datePicker!.datePickerMode = .date
+        datePicker!.addTarget(self, action: #selector(handleDatePicker(_:)), for: .valueChanged)
+        view.addSubview(datePicker!)
+        
+        // layout
+        datePicker!.translatesAutoresizingMaskIntoConstraints = false
+        datePicker!.layer.backgroundColor = CGColor(red: 0.88, green: 0.9, blue: 1.0, alpha: 1.0)
+        datePicker!.layer.cornerRadius = 10
+        NSLayoutConstraint.activate([
+            datePicker!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            datePicker!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+    }
+    
+    @IBOutlet weak var MonDate: UIButton!
+    @IBOutlet weak var TueDate: UIButton!
+    @IBOutlet weak var WedDate: UIButton!
+    @IBOutlet weak var ThuDate: UIButton!
+    @IBOutlet weak var FriDate: UIButton!
+    @IBOutlet weak var SatDate: UIButton!
+    @IBOutlet weak var SunDate: UIButton!
+    
+    @IBAction func btnWeekDate(_ sender: UIButton) {
+        let arrBtn: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
+        var idx = 0
+        for n in 0 ... (arrBtn.count-1) {
+            if sender == arrBtn[n] {
+                sender.isSelected = true
+                idx = n
+            } else {
+                arrBtn[n].isSelected = false
+            }
+        }
+        
+        let cnt = idx - (Date.GetIntDayWeek(selDate) ?? 0) + 1
+        selDate = Date.GetNextDay(selDate, cnt)
+        btnDay.setTitle(Date.GetUserDate(selDate), for: .normal)
+        mngToDo.loadTask(selDate, &taskList)
+        ToDoTable.reloadData()
+    }
+    
+    func btnWeekDate(_ weekIdx: Int) {
+        let arrBtn: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
+        for i in 0 ... 6 {
+            arrBtn[i].isSelected = (i == (weekIdx-1)) ? true : false
+        }
+    }
+    
+    func updateWeekDate(){
+        var year: Int = 0
+        var month: Int = 0
+        var day: Int = 0
+        
+        let arrDay: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
+        
+        Date.GetIntDate(selDate, &year, &month, &day)
+        
+        let idx: Int = Date.GetIntDayWeek(year: year, month: month, day: day) ?? 0
+        
+        for i in 1...7 {
+            let strDate = Date.GetNextDay(selDate, i-idx)
+            Date.GetIntDate(strDate, &year, &month, &day)
+            arrDay[i-1].setTitle(String(day), for: .normal)
+        }
+        
+    }
+    
     
     @IBAction func btnMenu(_ sender: Any) {
         
@@ -137,7 +263,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func alertTomorrow(_ taskName: String) {
         let date = mngToDo.tasks[taskName]!.date
         
-        mngToDo.tasks[taskName]!.date = Date.NextDay(date)
+        mngToDo.tasks[taskName]!.date = Date.GetNextDay(date)
         mngToDo.saveTask(mngToDo.tasks)
         mngToDo.loadTask(selDate, &taskList)
         self.ToDoTable.reloadData()
