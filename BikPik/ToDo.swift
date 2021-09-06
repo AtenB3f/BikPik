@@ -47,12 +47,21 @@ class ToDoManager {
     var tasks: [String: Task] = [:]     // KEY is [task name + "_" + ID]
     var idList: [String : Int] = [:]    // KEY is [task name] , VALUE is [ID]
     var taskList: [String] = []         // VALUE is [task name]
-    
+    var selDate: String = Date.FullNowDate()
+    var selTaskList : [String] = []
     var storage = Storage.disk
     
     static let managerToDo: ToDoManager = ToDoManager()
     private init() {
         loadTaskList()
+    }
+    
+    func updateSelDate(_ date: String) {
+        selDate = date
+        updateTaskList()
+    }
+    func updateTaskList() {
+        //selTaskList
     }
 
     // return number of ID
@@ -81,6 +90,29 @@ class ToDoManager {
      date : "yyyyMMdd" Format   (ex)20200706
      list : String Array
      */
+    func loadTask() {
+        let taskFile: String = "ToDoList.json"
+        var taskName: String
+        
+        // Clear Array
+        selTaskList.removeAll()
+        
+        tasks = storage.Search(taskFile, as: [String: Task].self) ?? [:]
+        
+        let numTask = taskList.count - 1
+        if numTask >= 0 {
+            for n in  0 ... numTask {
+                taskName = taskList[n]
+                print("TASK NAME :: \(taskName)")
+                
+                if searchTask(selDate, taskName) {
+                    selTaskList.append(taskName)
+                }
+            }
+        }
+        
+        sortTimeline(&selTaskList)
+    }
     func loadTask(_ date: String, _ list : inout [String]){
         let taskFile: String = "ToDoList.json"
         var taskName: String

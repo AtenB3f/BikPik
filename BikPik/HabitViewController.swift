@@ -21,3 +21,7 @@ class HabitViewController: UIViewController {
     }
     
 }
+
+class HabitCollectCell: UICollectionViewCell {
+    
+}
