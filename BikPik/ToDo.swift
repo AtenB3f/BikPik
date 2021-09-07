@@ -95,7 +95,7 @@ class ToDoManager {
         var taskName: String
         
         // Clear Array
-        selTaskList.removeAll()
+        tasks.removeAll()
         
         tasks = storage.Search(taskFile, as: [String: Task].self) ?? [:]
         

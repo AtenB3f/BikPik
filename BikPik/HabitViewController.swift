@@ -11,6 +11,12 @@ class HabitViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setLayout()
+    }
+    
+    func setLayout() {
+        
     }
     
     @IBOutlet weak var btnAddHabit: UIButton!
@@ -23,5 +29,10 @@ class HabitViewController: UIViewController {
 }
 
 class HabitCollectCell: UICollectionViewCell {
+    @IBOutlet weak var nameHabit: UILabel!
+    @IBOutlet weak var total: UILabel!
+    @IBOutlet weak var start: UILabel!
+    @IBOutlet weak var end: UILabel!
+    @IBOutlet weak var percent: UILabel!
     
 }
