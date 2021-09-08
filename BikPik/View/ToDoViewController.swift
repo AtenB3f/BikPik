@@ -9,7 +9,8 @@ import UIKit
 
 class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    let mngToDo : ToDoManager = ToDoManager.managerToDo
+    let dataMng = DataManager.dataMng
+    let mngToDo : ToDoManager = ToDoManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,13 +30,13 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         setLayout()
         updateDate()
         updateWeekDate()
-        btnWeekDate(Date.GetIntDayWeek(mngToDo.selDate) ?? 0)
-        mngToDo.loadTask()
+        btnWeekDate()
+        mngToDo.updateData()
     }
     
     // 태스크 추가 후에 테이블 뷰 적용될 수 있게 하는 기능
     @objc func didDismissPostCommentNotification(_ noti: Notification) {
-        mngToDo.loadTask()
+        mngToDo.updateData()
         OperationQueue.main.addOperation {
             self.ToDoTable.reloadData()
         }
@@ -51,7 +52,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @objc func handleDatePicker(_ sender: UIDatePicker) {
         datePick = sender.date
-        mngToDo.selDate = Date.DateForm(sender)
+        dataMng.selDate = Date.DateForm(sender)
         btnDay.setTitle(Date.GetUserDateForm(sender), for: .normal)
         //updateDate()
         
@@ -65,7 +66,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // 주간 요일 바꾸기
         updateWeekDate()
-        btnWeekDate(Date.GetIntDayWeek(mngToDo.selDate) ?? 0)
+        btnWeekDate()
         
         // 테이블 뷰 리로드
         mngToDo.loadTask()
@@ -124,14 +125,15 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
         }
         
-        let cnt = idx - (Date.GetIntDayWeek(mngToDo.selDate) ?? 0) + 1
-        mngToDo.selDate = Date.GetNextDay(mngToDo.selDate, cnt)
-        btnDay.setTitle(Date.GetUserDate(mngToDo.selDate), for: .normal)
-        mngToDo.loadTask()
+        let cnt = idx - (Date.GetIntDayWeek(dataMng.selDate) ?? 0) + 1
+        dataMng.selDate = Date.GetNextDay(dataMng.selDate, cnt)
+        btnDay.setTitle(Date.GetUserDate(dataMng.selDate), for: .normal)
+        mngToDo.updateData()
         ToDoTable.reloadData()
     }
     
-    func btnWeekDate(_ weekIdx: Int) {
+    func btnWeekDate() {
+        let weekIdx = Date.GetIntDayWeek(dataMng.selDate) ?? 0
         let arrBtn: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
         for i in 0 ... 6 {
             arrBtn[i].isSelected = (i == (weekIdx-1)) ? true : false
@@ -145,12 +147,12 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let arrDay: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
         
-        Date.GetIntDate(mngToDo.selDate, &year, &month, &day)
+        Date.GetIntDate(dataMng.selDate, &year, &month, &day)
         
         let idx: Int = Date.GetIntDayWeek(year: year, month: month, day: day) ?? 0
         
         for i in 1...7 {
-            let strDate = Date.GetNextDay(mngToDo.selDate, i-idx)
+            let strDate = Date.GetNextDay(dataMng.selDate, i-idx)
             Date.GetIntDate(strDate, &year, &month, &day)
             arrDay[i-1].setTitle(String(day), for: .normal)
         }
@@ -173,7 +175,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var ToDoTable: UITableView!
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mngToDo.selTaskList.count
+        return dataMng.selTaskList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -196,18 +198,18 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
      */
     @objc func clickIsDone (_ sender: UIButton) {
         let id = sender.tag
-        let str: String = mngToDo.selTaskList[id]
-        mngToDo.tasks[str]?.isDone = sender.isSelected
-        mngToDo.saveTask(mngToDo.tasks)
+        let str: String = dataMng.selTaskList[id]
+        dataMng.tasks[str]?.isDone = sender.isSelected
+        mngToDo.saveTask(dataMng.tasks)
     }
     
     @objc func clickSetting (_ sender: UIButton) {
         // 임시 삭제 함수.
         //내일 하기, 수정하기, 삭제하기 등의 기능이 있는 뷰 띄우기 필요
         let id = sender.tag
-        let taskName: String = mngToDo.selTaskList[id]
-        mngToDo.deleteTask(mngToDo.selDate, taskName)
-        mngToDo.loadTask()
+        let taskName: String = dataMng.selTaskList[id]
+        mngToDo.deleteTask(taskName)
+        mngToDo.updateData()
         self.ToDoTable.reloadData()
     }
     
@@ -217,7 +219,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             if let row = ToDoTable.indexPathForRow(at: touchPoint) {
                 let idx = row[1]
-                let taskName = mngToDo.selTaskList[idx]
+                let taskName = dataMng.selTaskList[idx]
                 
                 // ålert 출력 이름 뒤에 아이디 빼기
                 
@@ -239,26 +241,24 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func alertTomorrow(_ taskName: String) {
-        let date = mngToDo.tasks[taskName]!.date
+        let date = dataMng.tasks[taskName]!.date
         
-        mngToDo.tasks[taskName]!.date = Date.GetNextDay(date)
-        mngToDo.saveTask(mngToDo.tasks)
-        //mngToDo.loadTask(mngToDo.selDate, &taskList)
-        mngToDo.loadTask()
+        dataMng.tasks[taskName]!.date = Date.GetNextDay(date)
+        mngToDo.saveTask(dataMng.tasks)
+        mngToDo.updateData()
         self.ToDoTable.reloadData()
     }
     
     func alertDelete(_ taskName: String) {
-        mngToDo.deleteTask(mngToDo.selDate, taskName)
-        //mngToDo.loadTask(mngToDo.selDate, &taskList)
-        mngToDo.loadTask()
+        mngToDo.deleteTask(taskName)
+        mngToDo.updateData()
         self.ToDoTable.reloadData()
     }
 }
 
 class ToDoCell: UITableViewCell {
 
-    let mngToDo : ToDoManager = ToDoManager.managerToDo
+    let dataMng = DataManager.dataMng
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var isDone: UIButton!
     @IBOutlet weak var task: UILabel!
@@ -270,51 +270,57 @@ class ToDoCell: UITableViewCell {
      */
     @IBAction func isDone(_ sender: Any) {
         isDone.isSelected.toggle()
-        
-        isDone.tintColor = .red
-        if isDone.isSelected {
-            displayTask(true)
-        } else {
-            displayTask(false)
-        }
+        displayTask(isDone.isSelected)
     }
     
     func displayTask(_ done: Bool) {
         isDone.isSelected = done
-        if done == true {
-            let img = UIImage(named: "CheckBox_fill.png")
+        if done {
+            let col: UIColor = UIColor.init(named: "BikPik Color") ?? .cyan
+            let img = UIImage(named: "CheckBox_fill.png")?.withRenderingMode(.alwaysTemplate)
             isDone.setImage(img, for: .normal)
+            isDone.tintColor = col
+            task.textColor = col
+            
+            /*
             let attr = NSAttributedString(
                 string: self.task.text! ,
                 attributes: [NSAttributedString.Key.strikethroughStyle : NSUnderlineStyle.single.rawValue])
             task.attributedText = attr
+             */
         } else {
-            let img = UIImage(named: "CheckBox.png")
+            let col: UIColor = .lightGray
+            let img = UIImage(named: "CheckBox.png")?.withRenderingMode(.alwaysTemplate)
             isDone.setImage(img, for: .normal)
+            isDone.tintColor = col
+            task.textColor = col
+            
+            /*
             let attr = NSAttributedString(
                 string: self.task.text! ,
                 attributes: [NSAttributedString.Key.ligature : NSUnderlineStyle.single.rawValue])
             task.attributedText = attr
+             */
         }
     }
     
     func displayTime(_ taskId: String) -> String{
         var time: String?
         
-        if mngToDo.tasks[taskId]?.inToday == true {
+        if dataMng.tasks[taskId]?.inToday == true {
             time = ""
         } else {
-            time = mngToDo.tasks[taskId]?.time
+            time = dataMng.tasks[taskId]?.time
         }
         return time!
     }
     
     func updateCell(indexPathRow row: Int) {
-        let taskID = mngToDo.selTaskList[row]
+        let taskID = dataMng.selTaskList[row]
         
-        task.text = mngToDo.tasks[taskID]?.name
+        task.text = dataMng.tasks[taskID]?.name
         time.text = displayTime(taskID)
-        displayTask(mngToDo.tasks[taskID]!.isDone)
+        displayTask(dataMng.tasks[taskID]!.isDone)
         
         isDone.tag = row
         setting.tag = row
