@@ -251,4 +251,9 @@ extension Date {
         }
     }
     
+    static func GetDays(start: Date, end: Date) -> Int {
+        let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0
+        return days + 1
+    }
+
 }

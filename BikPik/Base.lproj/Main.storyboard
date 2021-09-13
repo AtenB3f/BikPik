@@ -612,7 +612,7 @@
         <!--Add Habit View Controller-->
         <scene sceneID="8Qt-RG-hfp">
             <objects>
-                <viewController storyboardIdentifier="AddHabitVC" title="Add Habit View Controller" id="x6M-eY-IYM" customClass="AddHabitViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddHabitVC" title="Add Habit View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="x6M-eY-IYM" customClass="AddHabitViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HQB-7V-kxp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -641,6 +641,9 @@
                                                             <constraint firstAttribute="height" constant="40" id="uwh-99-UBa"/>
                                                             <constraint firstAttribute="width" constant="100" id="voC-BL-LzW"/>
                                                         </constraints>
+                                                        <connections>
+                                                            <action selector="pickDate:" destination="x6M-eY-IYM" eventType="valueChanged" id="vg6-Ss-nTj"/>
+                                                        </connections>
                                                     </datePicker>
                                                 </subviews>
                                                 <constraints>
@@ -671,6 +674,9 @@
                                                             <constraint firstAttribute="height" constant="40" id="2bV-j8-jIb"/>
                                                             <constraint firstAttribute="width" constant="100" id="TeJ-iF-XUS"/>
                                                         </constraints>
+                                                        <connections>
+                                                            <action selector="pickDate:" destination="x6M-eY-IYM" eventType="valueChanged" id="1sb-8L-Nlt"/>
+                                                        </connections>
                                                     </datePicker>
                                                 </subviews>
                                                 <constraints>
@@ -911,6 +917,7 @@
                                             <imageReference key="image" image="square.grid.2x2.fill" catalog="system" symbolScale="large"/>
                                         </state>
                                         <connections>
+                                            <action selector="btnMenu:" destination="6js-RS-qy0" eventType="touchUpInside" id="IJn-XW-GNL"/>
                                             <action selector="btnMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uoS-dt-E4y"/>
                                         </connections>
                                     </button>
@@ -928,7 +935,7 @@
                                 <rect key="frame" x="0.0" y="144" width="375" height="634"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="inY-vl-ic1">
-                                        <rect key="frame" x="22.666666666666657" y="0.0" width="330" height="624"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="624"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="hmj-Vl-PcT">
                                             <size key="itemSize" width="330" height="128"/>
@@ -937,11 +944,11 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="habitCell" id="MJA-XQ-dcR" customClass="HabitCollectCell" customModule="BikPik" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="330" height="128"/>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="habitCell" reuseIdentifier="HabitCell" id="MJA-XQ-dcR" customClass="HabitCollectCell" customModule="BikPik" customModuleProvider="target">
+                                                <rect key="frame" x="62.666666666666664" y="0.0" width="250" height="128"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="t3b-mB-2Au">
-                                                    <rect key="frame" x="0.0" y="0.0" width="330" height="128"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="250" height="128"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Habit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xv4-qU-C8G">
@@ -951,14 +958,14 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="bPd-6e-Yun" userLabel="percent">
-                                                            <rect key="frame" x="190" y="9.9999999999999929" width="110" height="108.66666666666666"/>
+                                                            <rect key="frame" x="110" y="9.9999999999999929" width="110" height="108.66666666666666"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="110" id="DTV-TM-Egq"/>
                                                                 <constraint firstAttribute="width" constant="110" id="JEw-Ok-JFS"/>
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="n %" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3vy-ds-8XM">
-                                                            <rect key="frame" x="210" y="48.333333333333336" width="70" height="31.333333333333336"/>
+                                                            <rect key="frame" x="130" y="48.333333333333336" width="70" height="31.333333333333336"/>
                                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="26"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
@@ -1008,7 +1015,7 @@
                                                         <constraint firstItem="S6g-XN-1OO" firstAttribute="leading" secondItem="m5S-wH-ujp" secondAttribute="leading" id="sQi-1g-vx4"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
-                                                <size key="customSize" width="330" height="128"/>
+                                                <size key="customSize" width="250" height="128"/>
                                                 <connections>
                                                     <outlet property="end" destination="g2R-ae-X7S" id="yoI-ZZ-WAF"/>
                                                     <outlet property="nameHabit" destination="xv4-qU-C8G" id="TsJ-dd-F4d"/>
@@ -1018,6 +1025,10 @@
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="6js-RS-qy0" id="j9Z-ej-ng7"/>
+                                            <outlet property="delegate" destination="6js-RS-qy0" id="gb0-33-tOy"/>
+                                        </connections>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kCs-QX-Nxu" userLabel="Add Habit">
                                         <rect key="frame" x="295" y="555" width="50" height="48.666666666666686"/>
@@ -1037,7 +1048,7 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="inY-vl-ic1" firstAttribute="height" secondItem="xyt-8e-1jI" secondAttribute="height" multiplier="0.984227" id="Bfb-aP-hdq"/>
-                                    <constraint firstItem="inY-vl-ic1" firstAttribute="width" secondItem="xyt-8e-1jI" secondAttribute="width" multiplier="0.88" id="TEQ-Jp-luU"/>
+                                    <constraint firstItem="inY-vl-ic1" firstAttribute="width" secondItem="xyt-8e-1jI" secondAttribute="width" id="TEQ-Jp-luU"/>
                                     <constraint firstItem="inY-vl-ic1" firstAttribute="top" secondItem="xyt-8e-1jI" secondAttribute="top" id="gZr-62-RVu"/>
                                     <constraint firstItem="inY-vl-ic1" firstAttribute="centerX" secondItem="xyt-8e-1jI" secondAttribute="centerX" id="xa7-z0-JBq"/>
                                     <constraint firstAttribute="bottom" secondItem="kCs-QX-Nxu" secondAttribute="bottom" constant="30" id="z5I-4i-GZ0"/>
@@ -1059,6 +1070,8 @@
                     </view>
                     <connections>
                         <outlet property="btnAddHabit" destination="kCs-QX-Nxu" id="KP7-WW-Qt2"/>
+                        <outlet property="btnMenu" destination="XMr-bs-WzX" id="MKA-a4-nw0"/>
+                        <outlet property="habitCollection" destination="inY-vl-ic1" id="lxu-Jd-z0d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K6h-xl-aux" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1081,7 +1094,7 @@
             <color red="0.75599998235702515" green="0.70999997854232788" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="BikPik Light Color">
-            <color red="0.73299998044967651" green="0.83399999141693115" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.9309999942779541" green="0.9309999942779541" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

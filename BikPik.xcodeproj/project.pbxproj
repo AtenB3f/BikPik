@@ -14,7 +14,6 @@
 		31467911266B6118008AEC4D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3146790F266B6118008AEC4D /* Main.storyboard */; };
 		31467913266B611B008AEC4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31467912266B611B008AEC4D /* Assets.xcassets */; };
 		31467916266B611B008AEC4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31467914266B611B008AEC4D /* LaunchScreen.storyboard */; };
-		317FBA5526E7749400A02091 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317FBA5426E7749400A02091 /* DataManager.swift */; };
 		3188ACA62671E61E003239CC /* AddToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31467922266BBABD008AEC4D /* AddToDoViewController.swift */; };
 		3199943826DF606000F4DD5D /* HabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3199943726DF606000F4DD5D /* HabitViewController.swift */; };
 		3199943A26DF658700F4DD5D /* AddHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3199943926DF658700F4DD5D /* AddHabitViewController.swift */; };
@@ -36,7 +35,6 @@
 		31467917266B611B008AEC4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3146791E266B6203008AEC4D /* ToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewController.swift; sourceTree = "<group>"; };
 		31467922266BBABD008AEC4D /* AddToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoViewController.swift; sourceTree = "<group>"; };
-		317FBA5426E7749400A02091 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		3199943726DF606000F4DD5D /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
 		3199943926DF658700F4DD5D /* AddHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitViewController.swift; sourceTree = "<group>"; };
 		3199943B26DF65C400F4DD5D /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
@@ -84,10 +82,9 @@
 				31467914266B611B008AEC4D /* LaunchScreen.storyboard */,
 				31467917266B611B008AEC4D /* Info.plist */,
 				3141F0CF267874F000E14EDF /* DateFormat.swift */,
-				319DEF6026775F8100299580 /* ToDo.swift */,
 				319DEF64267782A200299580 /* Storage.swift */,
+				319DEF6026775F8100299580 /* ToDo.swift */,
 				3199943B26DF65C400F4DD5D /* Habit.swift */,
-				317FBA5426E7749400A02091 /* DataManager.swift */,
 			);
 			path = BikPik;
 			sourceTree = "<group>";
@@ -186,7 +183,6 @@
 				3146790C266B6118008AEC4D /* SceneDelegate.swift in Sources */,
 				3199943826DF606000F4DD5D /* HabitViewController.swift in Sources */,
 				319DEF5C26770F4200299580 /* CalendarViewController.swift in Sources */,
-				317FBA5526E7749400A02091 /* DataManager.swift in Sources */,
 				3141F0D92678965F00E14EDF /* DateFormat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

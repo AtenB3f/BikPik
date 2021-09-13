@@ -7,10 +7,9 @@
 
 import UIKit
 
-class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ToDoViewController: UIViewController {
     
-    let dataMng = DataManager.dataMng
-    let mngToDo : ToDoManager = ToDoManager()
+    let mngToDo : ToDoManager = ToDoManager.mngToDo
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +51,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @objc func handleDatePicker(_ sender: UIDatePicker) {
         datePick = sender.date
-        dataMng.selDate = Date.DateForm(sender)
+        mngToDo.selDate = Date.DateForm(sender)
         btnDay.setTitle(Date.GetUserDateForm(sender), for: .normal)
         //updateDate()
         
@@ -125,15 +124,15 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
         }
         
-        let cnt = idx - (Date.GetIntDayWeek(dataMng.selDate) ?? 0) + 1
-        dataMng.selDate = Date.GetNextDay(dataMng.selDate, cnt)
-        btnDay.setTitle(Date.GetUserDate(dataMng.selDate), for: .normal)
+        let cnt = idx - (Date.GetIntDayWeek(mngToDo.selDate) ?? 0) + 1
+        mngToDo.selDate = Date.GetNextDay(mngToDo.selDate, cnt)
+        btnDay.setTitle(Date.GetUserDate(mngToDo.selDate), for: .normal)
         mngToDo.updateData()
         ToDoTable.reloadData()
     }
     
     func btnWeekDate() {
-        let weekIdx = Date.GetIntDayWeek(dataMng.selDate) ?? 0
+        let weekIdx = Date.GetIntDayWeek(mngToDo.selDate) ?? 0
         let arrBtn: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
         for i in 0 ... 6 {
             arrBtn[i].isSelected = (i == (weekIdx-1)) ? true : false
@@ -147,12 +146,12 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let arrDay: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
         
-        Date.GetIntDate(dataMng.selDate, &year, &month, &day)
+        Date.GetIntDate(mngToDo.selDate, &year, &month, &day)
         
         let idx: Int = Date.GetIntDayWeek(year: year, month: month, day: day) ?? 0
         
         for i in 1...7 {
-            let strDate = Date.GetNextDay(dataMng.selDate, i-idx)
+            let strDate = Date.GetNextDay(mngToDo.selDate, i-idx)
             Date.GetIntDate(strDate, &year, &month, &day)
             arrDay[i-1].setTitle(String(day), for: .normal)
         }
@@ -174,8 +173,12 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @IBOutlet weak var ToDoTable: UITableView!
     
+}
+
+extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataMng.selTaskList.count
+        return mngToDo.selTaskList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -198,16 +201,16 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
      */
     @objc func clickIsDone (_ sender: UIButton) {
         let id = sender.tag
-        let str: String = dataMng.selTaskList[id]
-        dataMng.tasks[str]?.isDone = sender.isSelected
-        mngToDo.saveTask(dataMng.tasks)
+        let str: String = mngToDo.selTaskList[id]
+        mngToDo.tasks[str]?.isDone = sender.isSelected
+        mngToDo.saveTask(mngToDo.tasks)
     }
     
     @objc func clickSetting (_ sender: UIButton) {
         // 임시 삭제 함수.
         //내일 하기, 수정하기, 삭제하기 등의 기능이 있는 뷰 띄우기 필요
         let id = sender.tag
-        let taskName: String = dataMng.selTaskList[id]
+        let taskName: String = mngToDo.selTaskList[id]
         mngToDo.deleteTask(taskName)
         mngToDo.updateData()
         self.ToDoTable.reloadData()
@@ -219,7 +222,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             if let row = ToDoTable.indexPathForRow(at: touchPoint) {
                 let idx = row[1]
-                let taskName = dataMng.selTaskList[idx]
+                let taskName = mngToDo.selTaskList[idx]
                 
                 // ålert 출력 이름 뒤에 아이디 빼기
                 
@@ -241,10 +244,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func alertTomorrow(_ taskName: String) {
-        let date = dataMng.tasks[taskName]!.date
+        let date = mngToDo.tasks[taskName]!.date
         
-        dataMng.tasks[taskName]!.date = Date.GetNextDay(date)
-        mngToDo.saveTask(dataMng.tasks)
+        mngToDo.tasks[taskName]!.date = Date.GetNextDay(date)
+        mngToDo.saveTask(mngToDo.tasks)
         mngToDo.updateData()
         self.ToDoTable.reloadData()
     }
@@ -258,7 +261,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
 class ToDoCell: UITableViewCell {
 
-    let dataMng = DataManager.dataMng
+    let mngToDo = ToDoManager.mngToDo
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var isDone: UIButton!
     @IBOutlet weak var task: UILabel!
@@ -307,20 +310,20 @@ class ToDoCell: UITableViewCell {
     func displayTime(_ taskId: String) -> String{
         var time: String?
         
-        if dataMng.tasks[taskId]?.inToday == true {
+        if mngToDo.tasks[taskId]?.inToday == true {
             time = ""
         } else {
-            time = dataMng.tasks[taskId]?.time
+            time = mngToDo.tasks[taskId]?.time
         }
         return time!
     }
     
     func updateCell(indexPathRow row: Int) {
-        let taskID = dataMng.selTaskList[row]
+        let taskID = mngToDo.selTaskList[row]
         
-        task.text = dataMng.tasks[taskID]?.name
+        task.text = mngToDo.tasks[taskID]?.name
         time.text = displayTime(taskID)
-        displayTask(dataMng.tasks[taskID]!.isDone)
+        displayTask(mngToDo.tasks[taskID]!.isDone)
         
         isDone.tag = row
         setting.tag = row

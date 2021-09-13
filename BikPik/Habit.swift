@@ -13,28 +13,49 @@ struct Habits: Codable, Equatable {
     var start : String
     var end : String
     var days : [Bool] = [Bool](repeating: true, count: 7)
+    var total = 0
+    var isDone : [Bool]?
     
     init() {
+        task.id = 0
+        task.date = ""
         start = Date.FullNowDate()
         end = Date.FullNowDate()
     }
 }
 
-class HabitManager: ToDoManager {
-    
-    let disk: Storage = Storage.disk
+class HabitManager {
+    let storage: Storage = Storage.disk
+    static let mngHabit = HabitManager()
+    private init() { }
     
     var habits: [Habits] = []
-    var habitIdList: [String] = []
+    
     func createHabit(_ habitData: Habits) {
-        let fileName = "HabitList.json"
-        disk.Save(habitData, fileName)
+        var data = habitData
         
+        // setting ID
+        let id = habits.count > 0 ? (habits.count - 1) : 0
+        data.id = id
+        
+        habits.append(data)
+        saveHabit(habits)
     }
     
     func loadHabit() {
         let fileName = "HabitList.json"
-        habits = disk.Search(fileName, as: [Habits].self) ?? []
+        habits = storage.Search(fileName, as: [Habits].self) ?? []
+    }
+    
+    func saveHabit(_ habits: [Habits]) {
+        let fileName = "HabitList.json"
+        storage.Save(habits, fileName)
+    }
+    
+    func deleteHabit(_ id: Int) {
+        //guard let id = habitData.id else {return}
+        habits.remove(at: id)
+        saveHabit(habits)
     }
 }
 

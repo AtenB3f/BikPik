@@ -7,13 +7,18 @@
 
 import UIKit
 
-class AddHabitViewController: UIViewController {
+let AddHabitVC: Notification.Name = Notification.Name("AddHabitVC")
 
+class AddHabitViewController: UIViewController {
+    
+    let mngHabit = HabitManager.mngHabit
+    var data: Habits = Habits()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    var data: Habits = Habits()
+    
     
     @IBOutlet weak var nabigationBar: UINavigationBar!
     @IBAction func btnAdd(_ sender: Any) {
@@ -24,7 +29,11 @@ class AddHabitViewController: UIViewController {
         data.start = Date.DateForm(startDatePicker)
         data.end = Date.DateForm(endDatePicker)
         
+        mngHabit.createHabit(data)
+        
         self.presentingViewController?.dismiss(animated: true)
+        
+        NotificationCenter.default.post(name: AddHabitVC, object: nil, userInfo: nil)
     }
     
     @IBAction func btnCancle(_ sender: Any) {
@@ -37,6 +46,15 @@ class AddHabitViewController: UIViewController {
     @IBOutlet weak var viewDate: UIView!
     @IBOutlet weak var startDatePicker: UIDatePicker!
     @IBOutlet weak var endDatePicker: UIDatePicker!
+    @IBAction func pickDate(_ sender: UIDatePicker) {
+        if sender == startDatePicker {
+            endDatePicker.minimumDate = sender.date
+        } else if sender == endDatePicker {
+            startDatePicker.maximumDate = sender.date
+        }
+        data.total = Date.GetDays(start: startDatePicker.date,end: endDatePicker.date)
+        data.isDone = [Bool](repeating: false, count: data.total)
+    }
     
     @IBOutlet weak var btnMon: UIButton!
     @IBOutlet weak var btnTue: UIButton!

@@ -35,7 +35,7 @@ class AddToDoViewController: UIViewController {
     }
     
     // Navigation Add
-    let managerToDo = ToDoManager()
+    let managerToDo = ToDoManager.mngToDo
     @IBAction func btnAdd(_ sender: Any) {
 
         guard let name = fldTask.text else { return }

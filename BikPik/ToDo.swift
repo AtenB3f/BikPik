@@ -43,10 +43,18 @@ struct Task: Codable, Equatable{
  
  */
 class ToDoManager {
+    let storage = Storage.disk
+    static let mngToDo = ToDoManager()
+    private init() {
+        updateData()
+    }
     
-    let dataMng = DataManager.dataMng
+    var tasks: [String: Task] = [:]         // KEY is [task name + "_" + ID]
+    var taskIdList: [String : Int] = [:]    // KEY is [task name] , VALUE is [ID]
+    var taskList: [String] = []             // VALUE is [task name]
+    var selTaskList : [String] = []
+    var selDate: String = Date.FullNowDate()
     
-    var storage = Storage.disk
     
     func updateData() {
         loadTaskList()
@@ -60,10 +68,10 @@ class ToDoManager {
     func searchId(_ name: String) -> Int {
         var num: Int = 0
         let idFile: String = "ToDoIdList.json"
-        dataMng.taskIdList = storage.Search(idFile, as: [String: Int].self) ?? [:]
-        if (dataMng.taskIdList[name] != nil) {
+        taskIdList = storage.Search(idFile, as: [String: Int].self) ?? [:]
+        if (taskIdList[name] != nil) {
             // Start ID to 0, so number of ID is plus one.
-            num = dataMng.taskIdList[name]! + 1
+            num = taskIdList[name]! + 1
         } else {
             num = 0
         }
@@ -73,8 +81,8 @@ class ToDoManager {
     
     func loadTaskList() {
         let file: String = "ToDoTaskList.json"
-        dataMng.taskList.removeAll()
-        dataMng.taskList = storage.Search(file, as: [String].self) ?? []
+        taskList.removeAll()
+        taskList = storage.Search(file, as: [String].self) ?? []
     }
     
     /*
@@ -86,47 +94,47 @@ class ToDoManager {
     func loadTask() {
         let taskFile: String = "ToDoList.json"
         
-        dataMng.tasks.removeAll()
-        dataMng.tasks = storage.Search(taskFile, as: [String: Task].self) ?? [:]
+        tasks.removeAll()
+        tasks = storage.Search(taskFile, as: [String: Task].self) ?? [:]
     }
     
     func loadTaskIdList() {
         let file = "ToDoIdList.json"
-        dataMng.taskIdList.removeAll()
-        dataMng.taskIdList = storage.Search(file, as: [String:Int].self) ?? [:]
+        taskIdList.removeAll()
+        taskIdList = storage.Search(file, as: [String:Int].self) ?? [:]
     }
     
     func loadSelTaskList() {
         var taskName: String
-        dataMng.selTaskList.removeAll()
+        selTaskList.removeAll()
         
-        let numTask = dataMng.taskList.count - 1
+        let numTask = taskList.count - 1
         if numTask >= 0 {
             for n in  0 ... numTask {
-                taskName = dataMng.taskList[n]
+                taskName = taskList[n]
                 print("TASK NAME :: \(taskName)")
                 
-                if searchTask(dataMng.selDate, taskName) {
-                    dataMng.selTaskList.append(taskName)
+                if searchTask(selDate, taskName) {
+                    selTaskList.append(taskName)
                 }
             }
         }
     }
 
     func sortTimeline() {
-        var tmpArr = dataMng.selTaskList
+        var tmpArr = selTaskList
         var sortArr: [String] = []
         var deleteIdx: [Int] = []
         var cnt = 0
         var key: String
         
-        cnt = dataMng.selTaskList.count - 1
+        cnt = selTaskList.count - 1
         if cnt >= 0 {
             // Seleted "in today"
             for n in 0 ... cnt {
-                key = dataMng.selTaskList[n]
-                if dataMng.tasks[key]?.inToday == true {
-                    sortArr.append(dataMng.selTaskList[n])
+                key = selTaskList[n]
+                if tasks[key]?.inToday == true {
+                    sortArr.append(selTaskList[n])
                     deleteIdx.append(n)
                 }
             }
@@ -143,7 +151,7 @@ class ToDoManager {
         
         // Time Line
         sortArr.append(contentsOf: tmpArr.sorted(by: <))
-        dataMng.selTaskList = sortArr
+        selTaskList = sortArr
     }
     
     func searchTask(_ date: String, _ taskName: String) -> Bool{
@@ -153,7 +161,7 @@ class ToDoManager {
         let intDate: Int = Int(date) ?? 0
         */
         
-        if dataMng.tasks[taskName]?.date == date{
+        if tasks[taskName]?.date == date{
             return true
         }
         
@@ -178,58 +186,58 @@ class ToDoManager {
         key = data.name!
         
         // Find same named Task
-        if dataMng.taskIdList[key] == nil {
+        if taskIdList[key] == nil {
             id = 0
-            dataMng.taskIdList[key] = 0
+            taskIdList[key] = 0
         } else {
-            dataMng.taskIdList[key]! += 1
-            id = dataMng.taskIdList[key]!
+            taskIdList[key]! += 1
+            id = taskIdList[key]!
         }
         
         // KEY protocol is "NAME + ID"
         key = key + "_" + String(id)
-        dataMng.tasks[key] = data
+        tasks[key] = data
         
         // save task
-        saveTask(dataMng.tasks)
-        saveID(dataMng.taskIdList)
+        saveTask(tasks)
+        saveID(taskIdList)
         
         //taskList.append(data.name)
-        dataMng.taskList.append(key)
-        saveTaskList(dataMng.taskList)
+        taskList.append(key)
+        saveTaskList(taskList)
     }
     
     func deleteTask(_ key: String) {
-        guard let taskName = dataMng.tasks[key]!.name else {return}
+        guard let taskName = tasks[key]!.name else {return}
         
         // tasks
-        if dataMng.tasks[key] != nil {
-            dataMng.tasks.removeValue(forKey: key)
-            saveTask(dataMng.tasks)
+        if tasks[key] != nil {
+            tasks.removeValue(forKey: key)
+            saveTask(tasks)
         }
         
         // taskIdList
-        if let id = dataMng.taskIdList[taskName] {
+        if let id = taskIdList[taskName] {
             if id > 0 {
-                dataMng.taskIdList[taskName] = dataMng.taskIdList[taskName]! - 1
+                taskIdList[taskName] = taskIdList[taskName]! - 1
             } else {
-                dataMng.taskIdList.removeValue(forKey: taskName)
+                taskIdList.removeValue(forKey: taskName)
             }
-            saveID(dataMng.taskIdList)
+            saveID(taskIdList)
         }
         
         // taskList
-        if let arrIdx = dataMng.taskList.firstIndex(of: key) {
-            dataMng.taskList.remove(at: arrIdx)
-            saveTaskList(dataMng.taskList)
+        if let arrIdx = taskList.firstIndex(of: key) {
+            taskList.remove(at: arrIdx)
+            saveTaskList(taskList)
         }
         
         // selTaskList
-        if let arrIdx = dataMng.selTaskList.firstIndex(of: key) {
-            dataMng.selTaskList.remove(at: arrIdx)
+        if let arrIdx = selTaskList.firstIndex(of: key) {
+            selTaskList.remove(at: arrIdx)
         }
         
-        dataMng.tasks.removeValue(forKey: key)
+        tasks.removeValue(forKey: key)
     }
     
     func saveTask (_ data: [String:Task]) {

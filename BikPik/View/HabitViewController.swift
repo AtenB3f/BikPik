@@ -8,22 +8,119 @@
 import UIKit
 
 class HabitViewController: UIViewController {
-
+    
+    let mngHabit = HabitManager.mngHabit
+    
+    var widthCell : CGFloat = 250
+    var cellSize = CGSize()
+    var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: AddHabitVC  , object: nil)
         
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell(_:)))
+        habitCollection.addGestureRecognizer(longPress)
+        
+        //habitCollection.delegate = self
+        mngHabit.loadHabit()
         setLayout()
+    }
+    
+    @objc func didDismissPostCommentNotification(_ sender: Any) {
+        mngHabit.loadHabit()
+        habitCollection.reloadData()
     }
     
     func setLayout() {
         
     }
     
+    @IBOutlet weak var btnMenu: UIButton!
+    @IBAction func btnMenu(_ sender: Any) {
+        habitCollection.reloadData()
+    }
+    
+    @IBOutlet weak var habitCollection: UICollectionView!
     @IBOutlet weak var btnAddHabit: UIButton!
     @IBAction func btnAddHabit(_ sender: Any) {
         let vc = self.storyboard?.instantiateViewController(identifier: "AddHabitVC") as! AddHabitViewController
         vc.modalTransitionStyle = .coverVertical
         self.present(vc, animated: true, completion: nil)
+    }
+    
+}
+
+extension HabitViewController : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return mngHabit.habits.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HabitCell", for: indexPath) as? HabitCollectCell {
+            let size = CGSize(width: 330.0, height: 128.0)
+            let id = indexPath.row
+            let data = mngHabit.habits[id]
+            cell.update(data: data)
+            cell.frame.size = size
+            cell.updateConstraints()
+            cell.layer.cornerRadius = 15
+            return cell
+        } else {
+            return UICollectionViewCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let viewW = habitCollection.frame.width
+        let col : CGFloat = viewW > 500 ? 3 : 1
+        let edge: CGFloat = 10.0
+        
+        let widthFrame : CGFloat = (viewW - CGFloat(edge * 2)) / col
+        let gap : CGFloat = ((col - 1.0) * edge) / 2
+        widthCell = widthFrame - gap
+        
+        sectionInsets.left = (viewW - (widthFrame * col)) / 2
+        sectionInsets.right = sectionInsets.left
+        cellSize = CGSize(width: widthCell , height: 128)
+        
+        //cellSize.width -= CGFloat(edge)
+        return cellSize
+    }
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return sectionInsets.left
+    }
+    
+    
+    @objc func longPressCell(_ sender: UIGestureRecognizer) {
+        if sender.state == UIGestureRecognizer.State.began {
+            let point = sender.location(in: habitCollection)
+            let row = habitCollection.indexPathForItem(at: point)
+            let id  = row![1]
+            
+            let alert = UIAlertController(title: mngHabit.habits[id].task.name, message: "습관을 삭제하시겠습니까?", preferredStyle: .alert)
+            let deleteAct = UIAlertAction(title: "Delete", style: .destructive, handler: {UIAlertAction in self.alertDelete(id: id) })
+            let cancleAct = UIAlertAction(title: "Cancle", style: .default, handler: nil)
+            alert.addAction(deleteAct)
+            alert.addAction(cancleAct)
+            present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    func alertDelete(id: Int) {
+        mngHabit.deleteHabit(id)
+        mngHabit.loadHabit()
+        habitCollection.reloadData()
     }
     
 }
@@ -34,5 +131,30 @@ class HabitCollectCell: UICollectionViewCell {
     @IBOutlet weak var start: UILabel!
     @IBOutlet weak var end: UILabel!
     @IBOutlet weak var percent: UILabel!
+    
+    let mngHabit = HabitManager.mngHabit
+    
+    func update(data: Habits) {
+        nameHabit.text = data.task.name
+        start.text = "Start    \(Date.GetUserDate(data.start))"
+        end.text = "End      \(Date.GetUserDate(data.end))"
+        total.text = "\(data.total) day"
+        percent.text = "\(calPercent(habit: data))%"
+    }
+    
+    func calPercent(habit data: Habits) -> Int {
+        var numDone = 0
+        
+        guard data.isDone != nil else { return 0 }
+        guard data.total>0 else { return 0 }
+        
+        let cnt = data.total-1
+        for n in 0...cnt {
+            if data.isDone![n] == true {
+                numDone += 1
+            }
+        }
+        return (numDone/data.total)*100
+    }
     
 }
