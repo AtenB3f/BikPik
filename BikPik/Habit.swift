@@ -30,6 +30,7 @@ class HabitManager {
     private init() { }
     
     var habits: [Habits] = []
+    var habitId: [String:Int] = [:]
     
     func createHabit(_ habitData: Habits) {
         var data = habitData
@@ -37,6 +38,8 @@ class HabitManager {
         // setting ID
         let id = habits.count > 0 ? (habits.count - 1) : 0
         data.id = id
+        let name = data.task.name!
+        habitId[name] = id
         
         habits.append(data)
         saveHabit(habits)
@@ -44,7 +47,16 @@ class HabitManager {
     
     func loadHabit() {
         let fileName = "HabitList.json"
+        habits.removeAll()
         habits = storage.Search(fileName, as: [Habits].self) ?? []
+        habitId.removeAll()
+        
+        let cnt = habits.count - 1
+        guard cnt >= 0 else { return }
+        for n in 0...cnt {
+            let name = habits[n].task.name!
+            habitId[name] = habits[n].id
+        }
     }
     
     func saveHabit(_ habits: [Habits]) {
@@ -52,10 +64,100 @@ class HabitManager {
         storage.Save(habits, fileName)
     }
     
+    func saveHabit() {
+        let fileName = "HabitList.json"
+        storage.Save(habits, fileName)
+    }
+    
     func deleteHabit(_ id: Int) {
-        //guard let id = habitData.id else {return}
+        let name = habits[id].task.name!
+        habitId.removeValue(forKey: name)
         habits.remove(at: id)
         saveHabit(habits)
+    }
+    
+    func searchHabitTask (name: String) -> Task? {
+        guard let id = habitId[name] else { return nil }
+        
+        return habits[id].task
+    }
+    
+    func isDoneCheck(habit : Habits ,date: String) -> Bool {
+        var rptDay = 0
+        var resDay = 0
+        
+        for i in 0...6 {
+            if habit.days[i] == true {
+                rptDay += 1
+            }
+        }
+        let quotient = (Date.GetDays(start: habit.start, end: date)-1) / 7
+        let remainder = (Date.GetDays(start: habit.start, end: date)-1) % 7
+        if remainder>0{
+            let gap = Date.GetIntDayWeek(habit.start)! - Date.GetIntDayWeek(date)!
+            var n = Date.GetIntDayWeek(habit.start)!
+            if gap > 0 {
+                for _ in 1...(7-gap) {
+                    if n > 7 {
+                        n = 1
+                    }
+                    if ((habit.isDone?[n-1]) != nil) {
+                        resDay += 1
+                    }
+                    n += 1
+                }
+            } else if gap < 0 {
+                for _ in gap ... -1 {
+                    if ((habit.isDone?[n-1]) != nil) {
+                        resDay += 1
+                    }
+                    n += 1
+                }
+            }
+        }
+        
+        let idx = (quotient * rptDay) + resDay
+        let done = habit.isDone?[idx] ?? false
+        
+        return done
+    }
+    
+    func isDone(habit: inout Habits,  date: String, done : Bool) {
+        var rptDay = 0
+        var resDay = 0
+        
+        for i in 0...6 {
+            if habit.days[i] == true {
+                rptDay += 1
+            }
+        }
+        let quotient = (Date.GetDays(start: habit.start, end: date)-1) / 7
+        let remainder = (Date.GetDays(start: habit.start, end: date)-1) % 7
+        if remainder>0{
+            let gap = Date.GetIntDayWeek(habit.start)! - Date.GetIntDayWeek(date)!
+            var n = Date.GetIntDayWeek(habit.start)!
+            if gap > 0 {
+                for _ in 1...(7-gap) {
+                    if n > 7 {
+                        n = 1
+                    }
+                    if ((habit.isDone?[n-1]) != nil) {
+                        resDay += 1
+                    }
+                    n += 1
+                }
+            } else if gap < 0 {
+                for _ in gap ... -1 {
+                    if ((habit.isDone?[n-1]) != nil) {
+                        resDay += 1
+                    }
+                    n += 1
+                }
+            }
+        }
+        
+        let idx = (quotient * rptDay) + resDay
+        habit.isDone?[idx] = done
     }
 }
 

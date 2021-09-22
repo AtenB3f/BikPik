@@ -9,8 +9,8 @@ import UIKit
 
 class ToDoViewController: UIViewController {
     
-    let mngToDo : ToDoManager = ToDoManager.mngToDo
-    
+    let mngToDo = ToDoManager.mngToDo
+    let mngHabit = HabitManager.mngHabit
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -201,9 +201,15 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
      */
     @objc func clickIsDone (_ sender: UIButton) {
         let id = sender.tag
-        let str: String = mngToDo.selTaskList[id]
-        mngToDo.tasks[str]?.isDone = sender.isSelected
-        mngToDo.saveTask(mngToDo.tasks)
+        let taskName: String = mngToDo.selTaskList[id]
+        if mngToDo.tasks[taskName] != nil {
+            mngToDo.tasks[taskName]?.isDone = sender.isSelected
+            mngToDo.saveTask(mngToDo.tasks)
+        } else if mngHabit.searchHabitTask(name: taskName) != nil {
+            let id = mngHabit.habitId[taskName]!
+            mngHabit.isDone(habit: &mngHabit.habits[id], date: mngToDo.selDate, done: sender.isSelected)
+            mngHabit.saveHabit()
+        }
     }
     
     @objc func clickSetting (_ sender: UIButton) {
@@ -222,8 +228,8 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
             
             if let row = ToDoTable.indexPathForRow(at: touchPoint) {
                 let idx = row[1]
-                let taskName = mngToDo.selTaskList[idx]
                 
+                let taskName = mngToDo.selTaskList[idx]
                 // ålert 출력 이름 뒤에 아이디 빼기
                 
                 let alert = UIAlertController(title: taskName, message: "", preferredStyle: .alert)
@@ -262,6 +268,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
 class ToDoCell: UITableViewCell {
 
     let mngToDo = ToDoManager.mngToDo
+    let mngHabit = HabitManager.mngHabit
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var isDone: UIButton!
     @IBOutlet weak var task: UILabel!
@@ -273,10 +280,10 @@ class ToDoCell: UITableViewCell {
      */
     @IBAction func isDone(_ sender: Any) {
         isDone.isSelected.toggle()
-        displayTask(isDone.isSelected)
+        displayDone(done: isDone.isSelected)
     }
     
-    func displayTask(_ done: Bool) {
+    func displayDone(done: Bool) {
         isDone.isSelected = done
         if done {
             let col: UIColor = UIColor.init(named: "BikPik Color") ?? .cyan
@@ -310,20 +317,51 @@ class ToDoCell: UITableViewCell {
     func displayTime(_ taskId: String) -> String{
         var time: String?
         
-        if mngToDo.tasks[taskId]?.inToday == true {
-            time = ""
+        if mngToDo.tasks[taskId] != nil {
+            if mngToDo.tasks[taskId]?.inToday == true {
+                time = ""
+            } else {
+                time = mngToDo.tasks[taskId]?.time
+            }
+        } else if (mngHabit.habitId[taskId] != nil) {
+            let id = mngHabit.habitId[taskId] ?? 0
+            time = mngHabit.habits[id].task.time
         } else {
-            time = mngToDo.tasks[taskId]?.time
+            time = ""
         }
+        
         return time!
     }
     
+    /*
+    func displayTask(taskID:String) -> String {
+        var name: String = ""
+        if let task = mngToDo.tasks[taskID] {
+            name = task.name ?? ""
+            displayDone(done : mngToDo.tasks[taskID]!.isDone)
+        } else if let habit = mngHabit.searchHabit(name: taskID) {
+            name = habit.name ?? ""
+            
+            let idx =  mngHabit.habitId[name] ?? 0
+            let done = mngHabit.isDoneCheck(habit: mngHabit.habits[idx], date: mngToDo.selDate)
+            
+            displayDone(done: done)
+        }
+        return name
+    }
+     */
+    
     func updateCell(indexPathRow row: Int) {
         let taskID = mngToDo.selTaskList[row]
-        
-        task.text = mngToDo.tasks[taskID]?.name
+        if let task = mngToDo.tasks[taskID] {
+            displayDone(done: task.isDone)
+        } else if let id = mngHabit.habitId[taskID] {
+            let habit = mngHabit.habits[id]
+            let done = mngHabit.isDoneCheck(habit: habit, date: mngToDo.selDate)
+            displayDone(done: done)
+        }
+        task.text = taskID
         time.text = displayTime(taskID)
-        displayTask(mngToDo.tasks[taskID]!.isDone)
         
         isDone.tag = row
         setting.tag = row

@@ -55,8 +55,10 @@ class ToDoManager {
     var selTaskList : [String] = []
     var selDate: String = Date.FullNowDate()
     
+    let mngHabit = HabitManager.mngHabit
     
     func updateData() {
+        mngHabit.loadHabit()
         loadTaskList()
         loadTaskIdList()
         loadTask()
@@ -108,75 +110,136 @@ class ToDoManager {
         var taskName: String
         selTaskList.removeAll()
         
-        let numTask = taskList.count - 1
-        if numTask >= 0 {
-            for n in  0 ... numTask {
+        if taskList.count > 0 {
+            for n in  0...(taskList.count-1) {
                 taskName = taskList[n]
-                print("TASK NAME :: \(taskName)")
-                
                 if searchTask(selDate, taskName) {
                     selTaskList.append(taskName)
                 }
             }
         }
+        if mngHabit.habits.count > 0 {
+            for n in 0...(mngHabit.habits.count-1) {
+                taskName = mngHabit.habits[n].task.name!
+                if searchTask(selDate, taskName) {
+                    selTaskList.append(taskName)
+                }
+            }
+        }
+        
     }
 
     func sortTimeline() {
         var tmpArr = selTaskList
         var sortArr: [String] = []
         var deleteIdx: [Int] = []
-        var cnt = 0
-        var key: String
+        var inTodayArr: [String] = []
+        var timeArr: [String : String] = [:]
         
-        cnt = selTaskList.count - 1
-        if cnt >= 0 {
-            // Seleted "in today"
-            for n in 0 ... cnt {
-                key = selTaskList[n]
-                if tasks[key]?.inToday == true {
-                    sortArr.append(selTaskList[n])
-                    deleteIdx.append(n)
+        //checkSelDateHabit(sortArr: &sortArr)
+        checkInToday(sortArr: &inTodayArr, deleteIdx: &deleteIdx)
+        sortArr.append(contentsOf: inTodayArr.sorted(by: <))
+        
+        // delete "In Today" Task
+        if deleteIdx.count > 0 {
+            for n in (deleteIdx.count-1) ... 0 {
+                //let idx = cnt - n
+                tmpArr.remove(at: deleteIdx[n])
+            }
+        }
+        
+        // time sort
+        if tmpArr.count > 0 {
+            for n in 0...(tmpArr.count-1) {
+                let name = tmpArr[n]
+                if let task = tasks[name] {
+                    timeArr[name] = task.time
+                } else if let id = mngHabit.habitId[name] {
+                    timeArr[name] = mngHabit.habits[id].task.time
                 }
             }
         }
         
-        // delete "In Today" Task
-        cnt = deleteIdx.count - 1
-        if cnt >= 0 {
-            for n in 0 ... cnt {
-                let idx = cnt - n
-                tmpArr.remove(at: deleteIdx[idx])
+        let sortTimeArr = timeArr.sorted{$0.1 < $1.1}
+        
+        if sortTimeArr.count > 0 {
+            for n in 1...sortTimeArr.count {
+                sortArr.append(sortTimeArr[n-1].key)
             }
         }
         
-        // Time Line
-        sortArr.append(contentsOf: tmpArr.sorted(by: <))
         selTaskList = sortArr
+    }
+    /*
+    func checkSelDateHabit(sortArr: inout[String]){
+        guard mngHabit.habits.count > 0 else { return }
+        
+        let cnt = mngHabit.habits.count - 1
+        
+        for n in 0 ... cnt {
+            let sel: Int = Int(selDate) ?? 1
+            let start: Int = Int(mngHabit.habits[n].start) ?? 2
+            let end: Int = Int(mngHabit.habits[n].end) ?? 0
+            
+            guard (start <= sel) && (sel <= end) else { continue }
+            
+            for i in 0...6 {
+                
+                guard let day = Date.GetIntDayWeek(selDate) else { break }
+                
+                if (day - 1) == i {
+                    if mngHabit.habits[n].days[i] == true {
+                        let name = mngHabit.habits[n].task.name!
+                        sortArr.append(name)
+                    }
+                }
+            }
+        }
+    }
+    */
+    func checkInToday(sortArr: inout[String], deleteIdx: inout[Int]) {
+        let cnt = selTaskList.count - 1
+        var key: String
+        if cnt >= 0 {
+            // Seleted "in today"
+            for n in 0 ... cnt {
+                key = selTaskList[n]
+                if tasks[key] != nil {
+                    if tasks[key]?.inToday == true {
+                        sortArr.append(selTaskList[n])
+                        deleteIdx.append(n)
+                    }
+                } else if let id = mngHabit.habitId[key] {
+                    if mngHabit.habits[id].task.inToday == true {
+                        sortArr.append(selTaskList[n])
+                        deleteIdx.append(n)
+                    }
+                }
+            }
+        }
     }
     
     func searchTask(_ date: String, _ taskName: String) -> Bool{
-        /*
-        var intStart: Int
-        var intEnd: Int
-        let intDate: Int = Int(date) ?? 0
-        */
-        
         if tasks[taskName]?.date == date{
             return true
         }
         
-        /*
-        if tasks[taskName]?.habit == false {
-            return false
+        if let id = mngHabit.habitId[taskName] {
+            let habit = mngHabit.habits[id]
+            
+            let start = Int(habit.start) ?? 0
+            let end = Int(habit.end) ?? 0
+            let sel = Int(selDate) ?? 0
+            if (start <= sel && sel <= end) {
+                for i in 0...6 {
+                    if habit.days[i] {
+                        if (i+1) == Date.GetIntDayWeek(selDate) {
+                            return true
+                        }
+                    }
+                }
+            }
         }
-        if let start = tasks[taskName]?.start {intStart = Int(start) ?? 0} else {return false}
-        if let end = tasks[taskName]?.start {intEnd = Int(end) ?? 0} else {return false}
-        
-        
-        if intStart <= intDate || intDate <= intEnd {
-            return true
-        }
-        */
         return false
     }
     
@@ -208,36 +271,42 @@ class ToDoManager {
     }
     
     func deleteTask(_ key: String) {
-        guard let taskName = tasks[key]!.name else {return}
-        
-        // tasks
-        if tasks[key] != nil {
-            tasks.removeValue(forKey: key)
-            saveTask(tasks)
-        }
-        
-        // taskIdList
-        if let id = taskIdList[taskName] {
-            if id > 0 {
-                taskIdList[taskName] = taskIdList[taskName]! - 1
-            } else {
-                taskIdList.removeValue(forKey: taskName)
+        if tasks[key] != nil {        // To Do Task
+            let taskName = tasks[key]!.name!
+            // tasks
+            if tasks[key] != nil {
+                tasks.removeValue(forKey: key)
+                saveTask(tasks)
             }
-            saveID(taskIdList)
+            
+            // taskIdList
+            if let id = taskIdList[taskName] {
+                if id > 0 {
+                    taskIdList[taskName] = taskIdList[taskName]! - 1
+                } else {
+                    taskIdList.removeValue(forKey: taskName)
+                }
+                saveID(taskIdList)
+            }
+            
+            // taskList
+            if let arrIdx = taskList.firstIndex(of: key) {
+                taskList.remove(at: arrIdx)
+                saveTaskList(taskList)
+            }
+            
+            // selTaskList
+            if let arrIdx = selTaskList.firstIndex(of: key) {
+                selTaskList.remove(at: arrIdx)
+            }
+            
+            tasks.removeValue(forKey: key)
+        } else if let id = mngHabit.habitId[key] {           // Habit Task
+            // 비활성화 처리 필요
+            if let arrIdx = selTaskList.firstIndex(of: key) {
+                selTaskList.remove(at: arrIdx)
+            }
         }
-        
-        // taskList
-        if let arrIdx = taskList.firstIndex(of: key) {
-            taskList.remove(at: arrIdx)
-            saveTaskList(taskList)
-        }
-        
-        // selTaskList
-        if let arrIdx = selTaskList.firstIndex(of: key) {
-            selTaskList.remove(at: arrIdx)
-        }
-        
-        tasks.removeValue(forKey: key)
     }
     
     func saveTask (_ data: [String:Task]) {

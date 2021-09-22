@@ -16,6 +16,7 @@ class AddHabitViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        calurateTotal() 
     }
     
     
@@ -28,7 +29,7 @@ class AddHabitViewController: UIViewController {
         data.task.time = Date.TimeForm(timePicker)
         data.start = Date.DateForm(startDatePicker)
         data.end = Date.DateForm(endDatePicker)
-        
+        data.isDone = [Bool](repeating: false, count: data.total)
         mngHabit.createHabit(data)
         
         self.presentingViewController?.dismiss(animated: true)
@@ -52,8 +53,18 @@ class AddHabitViewController: UIViewController {
         } else if sender == endDatePicker {
             startDatePicker.maximumDate = sender.date
         }
-        data.total = Date.GetDays(start: startDatePicker.date,end: endDatePicker.date)
-        data.isDone = [Bool](repeating: false, count: data.total)
+        calurateTotal()
+    }
+    
+    func calurateTotal() {
+        let arrBtn: [UIButton] = [btnMon, btnTue, btnWed, btnThu, btnFri, btnSat, btnSun]
+        var total = 0
+        for n in 0...6 {
+            if arrBtn[n].isSelected == true {
+                total += Date.GetWeekDays(start: startDatePicker.date, end: endDatePicker.date, week: n+1)
+            }
+        }
+        data.total = total
     }
     
     @IBOutlet weak var btnMon: UIButton!
@@ -74,6 +85,7 @@ class AddHabitViewController: UIViewController {
                 data.days[n] = sender.isSelected
             }
         }
+        calurateTotal()
     }
     
     @IBOutlet weak var swtAlram: UISwitch!

@@ -10,6 +10,7 @@ import UIKit
 class HabitViewController: UIViewController {
     
     let mngHabit = HabitManager.mngHabit
+    let mngToDo = ToDoManager.mngToDo
     
     var widthCell : CGFloat = 250
     var cellSize = CGSize()
@@ -105,12 +106,14 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
         if sender.state == UIGestureRecognizer.State.began {
             let point = sender.location(in: habitCollection)
             let row = habitCollection.indexPathForItem(at: point)
-            let id  = row![1]
+            let id:Int  = row?[1] ?? 0
             
             let alert = UIAlertController(title: mngHabit.habits[id].task.name, message: "습관을 삭제하시겠습니까?", preferredStyle: .alert)
             let deleteAct = UIAlertAction(title: "Delete", style: .destructive, handler: {UIAlertAction in self.alertDelete(id: id) })
+            let reviseAct = UIAlertAction(title: "Revise", style: .default, handler: {UIAlertAction in self.alertRevise(id: id)})
             let cancleAct = UIAlertAction(title: "Cancle", style: .default, handler: nil)
             alert.addAction(deleteAct)
+            alert.addAction(reviseAct)
             alert.addAction(cancleAct)
             present(alert, animated: true, completion: nil)
         }
@@ -120,7 +123,12 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
     func alertDelete(id: Int) {
         mngHabit.deleteHabit(id)
         mngHabit.loadHabit()
+        mngToDo.updateData()
         habitCollection.reloadData()
+    }
+    
+    func alertRevise(id: Int) {
+        // 수정
     }
     
 }

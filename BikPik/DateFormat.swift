@@ -122,6 +122,16 @@ extension Date {
         return MondayFirstInt(dd)
     }
     
+    static func GetIntDayWeek(date: Date) -> Int? {
+        let year = Calendar.current.component(.year, from: date)
+        var dd = Calendar.current.component(.weekday, from: date)
+        if year%4 == 0 {
+            dd -= 1
+        }
+        
+        return MondayFirstInt(dd)
+    }
+    
     static func GetIntDayWeek (_ date: String) -> Int? {
         var year = 0
         var month = 0
@@ -255,5 +265,55 @@ extension Date {
         let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0
         return days + 1
     }
+    
+    static func GetDays(start: String, end: String) -> Int {
+        let calendar = Calendar(identifier: .gregorian)
+        var year = 0
+        var month = 0
+        var day = 0
+        
+        GetIntDate(start, &year, &month, &day)
+        let startDate = DateComponents(calendar:calendar, year: year, month: month, day: day).date ?? Date()
+        GetIntDate(end, &year, &month, &day)
+        let endDate = DateComponents(calendar:calendar, year: year, month: month, day: day).date ?? Date()
 
+        return GetDays(start: startDate, end: endDate)
+    }
+
+    // week : Mon(1) / Tue(2) / Wed(3) / ... / Sun(7)
+    static func GetWeekDays(start: Date, end: Date, week: Int) -> Int {
+        var weekCnt = 0
+        let stWeek = GetIntDayWeek(date: start) ?? 0
+        var addDay: Int = 0
+        
+        if stWeek > week {
+            addDay = 7 - (stWeek - week)
+        } else {
+            addDay = week - stWeek
+        }
+        
+        var selWeekDate = Calendar.current.date(byAdding: .day, value: addDay, to: start) ?? start
+        var cnt = (Calendar.current.dateComponents([.weekOfYear], from: selWeekDate, to: end).weekOfYear ?? 0)
+        
+        /*
+         * 위의 cnt를 구할 때 selWeekDate가 만약 월요일이면 다음주 월요일 까지 반환하는 값이 0이고 화요일부터 1이 됨.
+         * 선택한 날짜의 다음 주 부터 1일의 격차가 생겨 아래 if else문이 이를 보완하는 작업이다.
+         */
+        if (cnt >= 0) && (week == GetIntDayWeek(date: start)) {
+            cnt += 1
+        } else if (cnt >= 0) && (week == GetIntDayWeek(date: end)) {
+            cnt += 1
+        }
+        
+        for _ in 0...cnt {
+            if Calendar.current.compare(selWeekDate, to: end, toGranularity: .day).rawValue > 0 {
+                return weekCnt
+            } else {
+                weekCnt += 1
+                selWeekDate = Calendar.current.date(byAdding: .day, value: 7, to: selWeekDate)!
+            }
+        }
+        
+        return weekCnt
+    }
 }
