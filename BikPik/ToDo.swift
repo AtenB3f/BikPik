@@ -118,6 +118,7 @@ class ToDoManager {
                 }
             }
         }
+        
         if mngHabit.habits.count > 0 {
             for n in 0...(mngHabit.habits.count-1) {
                 taskName = mngHabit.habits[n].task.name!
@@ -142,9 +143,9 @@ class ToDoManager {
         
         // delete "In Today" Task
         if deleteIdx.count > 0 {
-            for n in (deleteIdx.count-1) ... 0 {
-                //let idx = cnt - n
-                tmpArr.remove(at: deleteIdx[n])
+            for n in 0...deleteIdx.count-1 {
+                let idx = deleteIdx.count - n - 1
+                tmpArr.remove(at: deleteIdx[idx])
             }
         }
         
@@ -260,14 +261,43 @@ class ToDoManager {
         // KEY protocol is "NAME + ID"
         key = key + "_" + String(id)
         tasks[key] = data
-        
-        // save task
-        saveTask(tasks)
-        saveID(taskIdList)
-        
-        //taskList.append(data.name)
         taskList.append(key)
-        saveTaskList(taskList)
+        
+        saveTasks()
+    }
+    
+    func reviseTask(before: Task, after: Task) {
+        if before.name == nil { return }
+        if after.name == nil { return }
+        
+        let beforeKey = before.name! + "_" + String(before.id)
+        let afterKey = after.name! + "_" + String(after.id)
+        
+        if beforeKey != afterKey {
+            tasks.removeValue(forKey: beforeKey)
+            if (taskIdList[before.name!]! == 0) {
+                taskIdList.removeValue(forKey: before.name!)
+            } else {
+                taskIdList[before.name!]! -= 1
+            }
+            if taskIdList[after.name!] != nil {
+                taskIdList[after.name!]! += 1
+            } else {
+                taskIdList[after.name!] = 0
+            }
+            if taskList.count > 0 {
+                for n in 0...(taskList.count-1) {
+                    if taskList[n] == beforeKey {
+                        taskList.remove(at: n)
+                        break
+                    }
+                }
+            }
+            taskList.append(afterKey)
+        }
+        
+        tasks[afterKey]  = after
+        saveTasks()
     }
     
     func deleteTask(_ key: String) {
@@ -309,6 +339,12 @@ class ToDoManager {
         }
     }
     
+    func saveTasks () {
+        saveTask(tasks)
+        saveID(taskIdList)
+        saveTaskList(taskList)
+    }
+    
     func saveTask (_ data: [String:Task]) {
         storage.Save(data, "ToDoList.json")
     }
@@ -319,5 +355,25 @@ class ToDoManager {
         storage.Save(arr, "ToDoTaskList.json")
     }
     
-    
+    func splitToName(key : String) -> String? {
+        var idx: [Int]? = []
+        var cnt = 0
+        for i in key {
+            cnt += 1
+            if i == "_" {
+                idx!.append(cnt)
+            }
+        }
+        if idx?.count == 0 {
+            return nil
+        } else {
+            if idx!.last! <= 0 { return nil }
+            let nameIdx = key.index(key.startIndex, offsetBy: (idx!.last! - 1))
+            let name: String = String(key[key.startIndex ..< nameIdx])
+            print (name)
+            
+            return name
+        }
+        
+    }
 }

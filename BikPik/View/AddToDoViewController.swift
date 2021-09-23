@@ -14,19 +14,24 @@ class AddToDoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setLayout()
-        
-        // Data Init
-        data.date = Date.FullNowDate()
-        data.time = Date.NowTime()
-        
+        if data.name != nil && data.name != "" {
+            revise = true
+            reviseTask = data
+            fldTask.text = data.name
+            swtToday.isOn = data.inToday
+            swtAlram.isOn = data.alram
+            pickerTime.date = Date.GetDateTime(date: data.time)
+            pickerDate.date = Date.GetDateDay(date: data.date)
+        } else {
+            // Data Init
+            data.date = Date.FullNowDate()
+            data.time = Date.NowTime()
+        }
     }
     
     var data: Task = Task()
-    
-    func setLayout() {
-        
-    }
+    var revise: Bool = false
+    var reviseTask :Task?	
     
     // Navigation Cancle
     @IBOutlet weak var navigationAddTask: UINavigationBar!
@@ -42,9 +47,12 @@ class AddToDoViewController: UIViewController {
         guard  name != "" else { return }
         
         data.name = name
-        
-        // Save Data
-        managerToDo.createTask(&data)
+        if revise == true {
+            managerToDo.reviseTask(before: reviseTask ?? Task() , after: data)
+        } else {
+            // Save Data
+            managerToDo.createTask(&data)
+        }
         
         // Back to To Do LIst Page
         self.presentingViewController?.dismiss(animated: true)
@@ -71,19 +79,18 @@ class AddToDoViewController: UIViewController {
         data.inToday = swtToday.isOn
         if swtToday.isOn {
             data.time = "00:00"
-            // pickerTime, swtAlram 비활성화
-            
+            swtAlram.isEnabled = false
+            pickerTime.isEnabled = false
+            labelAlram.textColor = .lightGray
+            labelTime.textColor = .lightGray
         } else {
             data.time = Date.TimeForm(pickerTime)
-            // pickerTime, swtAlram 활성화
+            swtAlram.isEnabled = true
+            pickerTime.isEnabled = true
+            labelAlram.textColor = .black
+            labelTime.textColor = .black
         }
-    }
-    
-    @IBOutlet weak var labelTime: UILabel!
-    @IBOutlet weak var pickerTime: UIDatePicker!
-    @IBAction func pickerTime(_ sender: Any) {
-        data.time = Date.TimeForm(pickerTime)
-        print("time")
+        data.inToday = swtToday.isOn
     }
     
     @IBOutlet weak var viewAlram: UIStackView!
@@ -97,5 +104,11 @@ class AddToDoViewController: UIViewController {
         } else {
             // 알람 해제
         }
+    }
+    
+    @IBOutlet weak var labelTime: UILabel!
+    @IBOutlet weak var pickerTime: UIDatePicker!
+    @IBAction func pickerTime(_ sender: Any) {
+        data.time = Date.TimeForm(pickerTime)
     }
 }

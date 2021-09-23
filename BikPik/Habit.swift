@@ -45,6 +45,11 @@ class HabitManager {
         saveHabit(habits)
     }
     
+    func reviseHabit(id: Int, habit : Habits) {
+        habits[id] = habit
+        saveHabit()
+    }
+    
     func loadHabit() {
         let fileName = "HabitList.json"
         habits.removeAll()

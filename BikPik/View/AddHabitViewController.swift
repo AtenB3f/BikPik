@@ -13,24 +13,53 @@ class AddHabitViewController: UIViewController {
     
     let mngHabit = HabitManager.mngHabit
     var data: Habits = Habits()
+    var revise : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        calurateTotal() 
+        calurateTotal()
+        if data.task.name == nil {
+            data = Habits()
+        } else {
+            revise = true
+            fldHabit.text = data.task.name
+            startDatePicker.date = Date.GetDateDay(date: data.start)
+            endDatePicker.date = Date.GetDateDay(date: data.end)
+            let arrBtn: [UIButton] = [btnMon, btnTue, btnWed, btnThu, btnFri, btnSat, btnSun]
+            for n in 0...(data.days.count-1) {
+                arrBtn[n].isSelected = data.days[n]
+            }
+            swtToday.isOn = data.task.inToday
+            swtAlram.isOn = data.task.alram
+            timePicker.date = Date.GetDateTime(date: data.task.time)
+        }
     }
     
     
     
     @IBOutlet weak var nabigationBar: UINavigationBar!
     @IBAction func btnAdd(_ sender: Any) {
+        
         if data.task.name == "", data.task.name == nil { return }
+        
+        var id :Int?
+        if revise {
+            id = mngHabit.habitId[data.task.name!]
+            if id == nil { return }
+        }
         
         data.task.name = fldHabit.text
         data.task.time = Date.TimeForm(timePicker)
         data.start = Date.DateForm(startDatePicker)
         data.end = Date.DateForm(endDatePicker)
         data.isDone = [Bool](repeating: false, count: data.total)
-        mngHabit.createHabit(data)
+        
+        if revise == true {
+            mngHabit.reviseHabit(id: id!, habit: data)
+        } else {
+            if mngHabit.habitId[data.task.name!] != nil { return }
+            mngHabit.createHabit(data)
+        }
         
         self.presentingViewController?.dismiss(animated: true)
         
@@ -86,6 +115,18 @@ class AddHabitViewController: UIViewController {
             }
         }
         calurateTotal()
+    }
+    
+    @IBOutlet weak var swtToday: UISwitch!
+    @IBAction func swtToday(_ sender: Any) {
+        if swtToday.isOn {
+            swtAlram.isEnabled = false
+            timePicker.isEnabled = false
+        } else {
+            swtAlram.isEnabled = true
+            timePicker.isEnabled = true
+        }
+        data.task.inToday = swtToday.isOn
     }
     
     @IBOutlet weak var swtAlram: UISwitch!

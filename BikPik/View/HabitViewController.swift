@@ -128,7 +128,10 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
     }
     
     func alertRevise(id: Int) {
-        // 수정
+        let vc  = storyboard.self?.instantiateViewController(withIdentifier: "AddHabitVC") as! AddHabitViewController
+        vc.modalTransitionStyle = .coverVertical
+        vc.data = mngHabit.habits[id]
+        self.present(vc, animated: true, completion: nil)
     }
     
 }
@@ -146,18 +149,17 @@ class HabitCollectCell: UICollectionViewCell {
         nameHabit.text = data.task.name
         start.text = "Start    \(Date.GetUserDate(data.start))"
         end.text = "End      \(Date.GetUserDate(data.end))"
-        total.text = "\(data.total) day"
+        total.text = "Total    \(data.total) day"
         percent.text = "\(calPercent(habit: data))%"
     }
     
     func calPercent(habit data: Habits) -> Int {
-        var numDone = 0
         
         guard data.isDone != nil else { return 0 }
         guard data.total>0 else { return 0 }
         
-        let cnt = data.total-1
-        for n in 0...cnt {
+        var numDone = 0
+        for n in 0...data.total-1 {
             if data.isDone![n] == true {
                 numDone += 1
             }

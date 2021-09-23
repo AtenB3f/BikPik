@@ -83,25 +83,32 @@ class ToDoViewController: UIViewController {
     @IBOutlet weak var btnDay: UIButton!
     @IBAction func btnDay(_ sender: Any) {
         
-        if datePicker != nil { return }
-        
-        datePicker = UIDatePicker()
-        datePicker!.date = datePick
-        
-        // mode & style
-        datePicker!.preferredDatePickerStyle = .inline
-        datePicker!.datePickerMode = .date
-        datePicker!.addTarget(self, action: #selector(handleDatePicker(_:)), for: .valueChanged)
-        view.addSubview(datePicker!)
-        
-        // layout
-        datePicker!.translatesAutoresizingMaskIntoConstraints = false
-        datePicker!.layer.backgroundColor = CGColor(red: 0.88, green: 0.9, blue: 1.0, alpha: 1.0)
-        datePicker!.layer.cornerRadius = 10
-        NSLayoutConstraint.activate([
-            datePicker!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            datePicker!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ])
+        if datePicker == nil {
+            datePicker = UIDatePicker()
+            datePicker!.date = datePick
+            
+            // mode & style
+            datePicker!.preferredDatePickerStyle = .inline
+            datePicker!.datePickerMode = .date
+            datePicker!.addTarget(self, action: #selector(handleDatePicker(_:)), for: .valueChanged)
+            view.addSubview(datePicker!)
+            
+            // layout
+            datePicker!.translatesAutoresizingMaskIntoConstraints = false
+            datePicker!.layer.backgroundColor = CGColor(red: 0.88, green: 0.9, blue: 1.0, alpha: 1.0)
+            datePicker!.layer.cornerRadius = 10
+            NSLayoutConstraint.activate([
+                datePicker!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                datePicker!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            ])
+        } else {
+            for view in self.view.subviews {
+                if view.isEqual(datePicker) {
+                    view.removeFromSuperview()
+                    datePicker = nil
+                }
+            }
+        }
     }
     
     @IBOutlet weak var MonDate: UIButton!
@@ -229,24 +236,36 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
             if let row = ToDoTable.indexPathForRow(at: touchPoint) {
                 let idx = row[1]
                 
-                let taskName = mngToDo.selTaskList[idx]
-                // ålert 출력 이름 뒤에 아이디 빼기
+                let key = mngToDo.selTaskList[idx]
                 
-                let alert = UIAlertController(title: taskName, message: "", preferredStyle: .alert)
-                let actRevise = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertRevise(taskName)})
-                let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(taskName)})
-                let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(taskName)})
-                
-                alert.addAction(actRevise)
-                alert.addAction(actTomorrow)
-                alert.addAction(actDelete)
-                present(alert, animated: true, completion: nil)
+                if let name = mngToDo.splitToName(key: key) {
+                    // To Do
+                    let alert = UIAlertController(title: name, message: "To Do", preferredStyle: .alert)
+                    let actRevise = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertRevise(key)})
+                    let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(key)})
+                    let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(key)})
+                    alert.addAction(actRevise)
+                    alert.addAction(actTomorrow)
+                    alert.addAction(actDelete)
+                    present(alert, animated: true, completion: nil)
+                } else {
+                    // habit
+                    let alert = UIAlertController(title: key, message: "Habit", preferredStyle: .alert)
+                    let disable = UIAlertAction(title: "비활성화", style: .default, handler: {UIAlertAction in self.alertDisable(habitName: key)})
+                    let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
+                    alert.addAction(disable)
+                    alert.addAction(cancle)
+                    present(alert, animated: true, completion: nil)
+                }
             }
         }
     }
     
     func alertRevise(_ taskname: String) {
-        print("revise")
+        let vc = storyboard.self?.instantiateViewController(withIdentifier: "AddToDoVC") as! AddToDoViewController
+        vc.modalTransitionStyle = .coverVertical
+        vc.data = mngToDo.tasks[taskname]!
+        self.present(vc, animated: true, completion: nil)
     }
     
     func alertTomorrow(_ taskName: String) {
@@ -262,6 +281,10 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         mngToDo.deleteTask(taskName)
         mngToDo.updateData()
         self.ToDoTable.reloadData()
+    }
+    
+    func alertDisable(habitName : String) {
+        print("Disable")
     }
 }
 
@@ -360,7 +383,12 @@ class ToDoCell: UITableViewCell {
             let done = mngHabit.isDoneCheck(habit: habit, date: mngToDo.selDate)
             displayDone(done: done)
         }
-        task.text = taskID
+        
+        if let name = mngToDo.splitToName(key: taskID) {
+            task.text = name
+        } else {
+            task.text = taskID
+        }
         time.text = displayTime(taskID)
         
         isDone.tag = row

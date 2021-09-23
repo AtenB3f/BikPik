@@ -159,6 +159,14 @@ extension Date {
         day = Int(date[IdxMD ..< date.endIndex])!
     }
     
+    static func GetIntTime (date: String, hour: inout Int, miniute: inout Int) {
+        let preCol = date.index(date.startIndex, offsetBy: 2)
+        let postCol = date.index(date.startIndex, offsetBy: 3)
+        
+        hour = Int(date[date.startIndex ..< preCol]) ?? 0
+        miniute = Int(date[postCol ..< date.endIndex]) ?? 0
+    }
+    
     static func GetStringDate (_ year: Int, _ month: Int, _ day: Int) -> String {
         var date: String = String(year)
         
@@ -315,5 +323,27 @@ extension Date {
         }
         
         return weekCnt
+    }
+    
+    static func GetDateDay(date: String) -> Date {
+        let calendar = Calendar(identifier: .gregorian)
+        
+        var year = 0
+        var month = 0
+        var day = 0
+        
+        GetIntDate(date, &year, &month, &day)
+        
+        return DateComponents(calendar: calendar, year: year, month: month, day: day).date ?? Date()
+    }
+    static func GetDateTime(date: String) -> Date {
+        let calendar = Calendar(identifier: .gregorian)
+        
+        var hour = 0
+        var minute = 0
+        
+        GetIntTime(date: date, hour: &hour, miniute: &minute)
+        
+        return DateComponents(calendar: calendar, hour: hour, minute: minute).date ?? Date()
     }
 }
