@@ -76,7 +76,7 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let viewW = habitCollection.frame.width
-        let col : CGFloat = viewW > 500 ? 3 : 1
+        let col : CGFloat = viewW > 500 ? 2 : 1
         let edge: CGFloat = 10.0
         
         let widthFrame : CGFloat = (viewW - CGFloat(edge * 2)) / col

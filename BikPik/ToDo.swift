@@ -156,7 +156,12 @@ class ToDoManager {
                 if let task = tasks[name] {
                     timeArr[name] = task.time
                 } else if let id = mngHabit.habitId[name] {
-                    timeArr[name] = mngHabit.habits[id].task.time
+                    let st:Int = Int(mngHabit.habits[id].start) ?? 0
+                    let ed:Int = Int(mngHabit.habits[id].end) ?? 0
+                    let sel:Int = Int(selDate) ?? 0
+                    if (st <= sel) && (ed >= sel) {
+                        timeArr[name] = mngHabit.habits[id].task.time
+                    }
                 }
             }
         }

@@ -68,9 +68,8 @@ class ToDoViewController: UIViewController {
         btnWeekDate()
         
         // 테이블 뷰 리로드
-        mngToDo.loadTask()
+        mngToDo.updateData()
         self.ToDoTable.reloadData()
-        
     }
     
     @IBOutlet weak var topView: UIView!
@@ -251,9 +250,9 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
                 } else {
                     // habit
                     let alert = UIAlertController(title: key, message: "Habit", preferredStyle: .alert)
-                    let disable = UIAlertAction(title: "비활성화", style: .default, handler: {UIAlertAction in self.alertDisable(habitName: key)})
+                    let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertReviseHabit(habitName: key)})
                     let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
-                    alert.addAction(disable)
+                    alert.addAction(revise)
                     alert.addAction(cancle)
                     present(alert, animated: true, completion: nil)
                 }
@@ -283,8 +282,12 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         self.ToDoTable.reloadData()
     }
     
-    func alertDisable(habitName : String) {
-        print("Disable")
+    func alertReviseHabit (habitName : String) {
+        let vc = storyboard.self?.instantiateViewController(withIdentifier: "AddHabitVC") as! AddHabitViewController
+        vc.modalTransitionStyle = .coverVertical
+        guard let id = mngHabit.habitId[habitName] else { return }
+        vc.data = mngHabit.habits[id]
+        self.present(vc, animated: true, completion: nil)
     }
 }
 

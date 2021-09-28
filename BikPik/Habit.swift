@@ -87,81 +87,50 @@ class HabitManager {
         return habits[id].task
     }
     
-    func isDoneCheck(habit : Habits ,date: String) -> Bool {
+    func isDoneIndex(habit: Habits, date: String) -> Int? {
+        var rptWeek: [Int] = []
         var rptDay = 0
-        var resDay = 0
-        
+        var retIndex = 0
+        let stWeek = Date.GetIntDayWeek(habit.start) ?? 0
         for i in 0...6 {
-            if habit.days[i] == true {
+            let idx = Date.GetIntDayWeek(Date.GetNextDay(date, i)) ?? 0
+            if habit.days[idx-1] == true {
+                rptWeek.append(idx)
                 rptDay += 1
             }
         }
+        if rptWeek.count == 0 { return nil }
+        
+        
         let quotient = (Date.GetDays(start: habit.start, end: date)-1) / 7
-        let remainder = (Date.GetDays(start: habit.start, end: date)-1) % 7
-        if remainder>0{
-            let gap = Date.GetIntDayWeek(habit.start)! - Date.GetIntDayWeek(date)!
-            var n = Date.GetIntDayWeek(habit.start)!
-            if gap > 0 {
-                for _ in 1...(7-gap) {
-                    if n > 7 {
-                        n = 1
-                    }
-                    if ((habit.isDone?[n-1]) != nil) {
-                        resDay += 1
-                    }
-                    n += 1
-                }
-            } else if gap < 0 {
-                for _ in gap ... -1 {
-                    if ((habit.isDone?[n-1]) != nil) {
-                        resDay += 1
-                    }
-                    n += 1
+        
+        for _ in 0...quotient {
+            for n in 0...(rptWeek.count-1) {
+                let add : Int = (rptWeek[n] - stWeek) >= 0 ? rptWeek[n] - stWeek : rptWeek[n] - stWeek + 7
+                
+                let addDay = Date.GetNextDay(habit.start, (quotient*7)+add)
+                if Int(addDay)! > Int(date)! {
+                    break
+                } else {
+                    retIndex += 1
                 }
             }
         }
         
-        let idx = (quotient * rptDay) + resDay
+        return retIndex - 1
+    }
+    
+    func isDoneCheck(habit : Habits ,date: String) -> Bool {
+        let idx = isDoneIndex(habit: habit, date: date) ?? 0
+        if habit.isDone == nil { return false }
+        if idx <= habit.isDone!.count { return false }
         let done = habit.isDone?[idx] ?? false
-        
+        print("isDoneCheck ::  \(idx) , \(done)")
         return done
     }
     
     func isDone(habit: inout Habits,  date: String, done : Bool) {
-        var rptDay = 0
-        var resDay = 0
-        
-        for i in 0...6 {
-            if habit.days[i] == true {
-                rptDay += 1
-            }
-        }
-        let quotient = (Date.GetDays(start: habit.start, end: date)-1) / 7
-        let remainder = (Date.GetDays(start: habit.start, end: date)-1) % 7
-        if remainder>0{
-            let gap = Date.GetIntDayWeek(habit.start)! - Date.GetIntDayWeek(date)!
-            var n = Date.GetIntDayWeek(habit.start)!
-            if gap > 0 {
-                for _ in 1...(7-gap) {
-                    if n > 7 {
-                        n = 1
-                    }
-                    if ((habit.isDone?[n-1]) != nil) {
-                        resDay += 1
-                    }
-                    n += 1
-                }
-            } else if gap < 0 {
-                for _ in gap ... -1 {
-                    if ((habit.isDone?[n-1]) != nil) {
-                        resDay += 1
-                    }
-                    n += 1
-                }
-            }
-        }
-        
-        let idx = (quotient * rptDay) + resDay
+        let idx = isDoneIndex(habit: habit, date: date) ?? 0
         habit.isDone?[idx] = done
     }
 }
