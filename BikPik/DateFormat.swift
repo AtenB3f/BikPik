@@ -6,7 +6,77 @@
 //
 
 import UIKit
+
+struct IntDate {
+    var year: Int = 0
+    var month: Int = 0
+    var day: Int = 0
+}
+
+enum DateFormat {
+    case picker
+    case date
+    case fullDate
+    case userDate
+    case intDate
+}
+
 extension Date {
+    /**
+     Date data conver function.
+     - parameter data : UIDatePicker / Date / yyyyMMdd string / M/d string / IntDate structure
+     - parameter input : Input data format. enum DateFormat
+     - parameter output : Output data format. enum DateFormat
+     */
+    static func DateForm(data: Any, input: DateFormat, output: DateFormat) ->Any {
+        if input == output { return data }
+        
+        let calendar = Calendar(identifier: .gregorian)
+        let dateFormatter = Foundation.DateFormatter()
+        var convertDate: Date?
+        
+        switch input {
+        case .picker:
+            let datePicker: UIDatePicker = data as! UIDatePicker
+            convertDate = datePicker.date
+        case .date:
+            convertDate = data as? Date
+        case .fullDate:
+            var year = 0
+            var month = 0
+            var day = 0
+            GetIntDate(date: data as! String , year: &year, month: &month, day: &day)
+            convertDate = DateComponents(calendar: calendar, year: year, month: month, day: day).date ?? Date()
+        case .intDate:
+            let intDate: IntDate = data as! IntDate
+            convertDate = DateComponents(calendar: calendar, year: intDate.year, month: intDate.month, day: intDate.day).date
+        default:
+            convertDate = Date()
+        }
+        
+        switch output {
+        case .picker:
+            let picker = UIDatePicker()
+            picker.date = convertDate!
+            return picker
+        case .date:
+            return convertDate!
+        case .fullDate:
+            dateFormatter.dateFormat = "yyyyMMdd"
+            return dateFormatter.string(from: convertDate!)
+        case .userDate:
+            dateFormatter.dateFormat = "M/d"
+            return dateFormatter.string(from: convertDate!)
+        case .intDate:
+            var intDate = IntDate()
+            intDate.year = calendar.component(.year, from: convertDate!)
+            intDate.month = calendar.component(.month, from: convertDate!)
+            intDate.day = calendar.component(.day, from: convertDate!)
+            return intDate
+        //default:
+            //return convertDate!
+        }
+    }
     /**
      Date time data convert to string data of HH:mm format .
      - parameter picker : UIDatePicker of time data
@@ -102,7 +172,7 @@ extension Date {
      date : "20200719"
      return: "Mon" / "Tue" / ...
      */
-    static func GetDayWeek (_ date: String) -> String {
+    static func GetDayWeek (date: String) -> String {
         let IdxYM = date.index(date.startIndex, offsetBy: 4)
         let IdxMD = date.index(date.startIndex, offsetBy: 6)
         
