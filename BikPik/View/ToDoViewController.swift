@@ -96,10 +96,20 @@ class ToDoViewController: UIViewController {
             datePicker!.translatesAutoresizingMaskIntoConstraints = false
             datePicker!.layer.backgroundColor = UIColor(named: "BikPik Light Color")?.cgColor
             datePicker!.layer.cornerRadius = 10
-            NSLayoutConstraint.activate([
-                datePicker!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                datePicker!.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            ])
+            print(view.layer.frame.width)
+            if view.layer.frame.width > 500 {
+                
+                NSLayoutConstraint.activate([
+                    datePicker!.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+                    datePicker!.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
+                ])
+            } else {
+                NSLayoutConstraint.activate([
+                    datePicker!.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+                    datePicker!.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+                    datePicker!.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
+                ])
+            }
         } else {
             for view in self.view.subviews {
                 if view.isEqual(datePicker) {
