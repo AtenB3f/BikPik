@@ -49,16 +49,16 @@ class AddHabitViewController: UIViewController {
         }
         
         data.task.name = fldHabit.text
-        data.task.time = Date.TimeForm(timePicker)
-        data.start = Date.DateForm(startDatePicker)
-        data.end = Date.DateForm(endDatePicker)
+        data.task.time = Date.TimeForm(picker: timePicker)
+        data.start = Date.DateForm(picker: startDatePicker)
+        data.end = Date.DateForm(picker: endDatePicker)
         data.isDone = [Bool](repeating: false, count: data.total)
         
         if revise == true {
-            mngHabit.reviseHabit(id: id!, habit: data)
+            mngHabit.correctHabit(id: id!, habit: data)
         } else {
             if mngHabit.habitId[data.task.name!] != nil { return }
-            mngHabit.createHabit(data)
+            mngHabit.createHabit(habit: data)
         }
         
         self.presentingViewController?.dismiss(animated: true)

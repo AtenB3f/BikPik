@@ -53,10 +53,13 @@ class ToDoManager {
     var taskIdList: [String : Int] = [:]    // KEY is [task name] , VALUE is [ID]
     var taskList: [String] = []             // VALUE is [task name]
     var selTaskList : [String] = []
-    var selDate: String = Date.FullNowDate()
+    var selDate: String = Date.GetNowDate()
     
     let mngHabit = HabitManager.mngHabit
     
+    /**
+     	 Reloading To Do Table View
+     */
     func updateData() {
         mngHabit.loadHabit()
         loadTaskList()
@@ -65,9 +68,13 @@ class ToDoManager {
         loadSelTaskList()
         sortTimeline()
     }
-
-    // return number of ID
-    func searchId(_ name: String) -> Int {
+    
+    /**
+     Search To Do ID.
+     - parameter name : task name
+     - returns : ID number
+     */
+    func searchId(name: String) -> Int {
         var num: Int = 0
         let idFile: String = "ToDoIdList.json"
         taskIdList = storage.Search(idFile, as: [String: Int].self) ?? [:]
@@ -81,17 +88,17 @@ class ToDoManager {
         return num
     }
     
+    /**
+     'taskLisk' array loading. "ToDoTaskList.json"file read.
+     */
     func loadTaskList() {
         let file: String = "ToDoTaskList.json"
         taskList.removeAll()
         taskList = storage.Search(file, as: [String].self) ?? []
     }
     
-    /*
-     [Load Task]
-     This function loading the list of tasks for that day.
-     date : "yyyyMMdd" Format   (ex)20200706
-     list : String Array
+    /**
+     'tasks' dictionary loading. "ToDoLisk.json" file read.
      */
     func loadTask() {
         let taskFile: String = "ToDoList.json"
@@ -100,12 +107,18 @@ class ToDoManager {
         tasks = storage.Search(taskFile, as: [String: Task].self) ?? [:]
     }
     
+    /**
+     'taskIdList' dictionary loading. "ToDoIdList.json" file read.
+     */
     func loadTaskIdList() {
         let file = "ToDoIdList.json"
         taskIdList.removeAll()
         taskIdList = storage.Search(file, as: [String:Int].self) ?? [:]
     }
     
+    /**
+     Habit data and To Do data are loaded into the 'selTaskList' array for the selected date.
+     */
     func loadSelTaskList() {
         var taskName: String
         selTaskList.removeAll()
@@ -113,7 +126,7 @@ class ToDoManager {
         if taskList.count > 0 {
             for n in  0...(taskList.count-1) {
                 taskName = taskList[n]
-                if searchTask(selDate, taskName) {
+                if searchTask(date: selDate, taskName: taskName) {
                     selTaskList.append(taskName)
                 }
             }
@@ -122,7 +135,7 @@ class ToDoManager {
         if mngHabit.habits.count > 0 {
             for n in 0...(mngHabit.habits.count-1) {
                 taskName = mngHabit.habits[n].task.name!
-                if searchTask(selDate, taskName) {
+                if searchTask(date: selDate, taskName: taskName) {
                     selTaskList.append(taskName)
                 }
             }
@@ -130,6 +143,10 @@ class ToDoManager {
         
     }
 
+    /**
+     Sort "selTaskLisk" array.
+     "selTaskList" display in the To Do table. first, display In Today tasks. and and sorted array out to time.
+     */
     func sortTimeline() {
         var tmpArr = selTaskList
         var sortArr: [String] = []
@@ -137,7 +154,6 @@ class ToDoManager {
         var inTodayArr: [String] = []
         var timeArr: [String : String] = [:]
         
-        //checkSelDateHabit(sortArr: &sortArr)
         checkInToday(sortArr: &inTodayArr, deleteIdx: &deleteIdx)
         sortArr.append(contentsOf: inTodayArr.sorted(by: <))
         
@@ -203,6 +219,12 @@ class ToDoManager {
         }
     }
     */
+    
+    /**
+     If task is setting 'in today', need to sort array out to time. so this function find the tasks to delete in 'sortArr'.
+     - parameter sortArr : raw array. task list of selected date.
+     - parameter deleteIdx :An array of indices to delete from "sortArr".
+     */
     func checkInToday(sortArr: inout[String], deleteIdx: inout[Int]) {
         let cnt = selTaskList.count - 1
         var key: String
@@ -225,7 +247,14 @@ class ToDoManager {
         }
     }
     
-    func searchTask(_ date: String, _ taskName: String) -> Bool{
+    /**
+     Search task in the Habit list and the To Do list.
+     - parameter date :format is yyyyMMdd. ex) 20210928
+     - parameter taskName : If the task is a habit, the form is the habit name. However, if the task is To Do, the format is "task name" + "_"+"ID".
+                            ex) study_01
+     - returns : If find the task in the list, return true. didn't find task, return false.
+     */
+    func searchTask (date: String, taskName: String) -> Bool{
         if tasks[taskName]?.date == date{
             return true
         }
@@ -239,7 +268,7 @@ class ToDoManager {
             if (start <= sel && sel <= end) {
                 for i in 0...6 {
                     if habit.days[i] {
-                        if (i+1) == Date.GetIntDayWeek(selDate) {
+                        if (i+1) == Date.GetIntDayWeek(date: selDate) {
                             return true
                         }
                     }
@@ -249,7 +278,11 @@ class ToDoManager {
         return false
     }
     
-    func createTask(_ data : inout Task) {
+    /**
+     Create task and save the task list.
+     - parameter data : 'Task' struct data.
+     */
+    func createTask(data : inout Task) {
         var key: String = ""
         var id :Int = 0
         key = data.name!
@@ -271,7 +304,12 @@ class ToDoManager {
         saveTasks()
     }
     
-    func reviseTask(before: Task, after: Task) {
+    /**
+     Correct the task. correct data and save 'tasks'  array.
+     - parameter before : the 'Task' data before modification.
+     - parameter after : the 'Task' data after correction.
+     */
+    func correctTask(before: Task, after: Task) {
         if before.name == nil { return }
         if after.name == nil { return }
         
@@ -305,61 +343,83 @@ class ToDoManager {
         saveTasks()
     }
     
-    func deleteTask(_ key: String) {
-        if tasks[key] != nil {        // To Do Task
-            let taskName = tasks[key]!.name!
-            // tasks
-            if tasks[key] != nil {
-                tasks.removeValue(forKey: key)
-                saveTask(tasks)
-            }
-            
-            // taskIdList
-            if let id = taskIdList[taskName] {
-                if id > 0 {
-                    taskIdList[taskName] = taskIdList[taskName]! - 1
-                } else {
-                    taskIdList.removeValue(forKey: taskName)
-                }
-                saveID(taskIdList)
-            }
-            
-            // taskList
-            if let arrIdx = taskList.firstIndex(of: key) {
-                taskList.remove(at: arrIdx)
-                saveTaskList(taskList)
-            }
-            
-            // selTaskList
-            if let arrIdx = selTaskList.firstIndex(of: key) {
-                selTaskList.remove(at: arrIdx)
-            }
-            
+    /**
+     Delete task in 'tasks' list.
+     - parameter key :If the task is a habit, the form is the habit name. However, if the task is To Do, the format is "task name" + "_"+"ID".
+                        ex) study_01
+     */
+    func deleteTask(key: String) {
+        if tasks[key] == nil { return }
+        
+        let taskName = tasks[key]!.name!
+        // tasks
+        if tasks[key] != nil {
             tasks.removeValue(forKey: key)
-        } else if let id = mngHabit.habitId[key] {           // Habit Task
-            // 비활성화 처리 필요
-            if let arrIdx = selTaskList.firstIndex(of: key) {
-                selTaskList.remove(at: arrIdx)
-            }
+            saveTask(data: tasks)
         }
+        
+        // taskIdList
+        if let id = taskIdList[taskName] {
+            if id > 0 {
+                taskIdList[taskName] = taskIdList[taskName]! - 1
+            } else {
+                taskIdList.removeValue(forKey: taskName)
+            }
+            saveID(data: taskIdList)
+        }
+        
+        // taskList
+        if let arrIdx = taskList.firstIndex(of: key) {
+            taskList.remove(at: arrIdx)
+            saveTaskList(data: taskList)
+        }
+        
+        // selTaskList
+        if let arrIdx = selTaskList.firstIndex(of: key) {
+            selTaskList.remove(at: arrIdx)
+        }
+        
+        tasks.removeValue(forKey: key)
     }
     
+    /**
+     Save tasks, task list, task ID list.
+     */
     func saveTasks () {
-        saveTask(tasks)
-        saveID(taskIdList)
-        saveTaskList(taskList)
+        saveTask(data: tasks)
+        saveID(data: taskIdList)
+        saveTaskList(data: taskList)
     }
     
-    func saveTask (_ data: [String:Task]) {
+    /**
+     Save Tasks.
+     - parameter data : This parameter is dictionary data. The key format is "task name"+"_"+"ID", and the value consists of a "Task" structure.
+     */
+    func saveTask (data: [String:Task]) {
         storage.Save(data, "ToDoList.json")
     }
-    func saveID (_ list: [String:Int]) {
-        storage.Save(list, "ToDoIdList.json")
-    }
-    func saveTaskList (_ arr: [String]) {
-        storage.Save(arr, "ToDoTaskList.json")
+    
+    /**
+     Save Tasks.
+     - parameter data : This parameter is dictionary data. The key format is "task name", and the value is number of task name.
+     */
+    func saveID (data: [String:Int]) {
+        storage.Save(data, "ToDoIdList.json")
     }
     
+    /**
+     Save Tasks.
+     - parameter data : This parameter is String array type. It is an array that shows which task names are stored.
+     */
+    func saveTaskList (data: [String]) {
+        storage.Save(data, "ToDoTaskList.json")
+    }
+    
+    /**
+     key format of "tasks" dictionary is "task name"+"_"+"ID", If you need only task name, use this function.
+     - parameter key : "task name" + "_" + "ID" format
+     - returns : If sucessed split to name, return string data.
+     */
     func splitToName(key : String) -> String? {
         var idx: [Int]? = []
         var cnt = 0

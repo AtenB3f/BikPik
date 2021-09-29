@@ -24,8 +24,8 @@ class AddToDoViewController: UIViewController {
             pickerDate.date = Date.GetDateDay(date: data.date)
         } else {
             // Data Init
-            data.date = Date.FullNowDate()
-            data.time = Date.NowTime()
+            data.date = Date.GetNowDate()
+            data.time = Date.GetNowTime()
         }
     }
     
@@ -48,10 +48,10 @@ class AddToDoViewController: UIViewController {
         
         data.name = name
         if revise == true {
-            managerToDo.reviseTask(before: reviseTask ?? Task() , after: data)
+            managerToDo.correctTask(before: reviseTask ?? Task() , after: data)
         } else {
             // Save Data
-            managerToDo.createTask(&data)
+            managerToDo.createTask(data: &data)
         }
         
         // Back to To Do LIst Page
@@ -69,7 +69,7 @@ class AddToDoViewController: UIViewController {
     
     @IBOutlet weak var pickerDate: UIDatePicker!
     @IBAction func pickerDate(_ sender: Any) {
-        data.date = Date.DateForm(pickerDate)
+        data.date = Date.DateForm(picker: pickerDate)
     }
     
     @IBOutlet weak var todayStackView: UIStackView!
@@ -84,7 +84,7 @@ class AddToDoViewController: UIViewController {
             labelAlram.textColor = .lightGray
             labelTime.textColor = .lightGray
         } else {
-            data.time = Date.TimeForm(pickerTime)
+            data.time = Date.TimeForm(picker: pickerTime)
             swtAlram.isEnabled = true
             pickerTime.isEnabled = true
             labelAlram.textColor = .black
@@ -109,6 +109,6 @@ class AddToDoViewController: UIViewController {
     @IBOutlet weak var labelTime: UILabel!
     @IBOutlet weak var pickerTime: UIDatePicker!
     @IBAction func pickerTime(_ sender: Any) {
-        data.time = Date.TimeForm(pickerTime)
+        data.time = Date.TimeForm(picker: pickerTime)
     }
 }

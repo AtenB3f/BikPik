@@ -51,8 +51,8 @@ class ToDoViewController: UIViewController {
     
     @objc func handleDatePicker(_ sender: UIDatePicker) {
         datePick = sender.date
-        mngToDo.selDate = Date.DateForm(sender)
-        btnDay.setTitle(Date.GetUserDateForm(sender), for: .normal)
+        mngToDo.selDate = Date.DateForm(picker: sender)
+        btnDay.setTitle(Date.GetUserDateForm(picker: sender), for: .normal)
         //updateDate()
         
         // 데이트 뷰 삭제
@@ -130,15 +130,15 @@ class ToDoViewController: UIViewController {
             }
         }
         
-        let cnt = idx - (Date.GetIntDayWeek(mngToDo.selDate) ?? 0) + 1
-        mngToDo.selDate = Date.GetNextDay(mngToDo.selDate, cnt)
-        btnDay.setTitle(Date.GetUserDate(mngToDo.selDate), for: .normal)
+        let cnt = idx - (Date.GetIntDayWeek(date: mngToDo.selDate) ?? 0) + 1
+        mngToDo.selDate = Date.GetNextDay(date: mngToDo.selDate,fewDays: cnt)
+        btnDay.setTitle(Date.GetUserDate(date: mngToDo.selDate), for: .normal)
         mngToDo.updateData()
         ToDoTable.reloadData()
     }
     
     func btnWeekDate() {
-        let weekIdx = Date.GetIntDayWeek(mngToDo.selDate) ?? 0
+        let weekIdx = Date.GetIntDayWeek(date: mngToDo.selDate) ?? 0
         let arrBtn: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
         for i in 0 ... 6 {
             arrBtn[i].isSelected = (i == (weekIdx-1)) ? true : false
@@ -152,13 +152,13 @@ class ToDoViewController: UIViewController {
         
         let arrDay: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
         
-        Date.GetIntDate(mngToDo.selDate, &year, &month, &day)
+        Date.GetIntDate(date: mngToDo.selDate, year: &year, month: &month, day: &day)
         
         let idx: Int = Date.GetIntDayWeek(year: year, month: month, day: day) ?? 0
         
         for i in 1...7 {
-            let strDate = Date.GetNextDay(mngToDo.selDate, i-idx)
-            Date.GetIntDate(strDate, &year, &month, &day)
+            let strDate = Date.GetNextDay(date: mngToDo.selDate,fewDays: i-idx)
+            Date.GetIntDate(date: strDate, year: &year, month: &month, day: &day)
             arrDay[i-1].setTitle(String(day), for: .normal)
         }
         
@@ -210,7 +210,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         let taskName: String = mngToDo.selTaskList[id]
         if mngToDo.tasks[taskName] != nil {
             mngToDo.tasks[taskName]?.isDone = sender.isSelected
-            mngToDo.saveTask(mngToDo.tasks)
+            mngToDo.saveTask(data: mngToDo.tasks)
         } else if mngHabit.searchHabitTask(name: taskName) != nil {
             let id = mngHabit.habitId[taskName]!
             mngHabit.isDone(habit: &mngHabit.habits[id], date: mngToDo.selDate, done: sender.isSelected)
@@ -223,7 +223,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         //내일 하기, 수정하기, 삭제하기 등의 기능이 있는 뷰 띄우기 필요
         let id = sender.tag
         let taskName: String = mngToDo.selTaskList[id]
-        mngToDo.deleteTask(taskName)
+        mngToDo.deleteTask(key: taskName)
         mngToDo.updateData()
         self.ToDoTable.reloadData()
     }
@@ -240,10 +240,10 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
                 if let name = mngToDo.splitToName(key: key) {
                     // To Do
                     let alert = UIAlertController(title: name, message: "To Do", preferredStyle: .alert)
-                    let actRevise = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertRevise(key)})
+                    let actCorrect = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertCorrect(key)})
                     let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(key)})
                     let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(key)})
-                    alert.addAction(actRevise)
+                    alert.addAction(actCorrect)
                     alert.addAction(actTomorrow)
                     alert.addAction(actDelete)
                     present(alert, animated: true, completion: nil)
@@ -260,7 +260,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    func alertRevise(_ taskname: String) {
+    func alertCorrect(_ taskname: String) {
         let vc = storyboard.self?.instantiateViewController(withIdentifier: "AddToDoVC") as! AddToDoViewController
         vc.modalTransitionStyle = .coverVertical
         vc.data = mngToDo.tasks[taskname]!
@@ -270,14 +270,14 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     func alertTomorrow(_ taskName: String) {
         let date = mngToDo.tasks[taskName]!.date
         
-        mngToDo.tasks[taskName]!.date = Date.GetNextDay(date)
-        mngToDo.saveTask(mngToDo.tasks)
+        mngToDo.tasks[taskName]!.date = Date.GetNextDay(date: date)
+        mngToDo.saveTask(data: mngToDo.tasks)
         mngToDo.updateData()
         self.ToDoTable.reloadData()
     }
     
     func alertDelete(_ taskName: String) {
-        mngToDo.deleteTask(taskName)
+        mngToDo.deleteTask(key: taskName)
         mngToDo.updateData()
         self.ToDoTable.reloadData()
     }

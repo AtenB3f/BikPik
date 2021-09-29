@@ -121,7 +121,7 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
     }
     
     func alertDelete(id: Int) {
-        mngHabit.deleteHabit(id)
+        mngHabit.deleteHabit(id : id)
         mngHabit.loadHabit()
         mngToDo.updateData()
         habitCollection.reloadData()
@@ -147,8 +147,8 @@ class HabitCollectCell: UICollectionViewCell {
     
     func update(data: Habits) {
         nameHabit.text = data.task.name
-        start.text = "Start    \(Date.GetUserDate(data.start))"
-        end.text = "End      \(Date.GetUserDate(data.end))"
+        start.text = "Start    \(Date.GetUserDate(date: data.start))"
+        end.text = "End      \(Date.GetUserDate(date: data.end))"
         total.text = "Total    \(data.total) day"
         percent.text = "\(calPercent(habit: data))%"
     }
