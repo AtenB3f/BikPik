@@ -94,7 +94,7 @@ class ToDoViewController: UIViewController {
             
             // layout
             datePicker!.translatesAutoresizingMaskIntoConstraints = false
-            datePicker!.layer.backgroundColor = CGColor(red: 0.88, green: 0.9, blue: 1.0, alpha: 1.0)
+            datePicker!.layer.backgroundColor = UIColor(named: "BikPik Light Color")?.cgColor
             datePicker!.layer.cornerRadius = 10
             NSLayoutConstraint.activate([
                 datePicker!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
