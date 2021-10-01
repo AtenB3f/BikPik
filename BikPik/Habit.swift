@@ -40,7 +40,7 @@ class HabitManager {
         var data = habit
         
         // setting ID
-        let id = habits.count > 0 ? (habits.count - 1) : 0
+        let id = habits.count
         data.id = id
         let name = data.task.name!
         habitId[name] = id

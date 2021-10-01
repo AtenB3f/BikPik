@@ -24,8 +24,8 @@ class AddToDoViewController: UIViewController {
             pickerDate.date = Date.GetDateDay(date: data.date)
         } else {
             // Data Init
-            data.date = Date.GetNowDate()
             data.time = Date.GetNowTime()
+            pickerDate.date = Date.DateForm(data: data.date, input: .fullDate, output: .date) as! Date
         }
     }
     

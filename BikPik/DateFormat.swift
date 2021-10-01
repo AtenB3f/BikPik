@@ -46,7 +46,8 @@ extension Date {
             var month = 0
             var day = 0
             GetIntDate(date: data as! String , year: &year, month: &month, day: &day)
-            convertDate = DateComponents(calendar: calendar, year: year, month: month, day: day).date ?? Date()
+            let cmp = DateComponents(calendar: calendar, year: year, month: month, day: day)
+            convertDate = cmp.date
         case .intDate:
             let intDate: IntDate = data as! IntDate
             convertDate = DateComponents(calendar: calendar, year: intDate.year, month: intDate.month, day: intDate.day).date

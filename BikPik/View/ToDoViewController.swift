@@ -98,7 +98,6 @@ class ToDoViewController: UIViewController {
             datePicker!.layer.cornerRadius = 10
             print(view.layer.frame.width)
             if view.layer.frame.width > 500 {
-                
                 NSLayoutConstraint.activate([
                     datePicker!.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
                     datePicker!.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
@@ -184,6 +183,7 @@ class ToDoViewController: UIViewController {
         // Present Add To Do VC
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddToDoVC") as! AddToDoViewController
         vc.modalTransitionStyle = .coverVertical
+        vc.data.date = mngToDo.selDate
         self.present(vc, animated: true, completion: nil)
     }
     
@@ -253,9 +253,11 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
                     let actCorrect = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertCorrect(key)})
                     let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(key)})
                     let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(key)})
+                    let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
                     alert.addAction(actCorrect)
                     alert.addAction(actTomorrow)
                     alert.addAction(actDelete)
+                    alert.addAction(cancle)
                     present(alert, animated: true, completion: nil)
                 } else {
                     // habit
