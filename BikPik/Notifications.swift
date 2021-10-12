@@ -38,29 +38,36 @@ class Notifications {
         dateComponents.day = day
         dateComponents.hour = hour
         dateComponents.minute = miniute
-           
-        // Create the trigger as a repeating event.
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
-        // Create the request
+        let key = task.name! + "_" + String(task.id)
+        let uuid = addNotification(content: content, dateComponents: dateComponents, repeats: false)
+        listIdentifer[key] = uuid
+        
+        print(listIdentifer)
+        return uuid
+    }
+    
+    func addNotification(content: UNMutableNotificationContent, dateComponents: DateComponents, repeats: Bool) -> String {
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)
         let uuidString = UUID().uuidString
         let request = UNNotificationRequest(identifier: uuidString,
                     content: content, trigger: trigger)
-        print(uuidString)
-        listIdentifer[task.name!] = uuidString
-        // Schedule the request with the system.
-        //let notificationCenter = UNUserNotificationCenter.current()
+        
         notificationCenter.add(request) { (error) in
            if error != nil {
               print("createNotificationTask Error")
            }
         }
-        
         return uuidString
     }
     
+    
     func removeNotificationTask(task: Task) {
-        guard let identifers = task.notiUUID else { return }
+        let key = task.name! + "_" + String(task.id)
+        guard let identifers = listIdentifer[key] else {
+            print("removeNotificationTask :: no identifer")
+            return
+        }
         
         UNUserNotificationCenter.current().getPendingNotificationRequests { (notiRequests) in
             var removeIdentifiers = [String]()
@@ -72,6 +79,54 @@ class Notifications {
             }
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: removeIdentifiers)
         }
+        
+        listIdentifer.removeValue(forKey: key)
+        print(listIdentifer)
     }
 
+    func createNotificationHabit(habit: Habits) {
+        var uuid: String?
+        let content =     UNMutableNotificationContent()
+        content.title = habit.task.name!
+        content.body = "습관 생성 중..."
+        content.sound = .default
+        
+        var hour = 0
+        var miniute = 0
+        
+        Date.GetIntTime(date: habit.task.time, hour: &hour, minutes: &miniute)
+        
+        let calendar = Calendar.current
+        var dateCmp = DateComponents(calendar: calendar, hour: hour, minute: miniute)
+        
+        for n in 0...6 {
+            if habit.days[n] == true {
+                dateCmp.weekday = n+1
+                uuid = addNotification(content: content, dateComponents: dateCmp, repeats: true)
+                let key = habit.task.name! + String(n+1)
+                listIdentifer[key] = uuid
+            }
+        }
+        print(listIdentifer)
+    }
+    
+    func removeNotificationHabit(habit: Habits) {
+        let name = habit.task.name!
+        
+        UNUserNotificationCenter.current().getPendingNotificationRequests { [self] (notiRequests) in
+            var removeIdentifiers = [String]()
+            for noti: UNNotificationRequest in notiRequests {
+                for n in 0...6 {
+                    let key = name + String(n+1)
+                    let identifer = listIdentifer[key]
+                    if noti.identifier == identifer {
+                        removeIdentifiers.append(noti.identifier)
+                        listIdentifer.removeValue(forKey: key)
+                    }
+                }
+            }
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: removeIdentifiers)
+        }
+        print(listIdentifer)
+    }
 }

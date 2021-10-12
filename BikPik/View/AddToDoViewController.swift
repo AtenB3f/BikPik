@@ -48,10 +48,13 @@ class AddToDoViewController: UIViewController {
 
         guard let name = fldTask.text else { return }
         guard  name != "" else { return }
+        if revise == true {
+            mngNoti.removeNotificationTask(task: data)
+        }
         
         data.name = name
         
-        if swtAlram.isOn {
+        if data.alram {
             data.notiUUID = mngNoti.createNotificationTask(task: data)
         }
         
@@ -106,12 +109,6 @@ class AddToDoViewController: UIViewController {
     @IBOutlet weak var swtAlram: UISwitch!
     @IBAction func swtAlram(_ sender: Any) {
         data.alram = swtAlram.isOn
-        print("alram")
-        if swtAlram.isOn {
-            // 알람 설정
-        } else {
-            // 알람 해제
-        }
     }
     
     @IBOutlet weak var labelTime: UILabel!

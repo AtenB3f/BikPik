@@ -11,6 +11,7 @@ class HabitViewController: UIViewController {
     
     let mngHabit = HabitManager.mngHabit
     let mngToDo = ToDoManager.mngToDo
+    let mngNoti = Notifications.mngNotification
     
     var widthCell : CGFloat = 250
     var cellSize = CGSize()
@@ -121,6 +122,10 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
     }
     
     func alertDelete(id: Int) {
+        let habit = mngHabit.habits[id]
+        if habit.task.alram == true {
+            mngNoti.removeNotificationHabit(habit: habit)
+        }
         mngHabit.deleteHabit(id : id)
         mngHabit.loadHabit()
         mngToDo.updateData()

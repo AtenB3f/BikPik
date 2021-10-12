@@ -12,6 +12,8 @@ let notiAddHabit: Notification.Name = Notification.Name("notiAddHabit")
 class AddHabitViewController: UIViewController {
     
     let mngHabit = HabitManager.mngHabit
+    let mngNoti = Notifications.mngNotification
+    
     var data: Habits = Habits()
     var revise : Bool = false
     
@@ -39,20 +41,28 @@ class AddHabitViewController: UIViewController {
     
     @IBOutlet weak var nabigationBar: UINavigationBar!
     @IBAction func btnAdd(_ sender: Any) {
-        
-        if data.task.name == "", data.task.name == nil { return }
+        guard let name = fldHabit.text else { return }
+        if name == "" { return }
         
         var id :Int?
         if revise {
+            mngNoti.removeNotificationHabit(habit: data)
             id = mngHabit.habitId[data.task.name!]
             if id == nil { return }
+        } else {
+            if mngHabit.habitId[name] != nil { return }
         }
         
-        data.task.name = fldHabit.text
+        data.task.name = name
         data.task.time = Date.TimeForm(picker: timePicker)
         data.start = Date.DateForm(picker: startDatePicker)
         data.end = Date.DateForm(picker: endDatePicker)
         data.isDone = [Bool](repeating: false, count: data.total)
+        data.task.alram = swtAlram.isOn
+        
+        if data.task.alram {
+             mngNoti.createNotificationHabit(habit: data)
+        }
         
         if revise == true {
             mngHabit.correctHabit(id: id!, habit: data)
