@@ -14,14 +14,7 @@ class ToDoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /*
-        // Timer 설정
-        // Today Date Change
-        let _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerProc), userInfo: nil, repeats: true)
-        timerProc()
-         */
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: AddToDoVC, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: notiAddToDo, object: nil)
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell))
         ToDoTable.addGestureRecognizer(longPress)

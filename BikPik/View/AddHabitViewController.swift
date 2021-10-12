@@ -7,7 +7,7 @@
 
 import UIKit
 
-let AddHabitVC: Notification.Name = Notification.Name("AddHabitVC")
+let notiAddHabit: Notification.Name = Notification.Name("notiAddHabit")
 
 class AddHabitViewController: UIViewController {
     
@@ -63,7 +63,7 @@ class AddHabitViewController: UIViewController {
         
         self.presentingViewController?.dismiss(animated: true)
         
-        NotificationCenter.default.post(name: AddHabitVC, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: notiAddHabit, object: nil, userInfo: nil)
     }
     
     @IBAction func btnCancle(_ sender: Any) {

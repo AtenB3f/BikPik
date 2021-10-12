@@ -7,7 +7,8 @@
 
 import UIKit
 
-let AddToDoVC: Notification.Name = Notification.Name("AddToDoVC")
+
+let notiAddToDo: Notification.Name = Notification.Name("notiAddToDo")
 
 class AddToDoViewController: UIViewController {
 
@@ -29,6 +30,9 @@ class AddToDoViewController: UIViewController {
         }
     }
     
+    let managerToDo = ToDoManager.mngToDo
+    let mngNoti = Notifications.mngNotification
+    
     var data: Task = Task()
     var revise: Bool = false
     var reviseTask :Task?	
@@ -40,13 +44,17 @@ class AddToDoViewController: UIViewController {
     }
     
     // Navigation Add
-    let managerToDo = ToDoManager.mngToDo
     @IBAction func btnAdd(_ sender: Any) {
 
         guard let name = fldTask.text else { return }
         guard  name != "" else { return }
         
         data.name = name
+        
+        if swtAlram.isOn {
+            data.notiUUID = mngNoti.createNotificationTask(task: data)
+        }
+        
         if revise == true {
             managerToDo.correctTask(before: reviseTask ?? Task() , after: data)
         } else {
@@ -57,7 +65,7 @@ class AddToDoViewController: UIViewController {
         // Back to To Do LIst Page
         self.presentingViewController?.dismiss(animated: true)
         
-        NotificationCenter.default.post(name: AddToDoVC, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: notiAddToDo, object: nil, userInfo: nil)
     }
     
 

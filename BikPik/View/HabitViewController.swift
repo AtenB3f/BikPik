@@ -19,7 +19,7 @@ class HabitViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: AddHabitVC  , object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: notiAddHabit  , object: nil)
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell(_:)))
         habitCollection.addGestureRecognizer(longPress)

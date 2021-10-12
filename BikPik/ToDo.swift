@@ -14,6 +14,7 @@ struct Task: Codable, Equatable{
     var date : String = ""
     var time : String = "00:00"
     var alram : Bool = false
+    var notiUUID: String?
     var isDone : Bool = false
     var project : String?
     var color : String?
@@ -56,7 +57,7 @@ class ToDoManager {
     var selDate: String = Date.GetNowDate()
     
     let mngHabit = HabitManager.mngHabit
-    
+    let mngNoti = Notifications.mngNotification
     /**
      	 Reloading To Do Table View
      */
@@ -349,14 +350,17 @@ class ToDoManager {
                         ex) study_01
      */
     func deleteTask(key: String) {
-        if tasks[key] == nil { return }
+        guard let data = tasks[key] else { return }
         
-        let taskName = tasks[key]!.name!
-        // tasks
-        if tasks[key] != nil {
-            tasks.removeValue(forKey: key)
-            saveTask(data: tasks)
+        let taskName = data.name!
+        
+        if data.alram == true {
+            mngNoti.removeNotificationTask(task: data)
         }
+        
+        // tasks
+        tasks.removeValue(forKey: key)
+        saveTask(data: tasks)
         
         // taskIdList
         if let id = taskIdList[taskName] {
