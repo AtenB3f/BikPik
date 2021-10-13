@@ -26,6 +26,12 @@ class ToDoViewController: UIViewController {
         mngToDo.updateData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        mngToDo.setToday()
+        mngToDo.updateData()
+        updateDate()
+    }
+    
     // 태스크 추가 후에 테이블 뷰 적용될 수 있게 하는 기능
     @objc func didDismissPostCommentNotification(_ noti: Notification) {
         mngToDo.updateData()
@@ -39,7 +45,9 @@ class ToDoViewController: UIViewController {
     }
     
     func updateDate() {
-        btnDay.setTitle(Date.GetUserDateForm(), for: .normal)
+        let userDate: String = Date.DateForm(data: mngToDo.selDate, input: .fullDate, output: .userDate) as! String
+        btnDay.setTitle(userDate, for: .normal)
+        ToDoTable.reloadData() 
     }
     
     @objc func handleDatePicker(_ sender: UIDatePicker) {

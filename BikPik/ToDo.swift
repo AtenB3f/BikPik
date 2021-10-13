@@ -445,4 +445,8 @@ class ToDoManager {
         }
         
     }
+    
+    func setToday() {
+        selDate = Date.GetNowDate()
+    }
 }

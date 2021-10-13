@@ -102,7 +102,7 @@ class Notifications {
         for n in 0...6 {
             if habit.days[n] == true {
                 dateCmp.weekday = n+1
-                uuid = addNotification(content: content, dateComponents: dateCmp, repeats: true)
+                uuid = addNotification(content: content, dateComponents: dateCmp, repeats: false)
                 let key = habit.task.name! + String(n+1)
                 listIdentifer[key] = uuid
             }
@@ -129,4 +129,14 @@ class Notifications {
         }
         print(listIdentifer)
     }
+    
+    func printNotifications() {
+        print("[printNotifications]")
+        UNUserNotificationCenter.current().getPendingNotificationRequests { (notiRequests) in
+            for noti: UNNotificationRequest in notiRequests {
+                print(noti.identifier)
+            }
+        }
+    }
+    
 }
