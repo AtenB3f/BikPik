@@ -1109,6 +1109,39 @@
             </objects>
             <point key="canvasLocation" x="53.600000000000001" y="750.73891625615772"/>
         </scene>
+        <!--Custom Side Menu View Controller-->
+        <scene sceneID="lGE-cG-Zje">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rjx-x8-Gvq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <navigationController id="Lxy-1g-mst" customClass="CustomSideMenuViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="3bs-yL-sL0"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZXU-kf-PU1">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="628" y="67"/>
+        </scene>
+        <!--Side Menu View Controller-->
+        <scene sceneID="KWd-Nr-Ecl">
+            <objects>
+                <viewController storyboardIdentifier="SideMenuVC" useStoryboardIdentifierAsRestorationIdentifier="YES" interfaceStyle="light" id="rwR-kh-w2w" customClass="SideMenuViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eyN-L9-I3l">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="zRZ-ad-Iu6"/>
+                        <color key="backgroundColor" name="BikPik Color"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Ybz-yL-DnB"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftSide" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Yew-4H-tCu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1337" y="67"/>
+        </scene>
     </scenes>
     <color key="tintColor" name="BikPik Color"/>
     <resources>

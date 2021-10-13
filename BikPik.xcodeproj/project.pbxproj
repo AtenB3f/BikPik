@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3124057E2716EEE20056C1F6 /* CustomSideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3124057D2716EEE20056C1F6 /* CustomSideMenuViewController.swift */; };
 		3141F0D62678965300E14EDF /* ToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3146791E266B6203008AEC4D /* ToDoViewController.swift */; };
 		3141F0D92678965F00E14EDF /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3141F0CF267874F000E14EDF /* DateFormat.swift */; };
 		3146790A266B6118008AEC4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31467909266B6118008AEC4D /* AppDelegate.swift */; };
@@ -23,9 +24,14 @@
 		319DEF5C26770F4200299580 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF5B26770F4200299580 /* CalendarViewController.swift */; };
 		319DEF6126775F8100299580 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF6026775F8100299580 /* ToDo.swift */; };
 		319DEF65267782A200299580 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF64267782A200299580 /* Storage.swift */; };
+		31A132F42716B88D004C6ACC /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A132F32716B88D004C6ACC /* SideMenuViewController.swift */; };
+		ACC189454E0F54C2FCE53B04 /* Pods_BikPik.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B409A4D7E305B7205E8A04 /* Pods_BikPik.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		16B409A4D7E305B7205E8A04 /* Pods_BikPik.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BikPik.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B4F49DA89A1131BF8FA848F /* Pods-BikPik.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BikPik.debug.xcconfig"; path = "Target Support Files/Pods-BikPik/Pods-BikPik.debug.xcconfig"; sourceTree = "<group>"; };
+		3124057D2716EEE20056C1F6 /* CustomSideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSideMenuViewController.swift; sourceTree = "<group>"; };
 		3141F0CF267874F000E14EDF /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; usesTabs = 0; };
 		31467906266B6118008AEC4D /* BikPik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BikPik.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31467909266B6118008AEC4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +50,8 @@
 		319DEF5B26770F4200299580 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		319DEF6026775F8100299580 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		319DEF64267782A200299580 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		31A132F32716B88D004C6ACC /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
+		AE1DE5914FF9628B3EAD1C39 /* Pods-BikPik.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BikPik.release.xcconfig"; path = "Target Support Files/Pods-BikPik/Pods-BikPik.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ACC189454E0F54C2FCE53B04 /* Pods_BikPik.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +71,8 @@
 			children = (
 				31467908266B6118008AEC4D /* BikPik */,
 				31467907266B6118008AEC4D /* Products */,
+				FB3CAAB88217B69111B5AA83 /* Pods */,
+				43BCC6D8BFA70A29BFD2BEDE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,8 +112,27 @@
 				319DEF5B26770F4200299580 /* CalendarViewController.swift */,
 				3199943726DF606000F4DD5D /* HabitViewController.swift */,
 				3199943926DF658700F4DD5D /* AddHabitViewController.swift */,
+				31A132F32716B88D004C6ACC /* SideMenuViewController.swift */,
+				3124057D2716EEE20056C1F6 /* CustomSideMenuViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		43BCC6D8BFA70A29BFD2BEDE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				16B409A4D7E305B7205E8A04 /* Pods_BikPik.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FB3CAAB88217B69111B5AA83 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1B4F49DA89A1131BF8FA848F /* Pods-BikPik.debug.xcconfig */,
+				AE1DE5914FF9628B3EAD1C39 /* Pods-BikPik.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,9 +142,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3146791A266B611B008AEC4D /* Build configuration list for PBXNativeTarget "BikPik" */;
 			buildPhases = (
+				4A4ED9C1B74F5EC5B452A18D /* [CP] Check Pods Manifest.lock */,
 				31467902266B6118008AEC4D /* Sources */,
 				31467903266B6118008AEC4D /* Frameworks */,
 				31467904266B6118008AEC4D /* Resources */,
+				1D3C18E3938E37D9B8AC331E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -170,6 +202,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1D3C18E3938E37D9B8AC331E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BikPik/Pods-BikPik-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BikPik/Pods-BikPik-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BikPik/Pods-BikPik-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4A4ED9C1B74F5EC5B452A18D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BikPik-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		31467902266B6118008AEC4D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -179,11 +253,13 @@
 				3199943A26DF658700F4DD5D /* AddHabitViewController.swift in Sources */,
 				319DEF6126775F8100299580 /* ToDo.swift in Sources */,
 				319DEF56267705C200299580 /* PageViewController.swift in Sources */,
+				31A132F42716B88D004C6ACC /* SideMenuViewController.swift in Sources */,
 				3146790A266B6118008AEC4D /* AppDelegate.swift in Sources */,
 				31867C6F2714815E007C6F58 /* Notifications.swift in Sources */,
 				3141F0D62678965300E14EDF /* ToDoViewController.swift in Sources */,
 				3199943C26DF65C400F4DD5D /* Habit.swift in Sources */,
 				319DEF65267782A200299580 /* Storage.swift in Sources */,
+				3124057E2716EEE20056C1F6 /* CustomSideMenuViewController.swift in Sources */,
 				3146790C266B6118008AEC4D /* SceneDelegate.swift in Sources */,
 				3199943826DF606000F4DD5D /* HabitViewController.swift in Sources */,
 				319DEF5C26770F4200299580 /* CalendarViewController.swift in Sources */,
@@ -331,6 +407,7 @@
 		};
 		3146791B266B611B008AEC4D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B4F49DA89A1131BF8FA848F /* Pods-BikPik.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -350,6 +427,7 @@
 		};
 		3146791C266B611B008AEC4D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AE1DE5914FF9628B3EAD1C39 /* Pods-BikPik.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SideMenu
 
 class ToDoViewController: UIViewController {
     
@@ -177,6 +178,10 @@ class ToDoViewController: UIViewController {
     
     @IBAction func btnMenu(_ sender: Any) {
         
+        let sideMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "SideMenuVC") as! SideMenuViewController
+        let menu = SideMenuNavigationController(rootViewController: sideMenuViewController)
+        
+        present(menu, animated: true, completion: nil)
     }  
     
     @IBOutlet weak var btnAddTask: UIButton!
