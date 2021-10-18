@@ -235,6 +235,7 @@
                                         </state>
                                         <connections>
                                             <action selector="btnMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="b6u-ye-gjB"/>
+                                            <segue destination="Lxy-1g-mst" kind="show" id="YaW-Sg-2k0"/>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gan-bg-mKI" userLabel="WeekView">
@@ -944,7 +945,7 @@
                                         </state>
                                         <connections>
                                             <action selector="btnMenu:" destination="6js-RS-qy0" eventType="touchUpInside" id="IJn-XW-GNL"/>
-                                            <action selector="btnMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uoS-dt-E4y"/>
+                                            <segue destination="Lxy-1g-mst" kind="show" id="vxh-sa-Zed"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1107,46 +1108,210 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K6h-xl-aux" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="Ft8-HM-h7X" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="53.600000000000001" y="750.73891625615772"/>
+            <point key="canvasLocation" x="-111" y="751"/>
         </scene>
         <!--Custom Side Menu View Controller-->
         <scene sceneID="lGE-cG-Zje">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rjx-x8-Gvq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController id="Lxy-1g-mst" customClass="CustomSideMenuViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="3bs-yL-sL0"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZXU-kf-PU1">
-                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <connections>
+                        <segue destination="rwR-kh-w2w" kind="relationship" relationship="rootViewController" id="r5Z-q5-L90"/>
+                    </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rjx-x8-Gvq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="628" y="67"/>
+            <point key="canvasLocation" x="690" y="67"/>
         </scene>
         <!--Side Menu View Controller-->
         <scene sceneID="KWd-Nr-Ecl">
             <objects>
                 <viewController storyboardIdentifier="SideMenuVC" useStoryboardIdentifierAsRestorationIdentifier="YES" interfaceStyle="light" id="rwR-kh-w2w" customClass="SideMenuViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eyN-L9-I3l">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lzI-wg-QYS" userLabel="Profile">
+                                <rect key="frame" x="12.666666666666657" y="56" width="350" height="128"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MmS-5q-c3x" userLabel="Name">
+                                        <rect key="frame" x="109.66666666666664" y="30" width="130.33333333333337" height="36"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E-mail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VY0-Ql-4GT" userLabel="Email">
+                                        <rect key="frame" x="150.66666666666669" y="76" width="48.333333333333343" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="VY0-Ql-4GT" firstAttribute="centerX" secondItem="lzI-wg-QYS" secondAttribute="centerX" id="6SL-ZO-4Sg"/>
+                                    <constraint firstAttribute="height" constant="128" id="NFv-O8-n2z"/>
+                                    <constraint firstItem="MmS-5q-c3x" firstAttribute="centerX" secondItem="lzI-wg-QYS" secondAttribute="centerX" id="aCg-Oh-KLL"/>
+                                    <constraint firstItem="VY0-Ql-4GT" firstAttribute="top" secondItem="MmS-5q-c3x" secondAttribute="bottom" constant="10" id="g8O-cj-51K"/>
+                                    <constraint firstItem="MmS-5q-c3x" firstAttribute="top" secondItem="lzI-wg-QYS" secondAttribute="top" constant="30" id="ij5-nJ-mmY"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dMM-GY-2OR" userLabel="Settings">
+                                <rect key="frame" x="0.0" y="608" width="375" height="120"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GWg-NL-Yid" userLabel="Setting">
+                                        <rect key="frame" x="152.66666666666666" y="20" width="70" height="31"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="gearshape.fill" catalog="system" title="설정"/>
+                                        <connections>
+                                            <action selector="btnSetting:" destination="rwR-kh-w2w" eventType="touchUpInside" id="ECx-mQ-n34"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tlk-c0-Kc2" userLabel="오픈소스">
+                                        <rect key="frame" x="125.66666666666666" y="51" width="123.66666666666666" height="34.333333333333343"/>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Open Source">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="17"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="btnOpenSource:" destination="rwR-kh-w2w" eventType="touchUpInside" id="B1Z-hb-fxJ"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qce-t5-NcB" userLabel="Version">
+                                        <rect key="frame" x="166.66666666666666" y="85.333333333333371" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Qce-t5-NcB" firstAttribute="centerX" secondItem="dMM-GY-2OR" secondAttribute="centerX" id="1Ro-Kh-s12"/>
+                                    <constraint firstItem="Tlk-c0-Kc2" firstAttribute="centerX" secondItem="dMM-GY-2OR" secondAttribute="centerX" id="GNu-gX-IQp"/>
+                                    <constraint firstAttribute="height" constant="120" id="Il5-7e-59U"/>
+                                    <constraint firstItem="Tlk-c0-Kc2" firstAttribute="centerX" secondItem="GWg-NL-Yid" secondAttribute="centerX" id="Ity-0w-17G"/>
+                                    <constraint firstItem="Tlk-c0-Kc2" firstAttribute="top" secondItem="GWg-NL-Yid" secondAttribute="bottom" id="j17-bk-6lv"/>
+                                    <constraint firstItem="GWg-NL-Yid" firstAttribute="top" secondItem="dMM-GY-2OR" secondAttribute="top" constant="20" id="xpI-na-P3U"/>
+                                    <constraint firstItem="Qce-t5-NcB" firstAttribute="top" secondItem="Tlk-c0-Kc2" secondAttribute="bottom" id="y8f-vE-5Ru"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="zRZ-ad-Iu6"/>
                         <color key="backgroundColor" name="BikPik Color"/>
+                        <constraints>
+                            <constraint firstItem="zRZ-ad-Iu6" firstAttribute="bottom" secondItem="dMM-GY-2OR" secondAttribute="bottom" constant="30" id="2Jm-gl-5MS"/>
+                            <constraint firstItem="dMM-GY-2OR" firstAttribute="width" secondItem="eyN-L9-I3l" secondAttribute="width" id="Abr-9B-7QU"/>
+                            <constraint firstItem="lzI-wg-QYS" firstAttribute="width" secondItem="eyN-L9-I3l" secondAttribute="width" constant="-25" id="Kga-lB-V6y"/>
+                            <constraint firstItem="lzI-wg-QYS" firstAttribute="centerX" secondItem="zRZ-ad-Iu6" secondAttribute="centerX" id="O44-Cb-mKj"/>
+                            <constraint firstItem="dMM-GY-2OR" firstAttribute="centerX" secondItem="zRZ-ad-Iu6" secondAttribute="centerX" id="Xbc-U5-0Z1"/>
+                            <constraint firstItem="lzI-wg-QYS" firstAttribute="top" secondItem="zRZ-ad-Iu6" secondAttribute="top" id="flx-Nu-3do"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Ybz-yL-DnB"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="leftSide" value="YES"/>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="btnOpenSource" destination="Tlk-c0-Kc2" id="wLk-ba-Fud"/>
+                        <outlet property="btnSetting" destination="GWg-NL-Yid" id="hAB-Nq-Lbf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yew-4H-tCu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1337" y="67"/>
+            <point key="canvasLocation" x="1388" y="67"/>
+        </scene>
+        <!--Setting View Controller-->
+        <scene sceneID="C44-3S-OmN">
+            <objects>
+                <viewController storyboardIdentifier="SettingVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sWz-h8-gNB" customClass="SettingViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CTp-fM-LF5">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" largeTitles="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qxS-f4-rr2">
+                                <rect key="frame" x="0.0" y="44" width="375" height="96"/>
+                                <items>
+                                    <navigationItem title="Settinig" id="GGj-XP-idB">
+                                        <barButtonItem key="leftBarButtonItem" image="arrow.left" catalog="system" id="SAY-ZM-qYS"/>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="7Vr-4P-idH"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="qxS-f4-rr2" firstAttribute="top" secondItem="7Vr-4P-idH" secondAttribute="top" id="LHw-SI-3jx"/>
+                            <constraint firstItem="qxS-f4-rr2" firstAttribute="width" secondItem="7Vr-4P-idH" secondAttribute="width" id="La5-iO-cZl"/>
+                            <constraint firstItem="qxS-f4-rr2" firstAttribute="centerX" secondItem="7Vr-4P-idH" secondAttribute="centerX" id="eKM-Tp-bVf"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D1Z-ds-IkF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2106" y="67"/>
+        </scene>
+        <!--Open Source View Controller-->
+        <scene sceneID="b4Q-Gx-0x9">
+            <objects>
+                <viewController storyboardIdentifier="OpenSourceVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cWD-N2-HLV" customClass="OpenSourceViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bPc-Md-elJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" largeTitles="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qSe-5h-Vvk">
+                                <rect key="frame" x="0.0" y="44" width="375" height="96"/>
+                                <items>
+                                    <navigationItem title="Open Source" id="TMb-IU-3gE">
+                                        <barButtonItem key="leftBarButtonItem" image="arrow.left" catalog="system" id="n9D-hf-ABQ">
+                                            <connections>
+                                                <action selector="navBtnBack:" destination="cWD-N2-HLV" id="pbp-9N-WnM"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="xzp-G9-pud">
+                                <rect key="frame" x="0.0" y="140" width="375" height="638"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="WnM-zl-e3g"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="qSe-5h-Vvk" firstAttribute="centerX" secondItem="WnM-zl-e3g" secondAttribute="centerX" id="CiF-Jq-96M"/>
+                            <constraint firstItem="WnM-zl-e3g" firstAttribute="bottom" secondItem="xzp-G9-pud" secondAttribute="bottom" id="Pxp-r9-hpk"/>
+                            <constraint firstItem="xzp-G9-pud" firstAttribute="top" secondItem="qSe-5h-Vvk" secondAttribute="bottom" id="S6f-lR-wIG"/>
+                            <constraint firstItem="xzp-G9-pud" firstAttribute="width" secondItem="bPc-Md-elJ" secondAttribute="width" id="Ty9-qu-18r"/>
+                            <constraint firstItem="xzp-G9-pud" firstAttribute="centerX" secondItem="WnM-zl-e3g" secondAttribute="centerX" id="fiM-xx-Td6"/>
+                            <constraint firstItem="qSe-5h-Vvk" firstAttribute="top" secondItem="WnM-zl-e3g" secondAttribute="top" id="iUc-bH-cwe"/>
+                            <constraint firstItem="qSe-5h-Vvk" firstAttribute="width" secondItem="WnM-zl-e3g" secondAttribute="width" id="yV4-d8-sBP"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textView" destination="xzp-G9-pud" id="51e-2X-rA2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EpN-sL-1WZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2842" y="67"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="YaW-Sg-2k0"/>
+    </inferredMetricsTieBreakers>
     <color key="tintColor" name="BikPik Color"/>
     <resources>
         <image name="CheckBox" width="128" height="128"/>
+        <image name="arrow.left" catalog="system" width="128" height="98"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
+        <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
         <image name="square.grid.2x2.fill" catalog="system" width="128" height="114"/>
         <image name="x.circle" catalog="system" width="128" height="121"/>
@@ -1156,6 +1321,9 @@
         <namedColor name="BikPik Color">
             <color red="0.75599998235702515" green="0.70999997854232788" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

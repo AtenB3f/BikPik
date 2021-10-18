@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SideMenu
 
 class HabitViewController: UIViewController {
     
@@ -41,7 +42,10 @@ class HabitViewController: UIViewController {
     
     @IBOutlet weak var btnMenu: UIButton!
     @IBAction func btnMenu(_ sender: Any) {
-        habitCollection.reloadData()
+        let sideMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "SideMenuVC") as! SideMenuViewController
+        let menu = CustomSideMenuViewController(rootViewController: sideMenuViewController)
+        
+        present(menu, animated: true, completion: nil)
     }
     
     @IBOutlet weak var habitCollection: UICollectionView!

@@ -177,9 +177,8 @@ class ToDoViewController: UIViewController {
     
     
     @IBAction func btnMenu(_ sender: Any) {
-        
         let sideMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "SideMenuVC") as! SideMenuViewController
-        let menu = SideMenuNavigationController(rootViewController: sideMenuViewController)
+        let menu = CustomSideMenuViewController(rootViewController: sideMenuViewController)
         
         present(menu, animated: true, completion: nil)
     }  
