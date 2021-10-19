@@ -1182,8 +1182,8 @@
                                             <action selector="btnOpenSource:" destination="rwR-kh-w2w" eventType="touchUpInside" id="B1Z-hb-fxJ"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qce-t5-NcB" userLabel="Version">
-                                        <rect key="frame" x="166.66666666666666" y="85.333333333333371" width="42" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ver" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qce-t5-NcB" userLabel="Version">
+                                        <rect key="frame" x="174.66666666666666" y="85.333333333333371" width="25.666666666666657" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -1236,7 +1236,11 @@
                                 <rect key="frame" x="0.0" y="44" width="375" height="96"/>
                                 <items>
                                     <navigationItem title="Settinig" id="GGj-XP-idB">
-                                        <barButtonItem key="leftBarButtonItem" image="arrow.left" catalog="system" id="SAY-ZM-qYS"/>
+                                        <barButtonItem key="leftBarButtonItem" image="arrow.left" catalog="system" id="SAY-ZM-qYS">
+                                            <connections>
+                                                <action selector="navBtnBack:" destination="sWz-h8-gNB" id="cjj-Gn-ZIO"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -1249,6 +1253,9 @@
                             <constraint firstItem="qxS-f4-rr2" firstAttribute="centerX" secondItem="7Vr-4P-idH" secondAttribute="centerX" id="eKM-Tp-bVf"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="navigationBar" destination="qxS-f4-rr2" id="AwL-k6-1u2"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D1Z-ds-IkF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
