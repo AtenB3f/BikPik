@@ -156,6 +156,7 @@ class HabitManager {
         let idx = isDoneIndex(habit: habit, date: date) ?? 0
         if habit.isDone == nil { return false }
         if idx <= habit.isDone!.count { return false }
+        if habit.isDone!.count <= idx { return false }
         let done = habit.isDone?[idx] ?? false
         print("isDoneCheck ::  \(idx) , \(done)")
         return done

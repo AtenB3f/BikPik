@@ -286,6 +286,9 @@ class ToDoManager {
     func createTask(data : inout Task) {
         var key: String = ""
         var id :Int = 0
+        
+        if data.name == "" || data.name == nil { return }
+        
         key = data.name!
         
         // Find same named Task

@@ -28,18 +28,26 @@ class SettingViewController: UIViewController {
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     let contentsView = UIScrollView()
+    
     let viewAccount = UIView()
     let labelAccount = UILabel()
     let btnAccount = UIButton()
+    
     let viewTheme = UIView()
     let labelTheme = UILabel()
     let btnTheme = UIButton()
+    let viewThemeDetail = UIView()
+    let labelTimeTheme = UILabel()
+    let swtTimeTheme = UISwitch()
+    
     let viewStartSun = UIView()
     let labelStartSun = UILabel()
     let swtStartSun = UISwitch()
+    
     let viewDeleteData = UIView()
     let labelDeleteData = UILabel()
     let swtDeleteData = UISwitch()
+    
     let viewTag = UIView()
     let labelTag = UILabel()
     let btnTag = UIButton()
@@ -49,6 +57,7 @@ class SettingViewController: UIViewController {
     let offsetTrailling = -15
     let offsetTop = 20
     let heightClose = 56
+    let hightTheme = 78
     
     func addSubView(){
         self.view.addSubview(contentsView)
@@ -60,12 +69,19 @@ class SettingViewController: UIViewController {
         
         viewAccount.addSubview(labelAccount)
         viewAccount.addSubview(btnAccount)
+        
         viewTheme.addSubview(labelTheme)
         viewTheme.addSubview(btnTheme)
+        viewTheme.addSubview(viewThemeDetail)
+        viewThemeDetail.addSubview(labelTimeTheme)
+        viewThemeDetail.addSubview(swtTimeTheme)
+        
         viewStartSun.addSubview(labelStartSun)
         viewStartSun.addSubview(swtStartSun)
+        
         viewDeleteData.addSubview(labelDeleteData)
         viewDeleteData.addSubview(swtDeleteData)
+        
         viewTag.addSubview(labelTag)
         viewTag.addSubview(btnTag)
     }
@@ -119,17 +135,17 @@ class SettingViewController: UIViewController {
         var height = heightClose
         switch setting {
         case .theme:
-            height = open ? 300 : heightClose
+            height = open ? hightTheme+50 : heightClose
             viewTheme.snp.remakeConstraints { make in
                 make.height.equalTo(height)
             }
         case .delete:
-            height = open ? 300 : heightClose
+            height = open ? hightTheme : heightClose
             viewDeleteData.snp.remakeConstraints { make in
                 make.height.equalTo(height)
             }
         case .tag:
-            height = open ? 300 : heightClose
+            height = open ? hightTheme : heightClose
             viewTag.snp.remakeConstraints { make in
                 make.height.equalTo(height)
             }
@@ -160,6 +176,10 @@ class SettingViewController: UIViewController {
         UIView.animate(withDuration: 0.5, animations: {
             self.contentsView.layoutIfNeeded()
         })
+        
+        var size = contentsView.frame.size
+        size.height = viewTag.frame.maxY - contentsView.layer.frame.minY
+        contentsView.contentSize = size
     }
     
     func accountLayout() {
@@ -188,6 +208,27 @@ class SettingViewController: UIViewController {
             make.centerY.equalTo(labelTheme.snp.centerY)
             make.trailing.equalToSuperview().offset(offsetTrailling)
         }
+        
+        viewThemeDetail.backgroundColor = .yellow
+        viewThemeDetail.snp.makeConstraints { make in
+            make.top.equalTo(labelTheme.snp.bottom)
+            make.width.equalToSuperview()
+            make.height.equalTo(0)
+        }
+        
+        labelTimeTheme.text = "시간 테마 적용"
+        labelTimeTheme.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(offsetLeading)
+            make.top.equalTo(labelTheme.snp.bottom).offset(offsetTop)
+        }
+        labelTimeTheme.isHidden = true
+        
+        swtTimeTheme.onTintColor = UIColor(named: "BikPik Color")
+        swtTimeTheme.snp.makeConstraints { make in
+            make.top.equalTo(labelTheme.snp.bottom).offset(offsetTop)
+            make.trailing.equalToSuperview().offset(offsetTrailling)
+        }
+        swtTimeTheme.isHidden = true
     }
     func startSunLayout() {
         labelStartSun.text = "달력 일요일 부터 시작하기"
@@ -242,9 +283,13 @@ class SettingViewController: UIViewController {
     @objc func actionTheme(_ sender: UIButton) {
         sender.isSelected.toggle()
         if sender.isSelected {
+            openTheme()
             viewLayoutResize(setting: .theme, open: true)
+            
+            
         } else {
             viewLayoutResize(setting: .theme, open: false)
+            closeTheme()
         }
     }
     @objc func actionStartSun(_ sender: UISwitch) {
@@ -265,5 +310,48 @@ class SettingViewController: UIViewController {
         } else {
             viewLayoutResize(setting: .tag, open: false)
         }
+    }
+    
+    
+    func openTheme() {
+        viewThemeDetail.backgroundColor = UIColor(named: "BikPik Light Color")
+        viewThemeDetail.layer.cornerRadius = 10
+        labelTimeTheme.isHidden = false
+        swtTimeTheme.isHidden = false
+        
+        viewThemeDetail.snp.remakeConstraints({ make in
+            make.height.equalTo(hightTheme)
+            make.top.equalTo(labelTheme.snp.bottom)
+            make.width.equalToSuperview().offset(10)
+        })
+        
+        labelTimeTheme.text = "시간 테마 적용"
+        labelTimeTheme.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(offsetLeading)
+            make.top.equalTo(labelTheme.snp.bottom).offset(offsetTop)
+        }
+        
+        swtTimeTheme.onTintColor = UIColor(named: "BikPik Color")
+        swtTimeTheme.snp.makeConstraints { make in
+            make.top.equalTo(labelTheme.snp.bottom).offset(offsetTop)
+            make.trailing.equalToSuperview().offset(offsetTrailling)
+        }
+        
+    }
+    func closeTheme() {
+        viewThemeDetail.snp.remakeConstraints({ make in
+            make.height.equalTo(0)
+            make.top.equalTo(labelTheme.snp.bottom)
+            make.width.equalToSuperview()
+        })
+        
+        labelTimeTheme.isHidden = true
+        swtTimeTheme.isHidden = true
+    }
+    func openDeleteData() {
+    
+    }
+    func closeDeleteData() {
+        
     }
 }
