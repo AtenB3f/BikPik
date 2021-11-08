@@ -170,7 +170,8 @@ class ToDoViewController: UIViewController {
         for i in 1...7 {
             let strDate = Date.GetNextDay(date: mngToDo.selDate,fewDays: i-idx)
             Date.GetIntDate(date: strDate, year: &year, month: &month, day: &day)
-            arrDay[i-1].setTitle(String(day), for: .normal)
+            let str = String(day)
+            arrDay[i-1].setTitle(str, for: .normal)
         }
         
     }
@@ -362,7 +363,7 @@ class ToDoCell: UITableViewCell {
         
         if mngToDo.tasks[taskId] != nil {
             if mngToDo.tasks[taskId]?.inToday == true {
-                time = ""
+                time = "Today"
             } else {
                 time = mngToDo.tasks[taskId]?.time
             }
@@ -370,7 +371,7 @@ class ToDoCell: UITableViewCell {
             let id = mngHabit.habitId[taskId] ?? 0
             time = mngHabit.habits[id].task.time
         } else {
-            time = ""
+            time = "Today"
         }
         
         return time!

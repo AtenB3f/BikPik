@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GhW-fJ-0uM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GhW-fJ-0uM">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -214,7 +214,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dUD-AO-YbL" userLabel="Top View">
-                                <rect key="frame" x="0.0" y="44" width="375" height="140"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="150"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1nV-a0-5ee" userLabel="Day">
                                         <rect key="frame" x="149.66666666666666" y="15" width="76" height="51"/>
@@ -239,7 +239,7 @@
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gan-bg-mKI" userLabel="WeekView">
-                                        <rect key="frame" x="37.666666666666657" y="80" width="300" height="30"/>
+                                        <rect key="frame" x="37.666666666666657" y="86" width="300" height="30"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZQ-ZS-NRx" userLabel="Mon">
                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
@@ -376,22 +376,54 @@
                                 <constraints>
                                     <constraint firstAttribute="top" secondItem="dFc-kO-BRP" secondAttribute="top" constant="-20" id="Cpq-I6-iLW"/>
                                     <constraint firstItem="G96-L8-LU9" firstAttribute="width" secondItem="gan-bg-mKI" secondAttribute="width" id="Lia-qF-p06"/>
-                                    <constraint firstItem="G96-L8-LU9" firstAttribute="top" secondItem="gan-bg-mKI" secondAttribute="bottom" id="Rrw-kU-9ii"/>
+                                    <constraint firstItem="G96-L8-LU9" firstAttribute="bottom" secondItem="dUD-AO-YbL" secondAttribute="bottom" constant="-10" id="Rrw-kU-9ii"/>
                                     <constraint firstAttribute="trailing" secondItem="dFc-kO-BRP" secondAttribute="trailing" constant="30" id="SEv-uw-Feu"/>
-                                    <constraint firstAttribute="height" constant="140" id="SML-9o-G0R"/>
+                                    <constraint firstAttribute="height" constant="150" id="SML-9o-G0R"/>
                                     <constraint firstItem="gan-bg-mKI" firstAttribute="centerX" secondItem="dUD-AO-YbL" secondAttribute="centerX" id="Vxd-lk-Q0x"/>
                                     <constraint firstItem="G96-L8-LU9" firstAttribute="height" secondItem="gan-bg-mKI" secondAttribute="height" id="Wfd-bf-Ea1"/>
                                     <constraint firstItem="1nV-a0-5ee" firstAttribute="centerX" secondItem="dUD-AO-YbL" secondAttribute="centerX" id="YX4-eh-EjZ"/>
                                     <constraint firstItem="1nV-a0-5ee" firstAttribute="top" secondItem="dUD-AO-YbL" secondAttribute="top" constant="15" id="Yt5-q6-bdq"/>
                                     <constraint firstItem="G96-L8-LU9" firstAttribute="centerX" secondItem="gan-bg-mKI" secondAttribute="centerX" id="huP-V6-d5R"/>
-                                    <constraint firstAttribute="bottom" secondItem="gan-bg-mKI" secondAttribute="bottom" constant="30" id="sHc-uy-0uR"/>
+                                    <constraint firstAttribute="bottom" secondItem="gan-bg-mKI" secondAttribute="bottom" constant="34" id="sHc-uy-0uR"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u9e-F2-lEG" userLabel="Fast Add View">
+                                <rect key="frame" x="0.0" y="194" width="375" height="40"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WKj-gG-Yzp">
+                                        <rect key="frame" x="30" y="4.6666666666666572" width="40" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="31" id="3Gx-Hg-efS"/>
+                                            <constraint firstAttribute="width" constant="40" id="hrx-Gb-YPz"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal">
+                                            <color key="titleColor" name="BikPik Color"/>
+                                            <imageReference key="image" image="plus.app" catalog="system" symbolScale="large"/>
+                                        </state>
+                                    </button>
+                                    <textField opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add Task" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="OWa-Xn-TTE">
+                                        <rect key="frame" x="72" y="10.666666666666659" width="273" height="18.666666666666671"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" name="BikPik Light Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="OWa-Xn-TTE" secondAttribute="trailing" constant="30" id="53F-bR-p9v"/>
+                                    <constraint firstItem="OWa-Xn-TTE" firstAttribute="leading" secondItem="WKj-gG-Yzp" secondAttribute="trailing" constant="2" id="Vuc-ge-pQN"/>
+                                    <constraint firstItem="WKj-gG-Yzp" firstAttribute="leading" secondItem="u9e-F2-lEG" secondAttribute="leading" constant="30" id="Yzd-bo-Qv5"/>
+                                    <constraint firstItem="WKj-gG-Yzp" firstAttribute="centerY" secondItem="u9e-F2-lEG" secondAttribute="centerY" id="lBX-Ua-ALJ"/>
+                                    <constraint firstAttribute="height" constant="40" id="mUx-mJ-D7t"/>
+                                    <constraint firstItem="OWa-Xn-TTE" firstAttribute="centerY" secondItem="u9e-F2-lEG" secondAttribute="centerY" id="xET-Mb-csK"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IXz-pS-gEh" userLabel="List View">
-                                <rect key="frame" x="0.0" y="199" width="375" height="579"/>
+                                <rect key="frame" x="0.0" y="234" width="375" height="544"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mup-g4-2J8">
-                                        <rect key="frame" x="30" y="0.0" width="315" height="579"/>
+                                        <rect key="frame" x="30" y="0.0" width="315" height="544"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="uFQ-W2-34M" customClass="ToDoCell" customModule="BikPik" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="44.666666030883789" width="315" height="44"/>
@@ -463,7 +495,7 @@
                                         </connections>
                                     </tableView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J8R-Nf-4zg">
-                                        <rect key="frame" x="295" y="500.00000000000006" width="50" height="48.666666666666629"/>
+                                        <rect key="frame" x="295" y="465" width="50" height="48.666666666666686"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="d2V-VE-tAg"/>
                                             <constraint firstAttribute="height" constant="50" id="hQa-LG-97H"/>
@@ -489,11 +521,15 @@
                         <viewLayoutGuide key="safeArea" id="nSB-XO-XKX"/>
                         <color key="backgroundColor" name="BikPik Color"/>
                         <constraints>
-                            <constraint firstItem="IXz-pS-gEh" firstAttribute="top" secondItem="dUD-AO-YbL" secondAttribute="bottom" constant="15" id="2Lx-Lr-p5P"/>
+                            <constraint firstItem="IXz-pS-gEh" firstAttribute="top" secondItem="u9e-F2-lEG" secondAttribute="bottom" id="2Lx-Lr-p5P"/>
                             <constraint firstItem="dUD-AO-YbL" firstAttribute="top" secondItem="nSB-XO-XKX" secondAttribute="top" id="5ih-ph-ks0"/>
+                            <constraint firstItem="u9e-F2-lEG" firstAttribute="bottom" secondItem="IXz-pS-gEh" secondAttribute="top" id="757-9h-r3U"/>
+                            <constraint firstItem="u9e-F2-lEG" firstAttribute="top" secondItem="dUD-AO-YbL" secondAttribute="bottom" id="BfO-fm-UWI"/>
                             <constraint firstItem="IXz-pS-gEh" firstAttribute="centerX" secondItem="nSB-XO-XKX" secondAttribute="centerX" id="M0N-qb-oLO"/>
                             <constraint firstItem="dUD-AO-YbL" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="Xif-Dp-aHA"/>
                             <constraint firstItem="IXz-pS-gEh" firstAttribute="bottom" secondItem="nSB-XO-XKX" secondAttribute="bottom" id="hD1-aM-ouF"/>
+                            <constraint firstItem="u9e-F2-lEG" firstAttribute="width" secondItem="nSB-XO-XKX" secondAttribute="width" id="hMF-rV-OO9"/>
+                            <constraint firstItem="u9e-F2-lEG" firstAttribute="centerX" secondItem="nSB-XO-XKX" secondAttribute="centerX" id="lbk-3Q-nI7"/>
                             <constraint firstItem="dUD-AO-YbL" firstAttribute="centerX" secondItem="nSB-XO-XKX" secondAttribute="centerX" id="nFg-j3-g8l"/>
                             <constraint firstItem="IXz-pS-gEh" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="nN3-nW-Khc"/>
                         </constraints>
@@ -1319,6 +1355,7 @@
         <image name="arrow.left" catalog="system" width="128" height="98"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="gearshape.fill" catalog="system" width="128" height="121"/>
+        <image name="plus.app" catalog="system" width="128" height="114"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
         <image name="square.grid.2x2.fill" catalog="system" width="128" height="114"/>
         <image name="x.circle" catalog="system" width="128" height="121"/>
@@ -1326,7 +1363,10 @@
             <color red="0.94999998807907104" green="0.94999998807907104" blue="0.94999998807907104" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="BikPik Color">
-            <color red="0.75599998235702515" green="0.70999997854232788" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.60645377635955811" green="0.70421195030212402" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="BikPik Light Color">
+            <color red="0.90482336282730103" green="0.92941576242446899" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
