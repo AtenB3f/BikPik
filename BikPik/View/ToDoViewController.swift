@@ -20,6 +20,10 @@ class ToDoViewController: UIViewController {
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell))
         ToDoTable.addGestureRecognizer(longPress)
         
+        fldFastAddTask.delegate = self
+        let tabToDoList = UITapGestureRecognizer(target: self, action: #selector(tabPressList))
+        ToDoTable.addGestureRecognizer(tabToDoList)
+        
         setLayout()
         updateDate()
         updateWeekDate()
@@ -176,6 +180,21 @@ class ToDoViewController: UIViewController {
         
     }
     
+    @IBOutlet weak var btnFastAddTask: UIButton!
+    @IBAction func btnFaskAddTask(_ sender: Any) {
+        let task = fldFastAddTask.text
+        if task != "" && task != nil {
+            let data:Task = Task(task!)
+            mngToDo.createTask(data: data)
+            mngToDo.updateData()
+            updateDate()
+        } else {
+            
+            //keyboard Up
+        }
+    }
+    
+    @IBOutlet weak var fldFastAddTask: UITextField!
     
     @IBAction func btnMenu(_ sender: Any) {
         let sideMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "SideMenuVC") as! SideMenuViewController
@@ -417,3 +436,27 @@ class ToDoCell: UITableViewCell {
     }
 }
 
+extension ToDoViewController: UITextFieldDelegate{
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let task = textField.text
+        {
+            let data:Task = Task(task)
+            mngToDo.createTask(data: data)
+            mngToDo.updateData()
+            updateDate()
+            textField.text = nil
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("textFieldDidEndEditing")
+    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    @objc func tabPressList(_ sender: UIGestureRecognizer) {
+        view.endEditing(true)
+    }
+}

@@ -18,6 +18,13 @@ struct Task: Codable, Equatable{
     var isDone : Bool = false
     var project : String?
     var color : String?
+    
+    init(){ }
+    init(_ str: String) {
+        name = str
+        date = Date.GetNowDate()
+        inToday = true
+    }
 }
 
 /*
@@ -283,13 +290,14 @@ class ToDoManager {
      Create task and save the task list.
      - parameter data : 'Task' struct data.
      */
-    func createTask(data : inout Task) {
+    func createTask(data : Task) {
+        var task:Task = data
         var key: String = ""
         var id :Int = 0
         
-        if data.name == "" || data.name == nil { return }
+        if task.name == "" || task.name == nil { return }
         
-        key = data.name!
+        key = task.name!
         
         // Find same named Task
         if taskIdList[key] == nil {
@@ -302,7 +310,7 @@ class ToDoManager {
         
         // KEY protocol is "NAME + ID"
         key = key + "_" + String(id)
-        tasks[key] = data
+        tasks[key] = task
         taskList.append(key)
         
         saveTasks()

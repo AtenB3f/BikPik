@@ -401,6 +401,9 @@
                                             <color key="titleColor" name="BikPik Color"/>
                                             <imageReference key="image" image="plus.app" catalog="system" symbolScale="large"/>
                                         </state>
+                                        <connections>
+                                            <action selector="btnFaskAddTask:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wRd-Nr-A0K"/>
+                                        </connections>
                                     </button>
                                     <textField opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add Task" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="OWa-Xn-TTE">
                                         <rect key="frame" x="72" y="10.666666666666659" width="273" height="18.666666666666671"/>
@@ -545,6 +548,8 @@
                         <outlet property="WedDate" destination="wHA-ag-Vqb" id="mEF-aC-dvP"/>
                         <outlet property="btnAddTask" destination="J8R-Nf-4zg" id="3Lc-wg-Vfh"/>
                         <outlet property="btnDay" destination="1nV-a0-5ee" id="p0p-y1-i3L"/>
+                        <outlet property="btnFastAddTask" destination="WKj-gG-Yzp" id="c4Y-QY-B5D"/>
+                        <outlet property="fldFastAddTask" destination="OWa-Xn-TTE" id="Rgc-Z4-ztw"/>
                         <outlet property="topView" destination="dUD-AO-YbL" id="ZaU-aM-8SH"/>
                         <outlet property="view" destination="8bC-Xf-vdC" id="CFX-H9-HPV"/>
                     </connections>

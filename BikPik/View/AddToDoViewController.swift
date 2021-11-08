@@ -62,7 +62,7 @@ class AddToDoViewController: UIViewController {
             managerToDo.correctTask(before: reviseTask ?? Task() , after: data)
         } else {
             // Save Data
-            managerToDo.createTask(data: &data)
+            managerToDo.createTask(data: data)
         }
         
         // Back to To Do LIst Page
