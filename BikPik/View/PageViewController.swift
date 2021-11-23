@@ -17,7 +17,8 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource, 
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let p1 = storyBoard.instantiateViewController(withIdentifier: "ToDoVC")
         let p2 = storyBoard.instantiateViewController(withIdentifier: "HabitVC")
-        return [p1,p2]
+        let p3 = storyBoard.instantiateViewController(withIdentifier: "CalendarVC")
+        return [p1,p2,p3]
     } ()
    
     var currentIndex : Int {

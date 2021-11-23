@@ -7,6 +7,7 @@
 
 import UIKit
 import SideMenu
+import FSCalendar
 
 class ToDoViewController: UIViewController {
     
@@ -48,7 +49,9 @@ class ToDoViewController: UIViewController {
     @objc func timerProc(){
         updateDate()
     }
-    
+    /***
+     sorting the tasks of seleted date.
+     */
     func updateDate() {
         let userDate: String = Date.DateForm(data: mngToDo.selDate, input: .fullDate, output: .userDate) as! String
         btnDay.setTitle(userDate, for: .normal)
@@ -79,48 +82,36 @@ class ToDoViewController: UIViewController {
     }
     
     @IBOutlet weak var topView: UIView!
+    
     func setLayout() {
         topView.layer.cornerRadius = 20.0
     }
     
+    var calendar: FSCalendar? = nil
     var datePick: Date = Date()
     var datePicker: UIDatePicker? = nil
     @IBOutlet weak var btnDay: UIButton!
     @IBAction func btnDay(_ sender: Any) {
-        
-        if datePicker == nil {
-            datePicker = UIDatePicker()
-            datePicker!.date = datePick
-            
-            // mode & style
-            datePicker!.preferredDatePickerStyle = .inline
-            datePicker!.datePickerMode = .date
-            datePicker!.addTarget(self, action: #selector(handleDatePicker(_:)), for: .valueChanged)
-            view.addSubview(datePicker!)
-            
-            // layout
-            datePicker!.translatesAutoresizingMaskIntoConstraints = false
-            datePicker!.layer.backgroundColor = UIColor(named: "BikPik Light Color")?.cgColor
-            datePicker!.layer.cornerRadius = 10
-            print(view.layer.frame.width)
-            if view.layer.frame.width > 500 {
-                NSLayoutConstraint.activate([
-                    datePicker!.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
-                    datePicker!.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
-                ])
-            } else {
-                NSLayoutConstraint.activate([
-                    datePicker!.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-                    datePicker!.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
-                    datePicker!.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
-                ])
-            }
+        if calendar == nil {
+            let y = topView.fs_bottom + 60
+            let rect = CGRect(x: (view.fs_width - 300)/2, y: y, width: 300, height: 400)
+            calendar = CustomCalendar(style: .month, frame: rect)//FSCalendar(frame: rect)
+            calendar?.allowsMultipleSelection = true
+            calendar?.delegate = self
+            calendar?.dataSource = self
+            view.addSubview(calendar!)
+            let selDate: Date = Date.DateForm(data: mngToDo.selDate, input: .fullDate, output: .date) as! Date
+            calendar!.currentPage = selDate
         } else {
-            for view in self.view.subviews {
-                if view.isEqual(datePicker) {
-                    view.removeFromSuperview()
-                    datePicker = nil
-                }
+            DisableCalendar()
+        }
+    }
+    
+    func DisableCalendar() {
+        for view in self.view.subviews {
+            if view.isEqual(calendar) {
+                view.removeFromSuperview()
+                calendar = nil
             }
         }
     }
@@ -415,6 +406,9 @@ class ToDoCell: UITableViewCell {
      */
     
     func updateCell(indexPathRow row: Int) {
+        if row >= mngToDo.selTaskList.count{
+            return
+        }
         let taskID = mngToDo.selTaskList[row]
         if let task = mngToDo.tasks[taskID] {
             displayDone(done: task.isDone)
@@ -458,5 +452,20 @@ extension ToDoViewController: UITextFieldDelegate{
     }
     @objc func tabPressList(_ sender: UIGestureRecognizer) {
         view.endEditing(true)
+    }
+}
+
+extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
+    
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        print("did select date \(date)")
+        let selDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
+        mngToDo.selDate = selDate
+        print(selDate)
+        DisableCalendar()
+        updateDate()
+        updateWeekDate()
+        btnWeekDate()
+        mngToDo.updateData()
     }
 }

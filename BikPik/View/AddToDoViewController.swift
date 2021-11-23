@@ -6,21 +6,21 @@
 //
 
 import UIKit
-
+import FSCalendar
+import SnapKit
 
 let notiAddToDo: Notification.Name = Notification.Name("notiAddToDo")
 
 class AddToDoViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         if data.name != nil && data.name != "" {
             revise = true
             reviseTask = data
             fldTask.text = data.name
             swtToday.isOn = data.inToday
             swtAlram.isOn = data.alram
+            //viewCalendar.
             pickerTime.date = Date.GetDateTime(date: data.time)
             pickerDate.date = Date.GetDateDay(date: data.date)
         } else {
@@ -83,6 +83,9 @@ class AddToDoViewController: UIViewController {
         data.date = Date.DateForm(picker: pickerDate)
     }
     
+    
+    @IBOutlet var viewCalendar: UIView!
+    
     @IBOutlet weak var todayStackView: UIStackView!
     @IBOutlet weak var labelInToday: UILabel!
     @IBOutlet weak var swtToday: UISwitch!
@@ -115,5 +118,27 @@ class AddToDoViewController: UIViewController {
     @IBOutlet weak var pickerTime: UIDatePicker!
     @IBAction func pickerTime(_ sender: Any) {
         data.time = Date.TimeForm(picker: pickerTime)
+    }
+    
+}
+
+extension AddToDoViewController: FSCalendarDataSource, FSCalendarDelegate{
+    
+    // MARK:- FSCalendarDataSource
+        
+    func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+        let cell = calendar.dequeueReusableCell(withIdentifier: "cell", for: date, at: position)
+        return cell
+    }
+        
+    func calendar(_ calendar: FSCalendar, willDisplay cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
+        //self.configure(cell: cell, for: date, at: position)
+    }
+    func calendar(_ calendar: FSCalendar, shouldSelect date: Date, at monthPosition: FSCalendarMonthPosition)   -> Bool {
+        return monthPosition == .current
+    }
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        print("did select date \(date)")
+
     }
 }
