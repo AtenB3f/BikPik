@@ -175,10 +175,12 @@ class ToDoViewController: UIViewController {
     @IBAction func btnFaskAddTask(_ sender: Any) {
         let task = fldFastAddTask.text
         if task != "" && task != nil {
-            let data:Task = Task(task!)
+            var data:Task = Task(task!)
+            data.date = mngToDo.selDate
             mngToDo.createTask(data: data)
             mngToDo.updateData()
             updateDate()
+            fldFastAddTask.text = ""
         } else {
             
             //keyboard Up
