@@ -16,8 +16,8 @@ struct Task: Codable, Equatable{
     var alram : Bool = false
     var notiUUID: String?
     var isDone : Bool = false
-    var project : String?
-    var color : String?
+    var tag : String?
+    var color : String?     //0xFFFFFF
     
     init(){ }
     init(_ str: String) {

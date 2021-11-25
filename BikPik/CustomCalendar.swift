@@ -25,12 +25,13 @@ class CustomCalendar: FSCalendar{
     init(style:CalendarStyle, frame:CGRect) {
         super.init(frame: frame)
         
+        setLayout()
         switch(style){
         case .month:
-            self.SetMonthLayout()
+            self.setMonthLayout()
             break
         case .week:
-            self.SetWeekLayout()
+            self.setWeekLayout()
         }
     }
     
@@ -38,11 +39,21 @@ class CustomCalendar: FSCalendar{
         fatalError("init(coder:) has not been implemented")
     }
     
-    func SetWeekLayout() {
+    let mngSetting = SettingManager.mngSetting
+    
+    func setLayout() {
+        if mngSetting.data.startSun {
+            super.firstWeekday = 1
+        } else {
+            super.firstWeekday = 2
+        }
+    }
+    
+    func setWeekLayout() {
         super.appearance.headerMinimumDissolvedAlpha = 0.0
     }
     
-    func SetMonthLayout() {
+    func setMonthLayout() {
         super.contentView.backgroundColor = .white
         super.contentView.layer.borderColor = UIColor(named: "BikPik Color")?.cgColor
         super.contentView.layer.borderWidth = 1.5

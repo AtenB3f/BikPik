@@ -9,12 +9,16 @@ import UIKit
 import SnapKit
 
 class SettingViewController: UIViewController {
+    
+    let mngSetting = SettingManager.mngSetting
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         addSubView()
         addTarget()
         setLayout()
+        updateSetting()
     }
     
     enum OpenSetting {
@@ -30,7 +34,7 @@ class SettingViewController: UIViewController {
     let contentsView = UIScrollView()
     
     let viewAccount = UIView()
-    let labelAccount = UILabel()
+    var labelAccount = UILabel()
     let btnAccount = UIButton()
     
     let viewTheme = UIView()
@@ -44,9 +48,9 @@ class SettingViewController: UIViewController {
     let labelStartSun = UILabel()
     let swtStartSun = UISwitch()
     
-    let viewDeleteData = UIView()
-    let labelDeleteData = UILabel()
-    let swtDeleteData = UISwitch()
+    let viewAutoDelete = UIView()
+    let labelAutoDelete = UILabel()
+    let swtAutoDelete = UISwitch()
     
     let viewTag = UIView()
     let labelTag = UILabel()
@@ -64,7 +68,7 @@ class SettingViewController: UIViewController {
         contentsView.addSubview(viewAccount)
         contentsView.addSubview(viewTheme)
         contentsView.addSubview(viewStartSun)
-        contentsView.addSubview(viewDeleteData)
+        contentsView.addSubview(viewAutoDelete)
         contentsView.addSubview(viewTag)
         
         viewAccount.addSubview(labelAccount)
@@ -79,8 +83,8 @@ class SettingViewController: UIViewController {
         viewStartSun.addSubview(labelStartSun)
         viewStartSun.addSubview(swtStartSun)
         
-        viewDeleteData.addSubview(labelDeleteData)
-        viewDeleteData.addSubview(swtDeleteData)
+        viewAutoDelete.addSubview(labelAutoDelete)
+        viewAutoDelete.addSubview(swtAutoDelete)
         
         viewTag.addSubview(labelTag)
         viewTag.addSubview(btnTag)
@@ -120,13 +124,13 @@ class SettingViewController: UIViewController {
             make.width.equalToSuperview()
             make.height.equalTo(heightClose)
         }
-        viewDeleteData.snp.makeConstraints { make in
+        viewAutoDelete.snp.makeConstraints { make in
             make.top.equalTo(viewStartSun.snp.bottom)
             make.width.equalToSuperview()
             make.height.equalTo(heightClose)
         }
         viewTag.snp.makeConstraints { make in
-            make.top.equalTo(viewDeleteData.snp.bottom)
+            make.top.equalTo(viewAutoDelete.snp.bottom)
             make.width.equalToSuperview()
             make.height.equalTo(heightClose)
         }
@@ -141,7 +145,7 @@ class SettingViewController: UIViewController {
             }
         case .delete:
             height = open ? hightTheme : heightClose
-            viewDeleteData.snp.remakeConstraints { make in
+            viewAutoDelete.snp.remakeConstraints { make in
                 make.height.equalTo(height)
             }
         case .tag:
@@ -165,12 +169,12 @@ class SettingViewController: UIViewController {
             make.width.equalToSuperview()
             make.height.equalTo(heightClose)
         }
-        viewDeleteData.snp.makeConstraints { make in
+        viewAutoDelete.snp.makeConstraints { make in
             make.top.equalTo(viewStartSun.snp.bottom)
             make.width.equalToSuperview()
         }
         viewTag.snp.makeConstraints { make in
-            make.top.equalTo(viewDeleteData.snp.bottom)
+            make.top.equalTo(viewAutoDelete.snp.bottom)
             make.width.equalToSuperview()
         }
         UIView.animate(withDuration: 0.5, animations: {
@@ -243,15 +247,15 @@ class SettingViewController: UIViewController {
         }
     }
     func deleteDataLayout() {
-        labelDeleteData.text = "이전 데이터 자동 삭제"
-        labelDeleteData.snp.makeConstraints { make in
+        labelAutoDelete.text = "이전 데이터 자동 삭제"
+        labelAutoDelete.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(offsetLabelTop)
             make.leading.equalToSuperview().offset(offsetLeading)
             
         }
-        swtDeleteData.onTintColor = UIColor(named: "BikPik Color")
-        swtDeleteData.snp.makeConstraints { make in
-            make.centerY.equalTo(labelDeleteData.snp.centerY)
+        swtAutoDelete.onTintColor = UIColor(named: "BikPik Color")
+        swtAutoDelete.snp.makeConstraints { make in
+            make.centerY.equalTo(labelAutoDelete.snp.centerY)
             make.trailing.equalToSuperview().offset(offsetTrailling)
         }
     }
@@ -273,8 +277,14 @@ class SettingViewController: UIViewController {
         btnAccount.addTarget(self, action: #selector(actionAccount(_:)), for: .touchUpInside)
         btnTheme.addTarget(self, action: #selector(self.actionTheme(_:)), for: .touchUpInside)
         swtStartSun.addTarget(self, action: #selector(self.actionStartSun(_:)), for: .touchUpInside)
-        swtDeleteData.addTarget(self, action: #selector(self.actionDeleteData(_:)), for: .touchUpInside)
+        swtAutoDelete.addTarget(self, action: #selector(self.actionAutoDelete(_:)), for: .touchUpInside)
         btnTag.addTarget(self, action: #selector(self.actionTag(_:)), for: .touchUpInside)
+    }
+    
+    func updateSetting() {
+        mngSetting.LoadSetting()
+        swtStartSun.isOn = mngSetting.data.startSun
+        swtAutoDelete.isOn = mngSetting.data.autoDelete
     }
     
     @objc func actionAccount(_ sender: UIButton) {
@@ -285,19 +295,18 @@ class SettingViewController: UIViewController {
         if sender.isSelected {
             openTheme()
             viewLayoutResize(setting: .theme, open: true)
-            
-            
         } else {
             viewLayoutResize(setting: .theme, open: false)
             closeTheme()
         }
     }
     @objc func actionStartSun(_ sender: UISwitch) {
-        
+        let select = sender.isOn
+        mngSetting.data.startSun = select
+        mngSetting.SaveSetting()
     }
-    @objc func actionDeleteData(_ sender: UISwitch) {
-        sender.isSelected.toggle()
-        if sender.isSelected {
+    @objc func actionAutoDelete(_ sender: UISwitch) {
+        if sender.isOn {
             viewLayoutResize(setting: .delete, open: true)
         } else {
             viewLayoutResize(setting: .delete, open: false)
