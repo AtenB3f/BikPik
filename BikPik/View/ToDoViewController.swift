@@ -94,7 +94,7 @@ class ToDoViewController: UIViewController {
     @IBAction func btnDay(_ sender: Any) {
         if calendar == nil {
             let y = topView.fs_bottom + 60
-            let rect = CGRect(x: (view.fs_width - 300)/2, y: y, width: 300, height: 400)
+            let rect = CGRect(x: (view.fs_width - 300)/2, y: y, width: 300, height: 300)
             calendar = CustomCalendar(style: .month, frame: rect)//FSCalendar(frame: rect)
             calendar?.allowsMultipleSelection = true
             calendar?.delegate = self
@@ -181,9 +181,6 @@ class ToDoViewController: UIViewController {
             mngToDo.updateData()
             updateDate()
             fldFastAddTask.text = ""
-        } else {
-            
-            //keyboard Up
         }
     }
     
@@ -463,7 +460,6 @@ extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
         print("did select date \(date)")
         let selDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
         mngToDo.selDate = selDate
-        print(selDate)
         DisableCalendar()
         updateDate()
         updateWeekDate()

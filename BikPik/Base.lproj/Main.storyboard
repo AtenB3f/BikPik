@@ -58,15 +58,9 @@
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="AppleSDGothicNeo-Thin" family="Apple SD Gothic Neo" pointSize="41"/>
                                                         <textInputTraits key="textInputTraits"/>
-                                                        <connections>
-                                                            <action selector="fldTask:" destination="lTo-3V-92w" eventType="editingDidEnd" id="E8n-ra-ugd"/>
-                                                        </connections>
                                                     </textField>
                                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="inline" translatesAutoresizingMaskIntoConstraints="NO" id="t3l-Qd-9h8">
                                                         <rect key="frame" x="37.666666666666657" y="120.00000000000003" width="300" height="298.66666666666674"/>
-                                                        <connections>
-                                                            <action selector="pickerDate:" destination="lTo-3V-92w" eventType="valueChanged" id="at9-bK-2Rv"/>
-                                                        </connections>
                                                     </datePicker>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="FmO-Fa-Bka" userLabel="Today Stack View">
                                                         <rect key="frame" x="37.666666666666657" y="418.66666666666669" width="300" height="31"/>
@@ -83,9 +77,6 @@
                                                                     <constraint firstAttribute="height" constant="31" id="n2m-hb-dHg"/>
                                                                 </constraints>
                                                                 <color key="onTintColor" name="BikPik Color"/>
-                                                                <connections>
-                                                                    <action selector="swtToday:" destination="lTo-3V-92w" eventType="valueChanged" id="whU-Lf-pwi"/>
-                                                                </connections>
                                                             </switch>
                                                         </subviews>
                                                     </stackView>
@@ -102,9 +93,6 @@
                                                                 <rect key="frame" x="251" y="0.0" width="51" height="31"/>
                                                                 <color key="tintColor" name="BikPik Color"/>
                                                                 <color key="onTintColor" name="BikPik Color"/>
-                                                                <connections>
-                                                                    <action selector="swtAlram:" destination="lTo-3V-92w" eventType="valueChanged" id="9uH-5s-er2"/>
-                                                                </connections>
                                                             </switch>
                                                         </subviews>
                                                         <constraints>
@@ -122,9 +110,6 @@
                                                             </label>
                                                             <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="inline" translatesAutoresizingMaskIntoConstraints="NO" id="ECe-Iu-fNo" userLabel="Time Picker">
                                                                 <rect key="frame" x="150" y="0.0" width="150" height="50"/>
-                                                                <connections>
-                                                                    <action selector="pickerTime:" destination="lTo-3V-92w" eventType="valueChanged" id="lCn-dB-W4V"/>
-                                                                </connections>
                                                             </datePicker>
                                                         </subviews>
                                                     </stackView>
@@ -186,20 +171,14 @@
                             <constraint firstItem="sga-SU-iZ8" firstAttribute="bottom" secondItem="cYI-wW-TQG" secondAttribute="bottom" id="b6K-35-z73"/>
                             <constraint firstItem="sga-SU-iZ8" firstAttribute="top" secondItem="VZe-9n-WfW" secondAttribute="bottom" id="zsG-gi-Ify"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="sga-SU-iZ8"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
-                        <outlet property="contentsView" destination="sga-SU-iZ8" id="5JV-eD-EgB"/>
-                        <outlet property="fldTask" destination="QWd-Dh-68B" id="7DK-So-IAs"/>
-                        <outlet property="labelAlram" destination="9Ea-aO-a6F" id="AWT-MT-qmq"/>
-                        <outlet property="labelInToday" destination="keh-2r-prW" id="Uie-Au-GLu"/>
-                        <outlet property="labelTime" destination="hRJ-uq-a2K" id="nqw-G9-SfC"/>
                         <outlet property="navigationAddTask" destination="VZe-9n-WfW" id="vhX-Th-ZCz"/>
-                        <outlet property="pickerDate" destination="t3l-Qd-9h8" id="lKp-St-X9e"/>
-                        <outlet property="pickerTime" destination="ECe-Iu-fNo" id="o8D-db-kfs"/>
-                        <outlet property="swtAlram" destination="qqJ-Sb-ojP" id="aYM-xT-c4Y"/>
-                        <outlet property="swtToday" destination="Jxg-PB-Zs7" id="6TD-Y4-TpR"/>
-                        <outlet property="todayStackView" destination="FmO-Fa-Bka" id="a75-Y6-mIa"/>
-                        <outlet property="viewAlram" destination="U0U-bT-4Kp" id="JXl-Am-5xP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="30r-Te-yzw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
