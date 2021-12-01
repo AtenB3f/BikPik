@@ -60,8 +60,9 @@ class ToDoViewController: UIViewController {
     
     @objc func handleDatePicker(_ sender: UIDatePicker) {
         datePick = sender.date
-        mngToDo.selDate = Date.DateForm(picker: sender)
-        btnDay.setTitle(Date.GetUserDateForm(picker: sender), for: .normal)
+        mngToDo.selDate = Date.DateForm(data: sender, input: .picker, output: .fullDate) as! String
+        let userDate = Date.DateForm(data: sender, input: .picker, output: .userDate) as! String
+        btnDay.setTitle(userDate, for: .normal)
         //updateDate()
         
         // 데이트 뷰 삭제
@@ -138,7 +139,7 @@ class ToDoViewController: UIViewController {
         
         let cnt = idx - (Date.GetIntDayWeek(date: mngToDo.selDate) ?? 0) + 1
         mngToDo.selDate = Date.GetNextDay(date: mngToDo.selDate,fewDays: cnt)
-        btnDay.setTitle(Date.GetUserDate(date: mngToDo.selDate), for: .normal)
+        btnDay.setTitle(Date.DateForm(data: mngToDo.selDate, input: .fullDate, output: .userDate) as? String, for: .normal)
         mngToDo.updateData()
         ToDoTable.reloadData()
     }

@@ -11,6 +11,7 @@ import FSCalendar
 enum CalendarStyle{
     case month
     case week
+    case habit
 }
 
 enum SelectionType : Int {
@@ -32,6 +33,10 @@ class CustomCalendar: FSCalendar{
             break
         case .week:
             self.setWeekLayout()
+            break
+        case .habit:
+            self.setHabitLayout()
+            break
         }
     }
     
@@ -54,6 +59,25 @@ class CustomCalendar: FSCalendar{
     }
     
     func setMonthLayout() {
+        super.allowsMultipleSelection = false
+        super.contentView.backgroundColor = .white
+        super.contentView.layer.borderColor = UIColor(named: "BikPik Color")?.cgColor
+        super.contentView.layer.borderWidth = 1.5
+        super.contentView.layer.cornerRadius = 10.0
+        super.appearance.headerTitleColor = UIColor(named: "BikPik Dark Color")
+        super.appearance.headerTitleFont = UIFont.systemFont(ofSize: 14.0)
+        super.appearance.selectionColor = UIColor(named: "BikPik Color")
+        super.appearance.todayColor = UIColor(named: "BikPik Light Color")
+        super.appearance.titleTodayColor = UIColor(named: "BikPik Dark Color")
+        super.appearance.weekdayFont = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+        super.appearance.weekdayTextColor = UIColor(named: "BikPik Dark Color")
+        super.appearance.headerMinimumDissolvedAlpha = 0.0
+        super.appearance.titleDefaultColor = .darkGray
+        super.appearance.caseOptions = .weekdayUsesSingleUpperCase
+    }
+    
+    func setHabitLayout() {
+        super.allowsMultipleSelection = true
         super.contentView.backgroundColor = .white
         super.contentView.layer.borderColor = UIColor(named: "BikPik Color")?.cgColor
         super.contentView.layer.borderWidth = 1.5

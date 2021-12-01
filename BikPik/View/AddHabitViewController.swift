@@ -25,8 +25,8 @@ class AddHabitViewController: UIViewController {
         } else {
             revise = true
             fldHabit.text = data.task.name
-            startDatePicker.date = Date.GetDateDay(date: data.start)
-            endDatePicker.date = Date.GetDateDay(date: data.end)
+            startDatePicker.date = Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date
+            endDatePicker.date = Date.DateForm(data: data.end, input: .fullDate, output: .date) as! Date
             let arrBtn: [UIButton] = [btnMon, btnTue, btnWed, btnThu, btnFri, btnSat, btnSun]
             for n in 0...(data.days.count-1) {
                 arrBtn[n].isSelected = data.days[n]
@@ -55,8 +55,8 @@ class AddHabitViewController: UIViewController {
         
         data.task.name = name
         data.task.time = Date.TimeForm(picker: timePicker)
-        data.start = Date.DateForm(picker: startDatePicker)
-        data.end = Date.DateForm(picker: endDatePicker)
+        data.start = Date.DateForm(data: startDatePicker as Any, input: .picker, output: .fullDate) as! String
+        data.end = Date.DateForm(data: endDatePicker as Any, input: .picker, output: .fullDate) as! String
         data.isDone = [Bool](repeating: false, count: data.total)
         data.task.alram = swtAlram.isOn
         

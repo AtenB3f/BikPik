@@ -156,8 +156,8 @@ class HabitCollectCell: UICollectionViewCell {
     
     func update(data: Habits) {
         nameHabit.text = data.task.name
-        start.text = "Start    \(Date.GetUserDate(date: data.start))"
-        end.text = "End      \(Date.GetUserDate(date: data.end))"
+        start.text = "Start    \(Date.DateForm(data: data.start, input: .fullDate, output: .userDate) as! String)"
+        end.text = "End      \(Date.DateForm(data: data.end, input: .fullDate, output: .userDate) as! String)"
         total.text = "Total    \(data.total) day"
         percent.text = "\(calPercent(habit: data))%"
     }
@@ -175,5 +175,4 @@ class HabitCollectCell: UICollectionViewCell {
         }
         return (numDone/data.total)*100
     }
-    
 }

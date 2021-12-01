@@ -91,59 +91,6 @@ extension Date {
     }
     
     /**
-     Date data convert to string data of yyyyMMd format .
-     - parameter picker : UIDatePicker of date data
-     - returns : HH:mm format string data.
-     */
-    static func DateForm(picker: UIDatePicker) -> String {
-        let dateFormatter = Foundation.DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd"
-        
-        return dateFormatter.string(from: picker.date)
-    }
-    
-    /**
-     current time convert to "M/d" format string.
-     - returns : "M/d" format string
-     */
-    static func GetUserDateForm() -> String {
-        
-        let nowDate = Date()
-        
-        let dateFormatter = Foundation.DateFormatter()
-        dateFormatter.dateFormat = "M/d"
-
-        return dateFormatter.string(from: nowDate)
-    }
-    
-    /**
-     seleted date by picker convert to "M/d" format string.
-     - parameter picker : UIDatePicker
-     - returns "M/d" format string.
-     */
-    static func GetUserDateForm(picker: UIDatePicker) -> String {
-        let dateFormatter = Foundation.DateFormatter()
-        dateFormatter.dateFormat = "M/d"
-
-        return dateFormatter.string(from: picker.date)
-    }
-    
-    /**
-     "yyyyMMdd" format string convert to "M/d" format string.
-     - parameters date : "yyyyMMdd" format string
-     - returns : "M/d" format string
-     */
-    static func GetUserDate(date: String) -> String{
-        var year = 0
-        var month = 0
-        var day = 0
-        
-        GetIntDate(date: date, year: &year, month: &month, day: &day)
-        
-        return String(month) + "/" + String(day)
-    }
-    
-    /**
      current date convert to "yyyyMMdd" format string.
      - returns :current date in "yyyyMMdd" format string
      */
@@ -514,24 +461,6 @@ extension Date {
         
         return weekCnt
     }
-    
-    /**
-     "yyyyMMdd" format string convert to Date structure.
-     - parameter date: "yyyyMMdd" format string date.
-     - returns : Date structure
-     */
-    static func GetDateDay(date: String) -> Date {
-        let calendar = Calendar(identifier: .gregorian)
-        
-        var year = 0
-        var month = 0
-        var day = 0
-        
-        GetIntDate(date: date, year: &year, month: &month, day: &day)
-        
-        return DateComponents(calendar: calendar, year: year, month: month, day: day).date ?? Date()
-    }
-    
     /**
      "HH:mm" format string convert to Date structure.
      - parameter date: "HH:mm" format string time.

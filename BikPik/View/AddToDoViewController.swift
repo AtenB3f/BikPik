@@ -254,49 +254,12 @@ class AddToDoViewController: UIViewController {
     @objc func actionInToday(_ sender: UISwitch) {
         data.inToday = sender.isOn
         setViewInTodayLayout(sender.isOn)
-    }
-    
-    /*
-    @IBOutlet weak var fldTask: UITextField!
-    @IBOutlet weak var pickerDate: UIDatePicker!
-    @IBAction func pickerDate(_ sender: Any) {
-        data.date = Date.DateForm(picker: pickerDate)
-    }
-    
-    @IBOutlet weak var todayStackView: UIStackView!
-    @IBOutlet weak var labelToday: UILabel!
-    @IBOutlet weak var swtToday: UISwitch!
-    @IBAction func swtToday(_ sender: Any) {
-        data.inToday = swtToday.isOn
-        if swtToday.isOn {
+        if data.inToday {
             data.time = "00:00"
-            swtAlram.isEnabled = false
-            pickerTime.isEnabled = false
-            labelAlram.textColor = .lightGray
-            labelTime.textColor = .lightGray
         } else {
             data.time = Date.TimeForm(picker: pickerTime)
-            swtAlram.isEnabled = true
-            pickerTime.isEnabled = true
-            labelAlram.textColor = .black
-            labelTime.textColor = .black
         }
-        data.inToday = swtToday.isOn
     }
-    
-    @IBOutlet weak var viewAlram: UIStackView!
-    @IBOutlet weak var labelAlram: UILabel!
-    @IBOutlet weak var swtAlram: UISwitch!
-    @IBAction func swtAlram(_ sender: Any) {
-        data.alram = swtAlram.isOn
-    }
-    
-    @IBOutlet weak var labelTime: UILabel!
-    @IBOutlet weak var pickerTime: UIDatePicker!
-    @IBAction func pickerTime(_ sender: Any) {
-        data.time = Date.TimeForm(picker: pickerTime)
-    }
-    */
 }
 
 extension AddToDoViewController: FSCalendarDelegate, FSCalendarDataSource {

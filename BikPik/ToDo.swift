@@ -268,6 +268,11 @@ class ToDoManager {
         }
         
         if let id = mngHabit.habitId[taskName] {
+            
+            if mngHabit.habits.count <= id {
+                return false
+            }
+            
             let habit = mngHabit.habits[id]
             
             let start = Int(habit.start) ?? 0
