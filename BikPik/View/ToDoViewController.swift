@@ -457,7 +457,6 @@ extension ToDoViewController: UITextFieldDelegate{
 extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        print("did select date \(date)")
         let selDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
         mngToDo.selDate = selDate
         DisableCalendar()

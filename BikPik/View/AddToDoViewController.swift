@@ -314,4 +314,8 @@ extension AddToDoViewController: FSCalendarDelegate, FSCalendarDataSource {
         let fullDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
         data.date = fullDate
     }
+    
+    func calendar(_ calendar: FSCalendar, willDisplay cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
+
+    }
 }
