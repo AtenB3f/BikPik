@@ -357,7 +357,7 @@ extension Date {
             case 12:
                 carry = day >= 31 ? true : false
                 if carry {
-                    year = 1
+                    year += 1
                 }
                 break
             default :
