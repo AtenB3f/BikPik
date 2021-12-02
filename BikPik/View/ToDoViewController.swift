@@ -25,16 +25,12 @@ class ToDoViewController: UIViewController {
         let tabToDoList = UITapGestureRecognizer(target: self, action: #selector(tabPressList))
         ToDoTable.addGestureRecognizer(tabToDoList)
         
-        setLayout()
         updateDate()
-        updateWeekDate()
-        btnWeekDate()
-        mngToDo.updateData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         mngToDo.setToday()
-        mngToDo.updateData()
+        //mngToDo.updateData()
         updateDate()
     }
     
@@ -55,38 +51,13 @@ class ToDoViewController: UIViewController {
     func updateDate() {
         let userDate: String = Date.DateForm(data: mngToDo.selDate, input: .fullDate, output: .userDate) as! String
         btnDay.setTitle(userDate, for: .normal)
-        ToDoTable.reloadData() 
-    }
-    
-    @objc func handleDatePicker(_ sender: UIDatePicker) {
-        datePick = sender.date
-        mngToDo.selDate = Date.DateForm(data: sender, input: .picker, output: .fullDate) as! String
-        let userDate = Date.DateForm(data: sender, input: .picker, output: .userDate) as! String
-        btnDay.setTitle(userDate, for: .normal)
-        //updateDate()
-        
-        // 데이트 뷰 삭제
-        for view in self.view.subviews {
-            if view.isEqual(datePicker) {
-                view.removeFromSuperview()
-                datePicker = nil
-            }
-        }
-        
-        // 주간 요일 바꾸기
+        mngToDo.updateData()
         updateWeekDate()
         btnWeekDate()
-        
-        // 테이블 뷰 리로드
-        mngToDo.updateData()
-        self.ToDoTable.reloadData()
+        ToDoTable.reloadData() 
     }
-    
+ 
     @IBOutlet weak var topView: UIView!
-    
-    func setLayout() {
-        topView.layer.cornerRadius = 20.0
-    }
     
     var calendar: FSCalendar? = nil
     var datePick: Date = Date()
@@ -179,7 +150,6 @@ class ToDoViewController: UIViewController {
             var data:Task = Task(task!)
             data.date = mngToDo.selDate
             mngToDo.createTask(data: data)
-            mngToDo.updateData()
             updateDate()
             fldFastAddTask.text = ""
         }
@@ -250,8 +220,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         let id = sender.tag
         let taskName: String = mngToDo.selTaskList[id]
         mngToDo.deleteTask(key: taskName)
-        mngToDo.updateData()
-        self.ToDoTable.reloadData()
+        updateDate()
     }
     
     @objc func longPressCell (_ sender: UIGestureRecognizer) {
@@ -300,14 +269,12 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         
         mngToDo.tasks[taskName]!.date = Date.GetNextDay(date: date)
         mngToDo.saveTask(data: mngToDo.tasks)
-        mngToDo.updateData()
-        self.ToDoTable.reloadData()
+        updateDate()
     }
     
     func alertDelete(_ taskName: String) {
         mngToDo.deleteTask(key: taskName)
-        mngToDo.updateData()
-        self.ToDoTable.reloadData()
+        updateDate()
     }
     
     func alertReviseHabit (habitName : String) {
@@ -462,8 +429,5 @@ extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
         mngToDo.selDate = selDate
         DisableCalendar()
         updateDate()
-        updateWeekDate()
-        btnWeekDate()
-        mngToDo.updateData()
     }
 }
