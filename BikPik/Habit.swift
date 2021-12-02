@@ -114,36 +114,35 @@ class HabitManager {
      - returns : if find the index, return index. if doesn't find the index, return nil.
      */
     func isDoneIndex(habit: Habits, date: String) -> Int? {
+        let selIdx = Date.WeekForm(data: date, input: .fullDate, output: .intIndex) as! Int
+        var resDay = 0
         var rptWeek: [Int] = []
-        var rptDay = 0
-        var retIndex = 0
-        let stWeek = Date.GetIntDayWeek(date: habit.start) ?? 0
+        var cntDay = habit.start
+
         for i in 0...6 {
-            let idx = Date.GetIntDayWeek(date: Date.GetNextDay(date: date,fewDays: i)) ?? 0
-            if habit.days[idx-1] == true {
+            let nextDay = Date.GetNextDay(date: habit.start,fewDays: i)
+            let idx = Date.WeekForm(data: nextDay, input: .fullDate, output: .intIndex) as! Int
+            if(habit.days[i] == true) {
                 rptWeek.append(idx)
-                rptDay += 1
+            }
+        }
+        for i in 0...6 {
+            let nextDay = Date.GetNextDay(date: habit.start,fewDays: i)
+            let idx = Date.WeekForm(data: nextDay, input: .fullDate, output: .intIndex) as! Int
+            
+            if selIdx == idx {
+                cntDay = nextDay
+                break
+            } else {
+                resDay += 1
             }
         }
         if rptWeek.count == 0 { return nil }
         
+        let quotient = (Date.GetDays(start: cntDay, end: date)-1) / 7
+        let ret = (rptWeek.count*quotient) + resDay
         
-        let quotient = (Date.GetDays(start: habit.start, end: date)-1) / 7
-        
-        for _ in 0...quotient {
-            for n in 0...(rptWeek.count-1) {
-                let add : Int = (rptWeek[n] - stWeek) >= 0 ? rptWeek[n] - stWeek : rptWeek[n] - stWeek + 7
-                
-                let addDay = Date.GetNextDay(date: habit.start,fewDays: (quotient*7)+add)
-                if Int(addDay)! > Int(date)! {
-                    break
-                } else {
-                    retIndex += 1
-                }
-            }
-        }
-        
-        return retIndex - 1
+        return ret
     }
     
     /**
@@ -155,10 +154,8 @@ class HabitManager {
     func isDoneCheck(habit : Habits ,date: String) -> Bool {
         let idx = isDoneIndex(habit: habit, date: date) ?? 0
         if habit.isDone == nil { return false }
-        if idx <= habit.isDone!.count { return false }
         if habit.isDone!.count <= idx { return false }
         let done = habit.isDone?[idx] ?? false
-        print("isDoneCheck ::  \(idx) , \(done)")
         return done
     }
     

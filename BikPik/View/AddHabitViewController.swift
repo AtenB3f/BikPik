@@ -19,10 +19,12 @@ class AddHabitViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        calurateTotal()
+        
         if data.task.name == nil {
+            // new habit create
             data = Habits()
         } else {
+            // habit revise
             revise = true
             fldHabit.text = data.task.name
             startDatePicker.date = Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date
@@ -35,6 +37,7 @@ class AddHabitViewController: UIViewController {
             swtAlram.isOn = data.task.alram
             timePicker.date = Date.GetDateTime(date: data.task.time)
         }
+        calurateTotal()
     }
     
     

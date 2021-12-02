@@ -21,6 +21,17 @@ enum DateFormat {
     case intDate
 }
 
+enum WeekInput {
+    case date
+    case fullDate
+    case intDate
+}
+
+enum WeekOutput {
+    case intIndex
+    case stringDay
+}
+
 extension Date {
     /**
      Date data conver function.
@@ -115,38 +126,42 @@ extension Date {
         return dateFormatter.string(from: nowDate)
     }
     
-    /*
-     [GetDayOfWeek]
-     date : "20200719"
-     return: "Mon" / "Tue" / ...
-     */
-    static func GetDayWeek (date: String) -> String {
-        let IdxYM = date.index(date.startIndex, offsetBy: 4)
-        let IdxMD = date.index(date.startIndex, offsetBy: 6)
-        
-        let year:Int = Int(date[date.startIndex ..< IdxYM])!
-        let month:Int = Int(date[IdxYM..<IdxMD])!
-        let day:Int = Int(date[IdxMD ..< date.endIndex])!
-
-        let week = GetDayWeek(year: year, month: month, day: day)
-        
-        return week!
+    static func WeekForm(data : Any, input: WeekInput, output : WeekOutput) -> Any {
+        var date: Date = Date()
+        var year: Int = 0
+        var ret: Any
+        switch input {
+        case .date:
+            date = data as! Date
+            
+            break
+        case .fullDate:
+            date = DateForm(data: data, input: .fullDate, output: .date) as! Date
+            break
+        case .intDate:
+            let intDate: IntDate = data as! IntDate
+            //year = intDate.year
+            date = DateForm(data: intDate, input: .intDate, output: .date) as! Date
+            break
+        }
+        year = Calendar.current.component(.year, from: date)
+        var dd = Calendar.current.component(.weekday, from: date)
+        if year%4 == 0 {
+            dd -= 1
+        }
+        switch output {
+        case .intIndex:
+            ret = dd
+            ret = MondayFirstInt(idx: dd)
+            return ret
+        case .stringDay:
+            ret = Calendar.current.shortWeekdaySymbols[dd]
+            ret = MondayFirstInt(idx: dd)
+            return ret
+        }
     }
     
-    /*
-     [GetDayOfWeek]
-     year : "2020"
-     month : "7"
-     day: "19"
-     return: "Mon" / "Tue" / ...
-     */
-    static func GetDayWeek (year: Int, month: Int, day: Int) -> String? {
-        
-        let dd = GetIntDayWeek(year: year, month: month, day: day) ?? 0
-        // "Sun" / "Mon" / "Tue" / "Wed" / "Thu" / "Fri"/ "Sat"
-        //Calendar.current.veryShortWeekdaySymbols[dd]
-        return Calendar.current.shortWeekdaySymbols[dd]
-    }
+
     
     /**
      A function that changes the index so that the week starts on Monday instead of Sunday.
