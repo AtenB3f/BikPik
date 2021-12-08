@@ -16,7 +16,7 @@ class HabitViewController: UIViewController {
     
     var widthCell : CGFloat = 250
     var cellSize = CGSize()
-    var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    var sectionInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,16 +28,11 @@ class HabitViewController: UIViewController {
         
         //habitCollection.delegate = self
         mngHabit.loadHabit()
-        setLayout()
     }
     
     @objc func didDismissPostCommentNotification(_ sender: Any) {
         mngHabit.loadHabit()
         habitCollection.reloadData()
-    }
-    
-    func setLayout() {
-        
     }
     
     @IBOutlet weak var btnMenu: UIButton!
@@ -63,10 +58,24 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
         return mngHabit.habits.count
     }
     
+    func calCellSize() -> CGSize {
+        let edge = 15.0
+        let viewW = habitCollection.frame.width
+        let col : CGFloat = round(viewW / 300.0)
+        let widthFrame : CGFloat = (viewW) / col
+        
+        widthCell = widthFrame - (edge*((col-1.0) + 2.0))
+        sectionInsets.right = edge
+        sectionInsets.left = edge
+        let size = CGSize(width: widthCell , height: 128)
+        
+        return size
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HabitCell", for: indexPath) as? HabitCollectCell {
-            let size = CGSize(width: 330.0, height: 128.0)
+            let size = calCellSize()//CGSize(width: 330.0, height: 128.0)
             let id = indexPath.row
             let data = mngHabit.habits[id]
             cell.update(data: data)
@@ -80,19 +89,8 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let viewW = habitCollection.frame.width
-        let col : CGFloat = viewW > 500 ? 2 : 1
-        let edge: CGFloat = 10.0
+        cellSize = calCellSize()
         
-        let widthFrame : CGFloat = (viewW - CGFloat(edge * 2)) / col
-        let gap : CGFloat = ((col - 1.0) * edge) / 2
-        widthCell = widthFrame - gap
-        
-        sectionInsets.left = (viewW - (widthFrame * col)) / 2
-        sectionInsets.right = sectionInsets.left
-        cellSize = CGSize(width: widthCell , height: 128)
-        
-        //cellSize.width -= CGFloat(edge)
         return cellSize
     }
     
@@ -173,6 +171,8 @@ class HabitCollectCell: UICollectionViewCell {
                 numDone += 1
             }
         }
-        return (numDone/data.total)*100
+        
+        let percent = round(Float(numDone)/Float(data.total)*100.0)
+        return Int(percent)
     }
 }
