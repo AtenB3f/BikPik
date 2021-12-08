@@ -129,10 +129,7 @@ class ToDoViewController: UIViewController {
         var day: Int = 0
         
         let arrDay: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
-        
-        Date.GetIntDate(date: mngToDo.selDate, year: &year, month: &month, day: &day)
-        
-        let idx: Int = Date.GetIntDayWeek(year: year, month: month, day: day) ?? 0
+        let idx = Date.WeekForm(data: mngToDo.selDate, input: .fullDate, output: .intIndex) as! Int
         
         for i in 1...7 {
             let strDate = Date.GetNextDay(date: mngToDo.selDate,fewDays: i-idx)
@@ -346,7 +343,13 @@ class ToDoCell: UITableViewCell {
             }
         } else if (mngHabit.habitId[taskId] != nil) {
             let id = mngHabit.habitId[taskId] ?? 0
-            time = mngHabit.habits[id].task.time
+            let habit = mngHabit.habits[id]
+            if habit.task.inToday == true {
+                time = "Today"
+            } else {
+                time = mngHabit.habits[id].task.time
+            }
+            
         } else {
             time = "Today"
         }

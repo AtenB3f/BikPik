@@ -10,39 +10,44 @@ import FSCalendar
 
 class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendarDelegate{
     
-    fileprivate let gregorian = Calendar(identifier: .gregorian)
-       fileprivate let formatter: DateFormatter = {
-           let formatter = DateFormatter()
-           formatter.dateFormat = "yyyy-MM-dd"
-           return formatter
-       }()
     
-    
-    fileprivate weak var calendar: FSCalendar!
 
-        override func viewDidLoad() {
-        super.viewDidLoad()
-            let height: CGFloat = 300
-            let calendar = FSCalendar(frame: CGRect(x: 0, y: 20, width: view.frame.size.width, height: height))
-            calendar.dataSource = self
-            calendar.delegate = self
-            calendar.allowsMultipleSelection = true
-            view.addSubview(calendar)
-            self.calendar = calendar
-            calendar.register(CustomCalendar.self, forCellReuseIdentifier: "cell")
-            self.calendar.accessibilityIdentifier = "calendar"
+    override func viewDidLoad() {
+    super.viewDidLoad()
+        /*
+        let height: CGFloat = 300
+        let calendar = FSCalendar(frame: CGRect(x: 0, y: 20, width: view.frame.size.width, height: height))
+        calendar.dataSource = self
+        calendar.delegate = self
+        calendar.allowsMultipleSelection = true
+        view.addSubview(calendar)
+        self.calendar = calendar
+        calendar.register(CustomCalendarCell.self, forCellReuseIdentifier: "cell")
+        self.calendar.accessibilityIdentifier = "calendar"
+         */
     }
-    
-    
+    /*
+     fileprivate let gregorian = Calendar(identifier: .gregorian)
+        fileprivate let formatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            return formatter
+        }()
+     
+     
+     var calendar: FSCalendar!
+     
     // MARK:- FSCalendarDataSource
         
         func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
             let cell = calendar.dequeueReusableCell(withIdentifier: "cell", for: date, at: position)
+            print("1")
             return cell
         }
         
         func calendar(_ calendar: FSCalendar, willDisplay cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
-            //self.configure(cell: cell, for: date, at: position)
+            self.configure(cell: cell, for: date, at: position)
+            print("2")
         }
         
         func calendar(_ calendar: FSCalendar, titleFor date: Date) -> String? {
@@ -89,7 +94,7 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
     
     private func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
             
-            let diyCell = (cell as! CustomCalendarCell)
+        let diyCell = cell as! CustomCalendarCell
             // Custom today circle
             diyCell.circleImageView.isHidden = !self.gregorian.isDateInToday(date)
             // Configure selection layer
@@ -130,4 +135,5 @@ class CalendarViewController: UIViewController, FSCalendarDataSource, FSCalendar
                 diyCell.selectionLayer.isHidden = true
             }
         }
+     */
 }

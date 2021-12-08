@@ -641,9 +641,6 @@
                                                             <constraint firstAttribute="height" constant="40" id="uwh-99-UBa"/>
                                                             <constraint firstAttribute="width" constant="100" id="voC-BL-LzW"/>
                                                         </constraints>
-                                                        <connections>
-                                                            <action selector="pickDate:" destination="x6M-eY-IYM" eventType="valueChanged" id="vg6-Ss-nTj"/>
-                                                        </connections>
                                                     </datePicker>
                                                 </subviews>
                                                 <constraints>
@@ -674,9 +671,6 @@
                                                             <constraint firstAttribute="height" constant="40" id="2bV-j8-jIb"/>
                                                             <constraint firstAttribute="width" constant="100" id="TeJ-iF-XUS"/>
                                                         </constraints>
-                                                        <connections>
-                                                            <action selector="pickDate:" destination="x6M-eY-IYM" eventType="valueChanged" id="1sb-8L-Nlt"/>
-                                                        </connections>
                                                     </datePicker>
                                                 </subviews>
                                                 <constraints>
@@ -696,63 +690,42 @@
                                                         <state key="normal" title="월">
                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="btnDay:" destination="x6M-eY-IYM" eventType="touchUpInside" id="kB1-v5-TW6"/>
-                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" tag="2" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sk4-eF-Fy6" userLabel="Tue">
                                                         <rect key="frame" x="37.999999999999993" y="0.0" width="30.000000000000007" height="30"/>
                                                         <state key="normal" title="화">
                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="btnDay:" destination="x6M-eY-IYM" eventType="touchUpInside" id="Ujh-Zj-NbO"/>
-                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" tag="3" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZQl-Wt-k69" userLabel="Wed">
                                                         <rect key="frame" x="76" y="0.0" width="30" height="30"/>
                                                         <state key="normal" title="수">
                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="btnDay:" destination="x6M-eY-IYM" eventType="touchUpInside" id="RAH-Zf-lWi"/>
-                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" tag="4" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cbH-jy-TY1" userLabel="Thu">
                                                         <rect key="frame" x="113.99999999999999" y="0.0" width="30.333333333333329" height="30"/>
                                                         <state key="normal" title="목">
                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="btnDay:" destination="x6M-eY-IYM" eventType="touchUpInside" id="eN5-aW-wCs"/>
-                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" tag="5" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Xh-bg-gbd" userLabel="Fri">
                                                         <rect key="frame" x="152.33333333333331" y="0.0" width="30" height="30"/>
                                                         <state key="normal" title="금">
                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="btnDay:" destination="x6M-eY-IYM" eventType="touchUpInside" id="WyN-Tl-QwZ"/>
-                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" tag="6" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="egZ-Eq-KKi" userLabel="Sat">
                                                         <rect key="frame" x="190.33333333333331" y="0.0" width="30" height="30"/>
                                                         <state key="normal" title="토">
                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="btnDay:" destination="x6M-eY-IYM" eventType="touchUpInside" id="hkP-PY-Nlr"/>
-                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" tag="7" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVG-Gu-eBa" userLabel="Sun">
                                                         <rect key="frame" x="228.33333333333334" y="0.0" width="30.000000000000028" height="30"/>
                                                         <state key="normal" title="일">
                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
-                                                        <connections>
-                                                            <action selector="btnDay:" destination="x6M-eY-IYM" eventType="touchUpInside" id="ZA3-jJ-pwd"/>
-                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <constraints>
@@ -786,9 +759,6 @@
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Jsv-7B-BfY" userLabel="Today Switch">
                                                 <rect key="frame" x="253" y="0.0" width="51" height="31"/>
                                                 <color key="onTintColor" name="BikPik Color"/>
-                                                <connections>
-                                                    <action selector="swtToday:" destination="x6M-eY-IYM" eventType="valueChanged" id="NrR-mp-wby"/>
-                                                </connections>
                                             </switch>
                                         </subviews>
                                         <constraints>
@@ -808,9 +778,6 @@
                                                 <rect key="frame" x="253" y="0.0" width="51" height="31"/>
                                                 <color key="tintColor" name="BikPik Color"/>
                                                 <color key="onTintColor" name="BikPik Color"/>
-                                                <connections>
-                                                    <action selector="swtAlram:" destination="x6M-eY-IYM" eventType="valueChanged" id="N4c-jD-p1J"/>
-                                                </connections>
                                             </switch>
                                         </subviews>
                                         <constraints>
@@ -892,23 +859,14 @@
                             <constraint firstItem="I8e-Ax-M0l" firstAttribute="width" secondItem="HQB-7V-kxp" secondAttribute="width" id="hZN-nI-ZE2"/>
                             <constraint firstItem="I8e-Ax-M0l" firstAttribute="top" secondItem="apV-3P-1bp" secondAttribute="bottom" id="jxq-zH-dbW"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="I8e-Ax-M0l"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
-                        <outlet property="btnFri" destination="7Xh-bg-gbd" id="xRH-vh-ege"/>
-                        <outlet property="btnMon" destination="Ogc-Nq-72w" id="Fyt-pJ-WJT"/>
-                        <outlet property="btnSat" destination="egZ-Eq-KKi" id="0nM-UL-LSV"/>
-                        <outlet property="btnSun" destination="EVG-Gu-eBa" id="TLA-1X-cZa"/>
-                        <outlet property="btnThu" destination="cbH-jy-TY1" id="GOP-Bj-kOu"/>
-                        <outlet property="btnTue" destination="sk4-eF-Fy6" id="hik-zK-81b"/>
-                        <outlet property="btnWed" destination="ZQl-Wt-k69" id="71w-1n-xsK"/>
-                        <outlet property="endDatePicker" destination="gji-cd-HpH" id="RfZ-25-AhY"/>
-                        <outlet property="fldHabit" destination="eSW-ay-B0a" id="o3F-qK-LhR"/>
                         <outlet property="nabigationBar" destination="apV-3P-1bp" id="GQ7-iQ-3GZ"/>
-                        <outlet property="startDatePicker" destination="jJS-NT-JHQ" id="GuI-pi-B7Q"/>
-                        <outlet property="swtAlram" destination="u8V-Fg-4vO" id="Miw-BR-G9A"/>
-                        <outlet property="swtToday" destination="Jsv-7B-BfY" id="IKv-w1-wDX"/>
-                        <outlet property="timePicker" destination="9bN-Nq-kcS" id="3ne-IO-n6r"/>
-                        <outlet property="viewDate" destination="BGc-9o-bLx" id="mrC-sb-CJo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xwH-l6-15q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
