@@ -16,21 +16,18 @@ BikPik은 하루 계획 관리를 위한 To Do List 앱입니다.
 
 ### :speech_balloon: Languege
 Swift 5
-### :wrench: Skill to Use
+### :wrench: Skill
 StoryBoard  
 Auto Layout  
 ### 📘 Library
 CoCoaPods  
-### :page_with_curl: Opensource to Use
-SnapKit  
-SideMenu  
-FSCalendar  
 <br>
 <br>
 
 ## :mag: 개요
 
 ### 1. To Do List
+
 ![KakaoTalk_20211213_165318404_05](https://user-images.githubusercontent.com/69495341/145805012-e2092d0d-328b-44ca-b4b7-be74463e354f.png)
 ### 2. Habit
 ![KakaoTalk_20211213_165318404_02](https://user-images.githubusercontent.com/69495341/145805009-83078c57-d60d-4ca2-bb1e-091cce7c82fa.png)
