@@ -103,6 +103,7 @@ class AddToDoViewController: UIViewController {
     // values
     let widthRate = 0.80
     let heightGap = 30.0
+    let textCol = UIColor(named: "TextColor")
     
     //functions
     func setLayout() {
@@ -135,7 +136,7 @@ class AddToDoViewController: UIViewController {
         }
         
         fldTaskName.placeholder = "Task"
-        fldTaskName.font = UIFont.systemFont(ofSize: 40.0)
+        fldTaskName.font = UIFont(name: "GmarketSansTTFLight", size: 40.0)
     }
     
     func setCalendarLayout() {
@@ -165,6 +166,7 @@ class AddToDoViewController: UIViewController {
             make.height.equalTo(34)
         }
         labelInToday.text = "오늘 동안"
+        labelInToday.textColor = textCol
         labelInToday.snp.makeConstraints { make in
             make.centerY.equalTo(swtInToday.snp.centerY)
             make.leading.equalTo(calendar.snp.leading).offset(3)
@@ -192,10 +194,10 @@ class AddToDoViewController: UIViewController {
         
         let height = 34
         if !on {
-            labelAlram.textColor = .black
+            labelAlram.textColor = textCol
             swtAlram.isEnabled = true
         } else {
-            labelAlram.textColor = .lightGray
+            labelAlram.textColor = .systemGray3
             swtAlram.isEnabled = false
         }
         
@@ -220,11 +222,11 @@ class AddToDoViewController: UIViewController {
         
         let height = 48
         if !on {
-            labelTime.textColor = .black
+            labelTime.textColor = textCol
             pickerTime.isEnabled = true
             
         } else {
-            labelTime.textColor = .lightGray
+            labelTime.textColor = .systemGray3
             pickerTime.isEnabled = false
         }
         pickerTime.datePickerMode = .time

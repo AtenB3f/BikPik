@@ -126,6 +126,7 @@ class AddHabitViewController: UIViewController {
     // values
     let widthRate = 0.80
     let heightGap = 20.0
+    let textCol = UIColor(named: "TextColor")
     
     
     //functions
@@ -161,7 +162,7 @@ class AddHabitViewController: UIViewController {
         }
         
         fldHabitName.placeholder = "Habit"
-        fldHabitName.font = UIFont.systemFont(ofSize: 40.0)
+        fldHabitName.font = UIFont(name: "GmarketSansTTFLight", size: 40.0)
     }
     
     func setCalendarLayout() {
@@ -193,6 +194,7 @@ class AddHabitViewController: UIViewController {
         
         labelRpt.text = "반복"
         labelRpt.font = UIFont.systemFont(ofSize: 17)
+        labelRpt.textColor = textCol
         labelRpt.snp.makeConstraints { make in
             make.leading.equalTo(calendar.snp.leading).offset(5)
             make.top.equalTo(calendar.snp.bottom).offset(18)
@@ -221,12 +223,7 @@ class AddHabitViewController: UIViewController {
         for i in 0...(arrBtn.count-1) {
             let btn: UIButton = arrBtn[i]
             btn.setTitle(arrTest[i], for: .normal)
-            //btn.backgroundColor = UIColor(named: "BikPik Light Color")
-            //btn.titleLabel?.textColor = .darkGray
-            //btn.tintColor = UIColor(named: "BikPik Color")
             btn.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
-            //btn.setTitleColor(UIColor.systemGray, for: .normal)
-            //btn.titleLabel?.tintColor = .darkGray
             btn.layer.cornerRadius = 8.0
             
             let x = ((widthBtn+8) * (i))
@@ -250,6 +247,7 @@ class AddHabitViewController: UIViewController {
             make.height.equalTo(34)
         }
         labelInToday.text = "오늘 동안"
+        labelInToday.textColor = textCol
         labelInToday.snp.makeConstraints { make in
             make.centerY.equalTo(swtInToday.snp.centerY)
             make.leading.equalTo(calendar.snp.leading).offset(3)
@@ -277,10 +275,10 @@ class AddHabitViewController: UIViewController {
         
         let height = 34
         if !on {
-            labelAlram.textColor = .black
+            labelAlram.textColor = textCol
             swtAlram.isEnabled = true
         } else {
-            labelAlram.textColor = .lightGray
+            labelAlram.textColor = .systemGray2
             swtAlram.isEnabled = false
         }
         
@@ -305,11 +303,11 @@ class AddHabitViewController: UIViewController {
         
         let height = 48
         if !on {
-            labelTime.textColor = .black
+            labelTime.textColor = textCol
             pickerTime.isEnabled = true
             
         } else {
-            labelTime.textColor = .lightGray
+            labelTime.textColor = .systemGray2
             pickerTime.isEnabled = false
         }
         pickerTime.datePickerMode = .time

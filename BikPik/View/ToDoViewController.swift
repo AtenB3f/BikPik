@@ -304,11 +304,12 @@ class ToDoCell: UITableViewCell {
     func displayDone(done: Bool) {
         isDone.isSelected = done
         if done {
-            let col: UIColor = UIColor.init(named: "BikPik Color") ?? .cyan
+            let col: UIColor = UIColor.init(named: "BikPik Dark Color") ?? .cyan
             let img = UIImage(named: "CheckBox_fill.png")?.withRenderingMode(.alwaysTemplate)
             isDone.setImage(img, for: .normal)
             isDone.tintColor = col
             task.textColor = col
+            time.textColor = col
             
             /*
             let attr = NSAttributedString(
@@ -317,11 +318,12 @@ class ToDoCell: UITableViewCell {
             task.attributedText = attr
              */
         } else {
-            let col: UIColor = .lightGray
+            let col: UIColor = UIColor(named: "TextLightColor") ?? .lightText
             let img = UIImage(named: "CheckBox.png")?.withRenderingMode(.alwaysTemplate)
             isDone.setImage(img, for: .normal)
             isDone.tintColor = col
             task.textColor = col
+            time.textColor = col
             
             /*
             let attr = NSAttributedString(

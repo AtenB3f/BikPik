@@ -17,6 +17,8 @@
 		31467916266B611B008AEC4D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31467914266B611B008AEC4D /* LaunchScreen.storyboard */; };
 		31795344271D96BF00EA6034 /* OpenSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31795343271D96BF00EA6034 /* OpenSourceViewController.swift */; };
 		31806387273AA53B0058C886 /* CustomCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31806386273AA53B0058C886 /* CustomCalendar.swift */; };
+		318136EB2768896700DD94C6 /* GmarketSansTTFLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 318136EA2768896700DD94C6 /* GmarketSansTTFLight.ttf */; };
+		318136ED2768896A00DD94C6 /* GmarketSansTTFMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 318136EC2768896A00DD94C6 /* GmarketSansTTFMedium.ttf */; };
 		31867C6F2714815E007C6F58 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31867C6E2714815E007C6F58 /* Notifications.swift */; };
 		3188ACA62671E61E003239CC /* AddToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31467922266BBABD008AEC4D /* AddToDoViewController.swift */; };
 		319657FF274E2543009B4618 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319657FE274E2543009B4618 /* Settings.swift */; };
@@ -48,6 +50,8 @@
 		31467922266BBABD008AEC4D /* AddToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoViewController.swift; sourceTree = "<group>"; };
 		31795343271D96BF00EA6034 /* OpenSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceViewController.swift; sourceTree = "<group>"; };
 		31806386273AA53B0058C886 /* CustomCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalendar.swift; sourceTree = "<group>"; };
+		318136EA2768896700DD94C6 /* GmarketSansTTFLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFLight.ttf; sourceTree = "<group>"; };
+		318136EC2768896A00DD94C6 /* GmarketSansTTFMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFMedium.ttf; sourceTree = "<group>"; };
 		31867C6E2714815E007C6F58 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		319657FE274E2543009B4618 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		3199943726DF606000F4DD5D /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 		31467908266B6118008AEC4D /* BikPik */ = {
 			isa = PBXGroup;
 			children = (
+				318136EC2768896A00DD94C6 /* GmarketSansTTFMedium.ttf */,
+				318136EA2768896700DD94C6 /* GmarketSansTTFLight.ttf */,
 				317FBA5326E7740100A02091 /* View */,
 				31467909266B6118008AEC4D /* AppDelegate.swift */,
 				3146790B266B6118008AEC4D /* SceneDelegate.swift */,
@@ -209,6 +215,8 @@
 				31467916266B611B008AEC4D /* LaunchScreen.storyboard in Resources */,
 				31467913266B611B008AEC4D /* Assets.xcassets in Resources */,
 				31467911266B6118008AEC4D /* Main.storyboard in Resources */,
+				318136EB2768896700DD94C6 /* GmarketSansTTFLight.ttf in Resources */,
+				318136ED2768896A00DD94C6 /* GmarketSansTTFMedium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
