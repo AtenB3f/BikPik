@@ -66,12 +66,11 @@ class AddToDoViewController: UIViewController {
         }
         
         data.name = name
+        data.time = Date.TimeForm(picker: pickerTime)
         
         if data.alram {
             data.notiUUID = mngNoti.createNotificationTask(task: data)
         }
-        
-        data.time = Date.TimeForm(picker: pickerTime)
         
         if revise == true {
             managerToDo.correctTask(before: reviseTask ?? Task() , after: data)

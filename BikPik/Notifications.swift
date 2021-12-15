@@ -14,16 +14,19 @@ class Notifications {
     let notificationCenter = UNUserNotificationCenter.current()
     var listIdentifer:[String: String] = [:]
     
+    func checkNoti(){
+        print("listIdentifer")
+        listIdentifer.forEach { key, value in
+            print("\(key), \(value)")
+        }
+    }
+    
     func createNotificationTask(task: Task) -> String {
         let content = 	UNMutableNotificationContent()
         content.title = task.name!
         content.body = "오늘 할일 했나요?"
         content.sound = .default
         
-        // Configure the recurring date.
-        var dateComponents = DateComponents()
-        dateComponents.calendar = Calendar.current
-
         var year = 0
         var month = 0
         var day = 0
@@ -33,14 +36,11 @@ class Notifications {
         Date.GetIntDate(date: task.date, year: &year, month: &month, day: &day)
         Date.GetIntTime(date: task.time, hour: &hour, minutes: &miniute)
         
-        dateComponents.year = year
-        dateComponents.month = month
-        dateComponents.day = day
-        dateComponents.hour = hour
-        dateComponents.minute = miniute
+        let calendar = Calendar.current
+        var cmp = DateComponents(calendar: calendar, year: year, month: month, day: day, hour: hour, minute: miniute)
         
         let key = task.name! + "_" + String(task.id)
-        let uuid = addNotification(content: content, dateComponents: dateComponents, repeats: false)
+        let uuid = addNotification(content: content, dateComponents: cmp, repeats: false)
         listIdentifer[key] = uuid
         
         print(listIdentifer)
@@ -86,7 +86,7 @@ class Notifications {
 
     func createNotificationHabit(habit: Habits) {
         var uuid: String?
-        let content =     UNMutableNotificationContent()
+        let content = UNMutableNotificationContent()
         content.title = habit.task.name!
         content.body = "습관 생성 중..."
         content.sound = .default
