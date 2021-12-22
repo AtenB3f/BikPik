@@ -147,7 +147,6 @@ class AddToDoViewController: UIViewController {
     }
     
     func setCalendar() {
-        calendar.allowsMultipleSelection = true
         calendar.delegate = self
         calendar.dataSource = self
         calendar.allowsMultipleSelection = false

@@ -174,9 +174,9 @@ class AddHabitViewController: UIViewController {
     }
     
     func setCalendar() {
-        calendar.allowsMultipleSelection = true
         calendar.delegate = self
         calendar.dataSource = self
+        calendar.allowsMultipleSelection = true
         viewContents.addSubview(calendar)
         calendar.register(CustomCalendarCell.self, forCellReuseIdentifier: "cell")
         calendar.accessibilityIdentifier = "calendar"
@@ -413,7 +413,7 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
         term.toggle()
         print("start : \(data.start)  end : \(data.end)")
         let st: Date = Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date
-        setCellLayout(date: st)
+        setCellLayout(date: st, posi: monthPosition)
         
     }
     
@@ -427,23 +427,21 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
         }
     }
     
-    func setCellLayout(date: Date) {
-        var posi: FSCalendarMonthPosition = .current
+    func setCellLayout(date: Date, posi: FSCalendarMonthPosition) {
         let cell = calendar.dequeueReusableCell(withIdentifier: "cell", for: date, at: posi)
-        
-        let cnt = Date.GetDays(start: data.start, end: data.end)
         let gregorian = Calendar(identifier: .gregorian)
         
-        for i in 0...(cnt-1) {
-            if (i == 0){
-                posi = .current
-            } else if (i == (cnt-1)) {
-                posi = .current
+        let st = calendar.currentPage
+        //let cnt = Date.GetDays(start: data.start, end: data.end)
+        for i in 0..<48 {
+            let next = gregorian.date(byAdding: .day, value: i, to: st)!
+            let str = Date.DateForm(data: next, input: .date, output: .fullDate) as! String
+            if data.start <= str && str <= data.end {
+                calendar.select(next)
             }
-            let next = gregorian.date(byAdding: .day, value: i, to: date)!
             self.configure(cell: cell, for: next, at: posi)
-            calendar.select(next)
         }
+        
     }
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
@@ -455,40 +453,37 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
         self.configure(cell: cell, for: date, at: position)
         //setCellLayout(date: date)
     }
+
     func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
         let diyCell = (cell as! CustomCalendarCell)
-        if position == .current {
-            
-            var selectionType = SelectionType.none
-            
-            if calendar.selectedDates.contains(date) {
-                let st = Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date
-                let ed = Date.DateForm(data: data.end, input: .fullDate, output: .date) as! Date
-                if st == ed {
-                    selectionType = .single
-                } else if date == st {
-                    selectionType = .leftBorder
-                } else if date == ed {
-                    selectionType = .rightBorder
-                } else {
-                    selectionType = .middle
-                }
+        var selectionType = SelectionType.none
+        print("date: \(date)")
+        
+        if calendar.selectedDates.contains(date) {
+            let st = Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date
+            let ed = Date.DateForm(data: data.end, input: .fullDate, output: .date) as! Date
+            if st == ed {
+                selectionType = .single
+            } else if date == st {
+                selectionType = .leftBorder
+            } else if date == ed {
+                selectionType = .rightBorder
+            } else {
+                selectionType = .middle
             }
-            else {
-                selectionType = .none
-            }
-            if selectionType == .none {
-                diyCell.selectionLayer.isHidden = true
-                return
-            }
-            diyCell.selectionLayer.isHidden = false
-            diyCell.selectionType = selectionType
-            
+        }
+        else {
+            selectionType = .none
         }
         
-        else {
+        if selectionType == .none {
             diyCell.selectionLayer.isHidden = true
+            
+        } else {
+            diyCell.selectionLayer.isHidden = false
         }
+        diyCell.selectionType = selectionType
+        diyCell.hide = diyCell.selectionLayer.isHidden
+        diyCell.setCellLayout()
     }
-
 }

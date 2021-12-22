@@ -62,8 +62,8 @@ class CustomCalendar: FSCalendar{
         super.appearance.titleTodayColor = UIColor(named: "BikPik Dark Color")
         super.appearance.weekdayFont = UIFont.systemFont(ofSize: 14.0, weight: .bold)
         super.appearance.weekdayTextColor = UIColor(named: "BikPik Dark Color")
+        super.appearance.titleDefaultColor = UIColor(named: "TextLightColor")
         super.appearance.headerMinimumDissolvedAlpha = 0.0
-        super.appearance.titleDefaultColor = .systemGray
         super.appearance.caseOptions = .weekdayUsesSingleUpperCase
     }
     
@@ -78,6 +78,7 @@ class CustomCalendar: FSCalendar{
         super.appearance.todayColor = UIColor(named: "BikPik Light Color")
         super.appearance.titleTodayColor = UIColor(named: "BikPik Dark Color")
         super.appearance.weekdayFont = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+        super.appearance.titleDefaultColor = UIColor(named: "TextLightColor")
         super.appearance.weekdayTextColor = UIColor(named: "BikPik Dark Color")
         super.appearance.headerMinimumDissolvedAlpha = 0.0
         super.appearance.caseOptions = .weekdayUsesSingleUpperCase
@@ -99,10 +100,13 @@ class CustomCalendar: FSCalendar{
  
 class CustomCalendarCell: FSCalendarCell {
     weak var selectionLayer: CAShapeLayer!
+    var hide:Bool = false
     
     var selectionType: SelectionType = .none {
         didSet {
+            //setCellLayout()
             setNeedsLayout()
+            setLayout()
         }
     }
     
@@ -113,19 +117,23 @@ class CustomCalendarCell: FSCalendarCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        setLayout()
         
+        //let view = UIView(frame: self.bounds)
+        //view.backgroundColor = .white
+        //self.backgroundView = view;
+        
+    }
+    
+    func setLayout() {
         let selectionLayer = CAShapeLayer()
         selectionLayer.fillColor = UIColor(named: "BikPik Color")?.cgColor
-        selectionLayer.actions = ["hidden": NSNull()]
-        self.contentView.layer.insertSublayer(selectionLayer, below: self.titleLabel!.layer)
+        //selectionLayer.opacity = 0.5
+        //selectionLayer.actions = ["hidden": NSNull()]
+        
         self.selectionLayer = selectionLayer
-        
-        self.shapeLayer.isHidden = true
-        
-        let view = UIView(frame: self.bounds)
-        //view.backgroundColor = .white
-        self.backgroundView = view;
-        
+        self.shapeLayer.isHidden = true//hide
+        self.contentView.layer.insertSublayer(selectionLayer, below: self.titleLabel!.layer)
     }
     
     override func layoutSubviews() {
@@ -137,8 +145,8 @@ class CustomCalendarCell: FSCalendarCell {
         super.configureAppearance()
         // Override the build-in appearance configuration
         if self.isPlaceholder {
-            self.eventIndicator.isHidden = true
-            self.titleLabel.textColor = UIColor.lightGray
+            //self.eventIndicator.isHidden = true
+            //self.titleLabel.textColor = UIColor.lightGray
         }
     }
     
