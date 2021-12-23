@@ -212,11 +212,15 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     @objc func clickSetting (_ sender: UIButton) {
-        // 임시 삭제 함수.
-        //내일 하기, 수정하기, 삭제하기 등의 기능이 있는 뷰 띄우기 필요
         let id = sender.tag
-        let taskName: String = mngToDo.selTaskList[id]
-        mngToDo.deleteTask(key: taskName)
+        let key = mngToDo.selTaskList[id]
+        let name:String = mngToDo.splitToName(key: key) ?? ""
+        if mngToDo.tasks[key] != nil {
+            mngToDo.deleteTask(key: key)
+        } else if mngHabit.habitId[key] != nil {
+            presentHabitAlert(name: name, key: key)
+        }
+        
         updateDate()
     }
     
@@ -228,30 +232,38 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
                 let idx = row[1]
                 
                 let key = mngToDo.selTaskList[idx]
-                
-                if let name = mngToDo.splitToName(key: key) {
+                let name = mngToDo.splitToName(key: key) ?? ""
+                if mngToDo.tasks[key] != nil {
                     // To Do
-                    let alert = UIAlertController(title: name, message: "To Do", preferredStyle: .alert)
-                    let actCorrect = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertCorrect(key)})
-                    let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(key)})
-                    let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(key)})
-                    let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
-                    alert.addAction(actCorrect)
-                    alert.addAction(actTomorrow)
-                    alert.addAction(actDelete)
-                    alert.addAction(cancle)
-                    present(alert, animated: true, completion: nil)
+                    presentToDoAlert(name: name, key: key)
                 } else {
                     // habit
-                    let alert = UIAlertController(title: key, message: "Habit", preferredStyle: .alert)
-                    let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertReviseHabit(habitName: key)})
-                    let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
-                    alert.addAction(revise)
-                    alert.addAction(cancle)
-                    present(alert, animated: true, completion: nil)
+                    presentHabitAlert(name: name, key: key)
                 }
             }
         }
+    }
+    
+    func presentToDoAlert(name: String, key: String) {
+        let alert = UIAlertController(title: name, message: "To Do", preferredStyle: .alert)
+        let actCorrect = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertCorrect(key)})
+        let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(key)})
+        let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(key)})
+        let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
+        alert.addAction(actCorrect)
+        alert.addAction(actTomorrow)
+        alert.addAction(actDelete)
+        alert.addAction(cancle)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func presentHabitAlert(name: String, key: String) {
+        let alert = UIAlertController(title: key, message: "Habit", preferredStyle: .alert)
+        let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertReviseHabit(habitName: key)})
+        let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
+        alert.addAction(revise)
+        alert.addAction(cancle)
+        present(alert, animated: true, completion: nil)
     }
     
     func alertCorrect(_ taskname: String) {
@@ -384,10 +396,12 @@ class ToDoCell: UITableViewCell {
         let taskID = mngToDo.selTaskList[row]
         if let task = mngToDo.tasks[taskID] {
             displayDone(done: task.isDone)
+            setting.setImage(UIImage(systemName: "x.circle"), for: .normal)
         } else if let id = mngHabit.habitId[taskID] {
             let habit = mngHabit.habits[id]
             let done = mngHabit.isDoneCheck(habit: habit, date: mngToDo.selDate)
             displayDone(done: done)
+            setting.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
         }
         
         if let name = mngToDo.splitToName(key: taskID) {

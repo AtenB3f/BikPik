@@ -30,6 +30,10 @@ class HabitViewController: UIViewController {
         mngHabit.loadHabit()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        updateData()
+    }
+    
     @objc func didDismissPostCommentNotification(_ sender: Any) {
         mngHabit.loadHabit()
         habitCollection.reloadData()
@@ -37,6 +41,7 @@ class HabitViewController: UIViewController {
     
     @IBOutlet weak var btnMenu: UIButton!
     @IBAction func btnMenu(_ sender: Any) {
+        updateData()
         let sideMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "SideMenuVC") as! SideMenuViewController
         let menu = CustomSideMenuViewController(rootViewController: sideMenuViewController)
         
@@ -51,6 +56,14 @@ class HabitViewController: UIViewController {
         self.present(vc, animated: true, completion: nil)
     }
     
+    
+    func updateData() {
+        habitCollection?.indexPathsForVisibleItems.forEach { idx in
+            let cell = habitCollection?.cellForItem(at: idx) as! HabitCollectCell
+            let id = idx.row
+            cell.update(data: mngHabit.habits[id])
+        }
+    }
 }
 
 extension HabitViewController : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -93,8 +106,6 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
         
         return cellSize
     }
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return sectionInsets
