@@ -1,20 +1,9 @@
 //
-//  Settings.swift
+//  SettingsViewModel.swift
 //  BikPik
 //
-//  Created by jihee moon on 2021/11/24.
+//  Created by jihee moon on 2021/12/23.
 //
-
-import UIKit
-
-struct SettingData: Codable, Equatable{
-    var accountName: String? = nil
-    var accountEmail: String? = nil
-    var themeTime: Bool = false
-    var startSun: Bool = false
-    var autoDelete: Bool = false
-}
-
 
 class SettingManager {
     

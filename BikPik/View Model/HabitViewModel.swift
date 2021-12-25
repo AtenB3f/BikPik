@@ -1,28 +1,11 @@
 //
-//  Habit.swift
+//  HabitViewModel.swift
 //  BikPik
 //
-//  Created by jihee moon on 2021/09/01.
+//  Created by jihee moon on 2021/12/23.
 //
- 
-import UIKit
 
-struct Habits: Codable, Equatable {
-    var id: Int?
-    var task: Task = Task()
-    var start : String
-    var end : String
-    var days : [Bool] = [Bool](repeating: true, count: 7)
-    var total = 0
-    var isDone : [Bool]?
-    
-    init() {
-        task.id = 0
-        task.date = ""
-        start = Date.GetNowDate()
-        end = Date.GetNowDate()
-    }
-}
+import UIKit
 
 class HabitManager {
     let storage: Storage = Storage.disk

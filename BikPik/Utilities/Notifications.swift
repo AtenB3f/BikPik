@@ -14,6 +14,7 @@ class Notifications {
     let notificationCenter = UNUserNotificationCenter.current()
     var listIdentifer:[String: String] = [:]
     
+    // test code
     func checkNoti(){
         print("listIdentifer")
         listIdentifer.forEach { key, value in
@@ -37,7 +38,7 @@ class Notifications {
         Date.GetIntTime(date: task.time, hour: &hour, minutes: &miniute)
         
         let calendar = Calendar.current
-        var cmp = DateComponents(calendar: calendar, year: year, month: month, day: day, hour: hour, minute: miniute)
+        let cmp = DateComponents(calendar: calendar, year: year, month: month, day: day, hour: hour, minute: miniute)
         
         let key = task.name! + "_" + String(task.id)
         let uuid = addNotification(content: content, dateComponents: cmp, repeats: false)

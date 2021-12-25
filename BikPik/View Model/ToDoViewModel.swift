@@ -1,31 +1,11 @@
 //
-//  ToDo.swift
+//  ToDoViewModel.swift
 //  BikPik
 //
-//  Created by jihee moon on 2021/06/14.
+//  Created by jihee moon on 2021/12/23.
 //
 
 import UIKit
-
-struct Task: Codable, Equatable{
-    var id : Int = 0
-    var name : String? = nil
-    var inToday : Bool = false
-    var date : String = ""
-    var time : String = "00:00"
-    var alram : Bool = false
-    var notiUUID: String?
-    var isDone : Bool = false
-    var tag : String?
-    var color : String?     //0xFFFFFF
-    
-    init(){ }
-    init(_ str: String) {
-        name = str
-        date = Date.GetNowDate()
-        inToday = true
-    }
-}
 
 /*
  [Save File]
@@ -51,22 +31,22 @@ struct Task: Codable, Equatable{
  
  */
 class ToDoManager {
-    let storage = Storage.disk
-    static let mngToDo = ToDoManager()
-    private init() {
-        updateData()
-    }
-    
     var tasks: [String: Task] = [:]         // KEY is [task name + "_" + ID]
     var taskIdList: [String : Int] = [:]    // KEY is [task name] , VALUE is [ID]
     var taskList: [String] = []             // VALUE is [task name]
     var selTaskList : [String] = []
-    var selDate: String = Date.GetNowDate()
+    var selDate = Observable(Date.GetNowDate())
     
+    let storage = Storage.disk
+    static let mngToDo = ToDoManager()
     let mngHabit = HabitManager.mngHabit
     let mngNoti = Notifications.mngNotification
+    
+    private init() {
+        updateData()
+    }
     /**
-     	 Reloading To Do Table View
+          Reloading To Do Table View
      */
     func updateData() {
         mngHabit.loadHabit()
@@ -75,6 +55,10 @@ class ToDoManager {
         loadTask()
         loadSelTaskList()
         sortTimeline()
+    }
+    
+    func changeSelectDate(_ date:String) {
+        selDate.value = date
     }
     
     /**
@@ -134,7 +118,7 @@ class ToDoManager {
         if taskList.count > 0 {
             for n in  0...(taskList.count-1) {
                 taskName = taskList[n]
-                if searchTask(date: selDate, taskName: taskName) {
+                if searchTask(date: selDate.value, taskName: taskName) {
                     selTaskList.append(taskName)
                 }
             }
@@ -143,7 +127,7 @@ class ToDoManager {
         if mngHabit.habits.count > 0 {
             for n in 0...(mngHabit.habits.count-1) {
                 taskName = mngHabit.habits[n].task.name!
-                if searchTask(date: selDate, taskName: taskName) {
+                if searchTask(date: selDate.value, taskName: taskName) {
                     selTaskList.append(taskName)
                 }
             }
@@ -182,7 +166,7 @@ class ToDoManager {
                 } else if let id = mngHabit.habitId[name] {
                     let st:Int = Int(mngHabit.habits[id].start) ?? 0
                     let ed:Int = Int(mngHabit.habits[id].end) ?? 0
-                    let sel:Int = Int(selDate) ?? 0
+                    let sel:Int = Int(selDate.value) ?? 0
                     if (st <= sel) && (ed >= sel) {
                         timeArr[name] = mngHabit.habits[id].task.time
                     }
@@ -277,11 +261,11 @@ class ToDoManager {
             
             let start = Int(habit.start) ?? 0
             let end = Int(habit.end) ?? 0
-            let sel = Int(selDate) ?? 0
+            let sel = Int(selDate.value) ?? 0
             if (start <= sel && sel <= end) {
                 for i in 0...6 {
                     if habit.days[i] {
-                        if (i+1) == Date.GetIntDayWeek(date: selDate) {
+                        if (i+1) == Date.GetIntDayWeek(date: selDate.value) {
                             return true
                         }
                     }
@@ -463,6 +447,7 @@ class ToDoManager {
     }
     
     func setToday() {
-        selDate = Date.GetNowDate()
+        changeSelectDate(Date.GetNowDate())
     }
 }
+

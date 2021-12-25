@@ -16,7 +16,7 @@ class AddHabitViewController: UIViewController {
     let mngHabit = HabitManager.mngHabit
     let mngNoti = Notifications.mngNotification
     
-    var data: Habits = Habits()
+    var data: Habits = Habits(date: Date.GetNowDate())
     var revise : Bool = false
     
     var term: Bool = false
@@ -29,7 +29,7 @@ class AddHabitViewController: UIViewController {
         
         if data.task.name == nil {
             // new habit create
-            data = Habits()
+            data = Habits(date: Date.GetNowDate())
         } else {
             // habit revise
             revise = true
