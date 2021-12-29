@@ -33,8 +33,7 @@ import UIKit
 class ToDoManager {
     var tasks: [String: Task] = [:]         // KEY is [task name + "_" + ID]
     var taskIdList: [String : Int] = [:]    // KEY is [task name] , VALUE is [ID]
-    var taskList: [String] = []             // VALUE is [task name]
-    var selTaskList : [String] = []
+    var selTaskList = Observable(Array<String>())//[String] = []
     var selDate = Observable(Date.GetNowDate())
     
     let storage = Storage.disk
@@ -42,15 +41,13 @@ class ToDoManager {
     let mngHabit = HabitManager.mngHabit
     let mngNoti = Notifications.mngNotification
     
-    private init() {
-        updateData()
-    }
+    private init() { }
+    
     /**
           Reloading To Do Table View
      */
     func updateData() {
         mngHabit.loadHabit()
-        loadTaskList()
         loadTaskIdList()
         loadTask()
         loadSelTaskList()
@@ -81,15 +78,6 @@ class ToDoManager {
     }
     
     /**
-     'taskLisk' array loading. "ToDoTaskList.json"file read.
-     */
-    func loadTaskList() {
-        let file: String = "ToDoTaskList.json"
-        taskList.removeAll()
-        taskList = storage.Search(file, as: [String].self) ?? []
-    }
-    
-    /**
      'tasks' dictionary loading. "ToDoLisk.json" file read.
      */
     func loadTask() {
@@ -112,27 +100,22 @@ class ToDoManager {
      Habit data and To Do data are loaded into the 'selTaskList' array for the selected date.
      */
     func loadSelTaskList() {
-        var taskName: String
-        selTaskList.removeAll()
-        
-        if taskList.count > 0 {
-            for n in  0...(taskList.count-1) {
-                taskName = taskList[n]
-                if searchTask(date: selDate.value, taskName: taskName) {
-                    selTaskList.append(taskName)
+        var arr = [String]()
+        let date = selDate.value
+        let idx = Date.WeekForm(data: date, input: .fullDate, output: .intIndex) as! Int
+        for (key, val) in tasks {
+            if val.date == date {
+                arr.append(key)
+            }
+        }
+        for habit in mngHabit.habits {
+            if habit.start <= date && habit.end >= date {
+                if habit.days[idx-1] {
+                    arr.append(habit.task.name!)
                 }
             }
         }
-        
-        if mngHabit.habits.count > 0 {
-            for n in 0...(mngHabit.habits.count-1) {
-                taskName = mngHabit.habits[n].task.name!
-                if searchTask(date: selDate.value, taskName: taskName) {
-                    selTaskList.append(taskName)
-                }
-            }
-        }
-        
+        selTaskList.value = arr
     }
 
     /**
@@ -140,7 +123,7 @@ class ToDoManager {
      "selTaskList" display in the To Do table. first, display In Today tasks. and and sorted array out to time.
      */
     func sortTimeline() {
-        var tmpArr = selTaskList
+        var tmpArr = selTaskList.value
         var sortArr: [String] = []
         var deleteIdx: [Int] = []
         var inTodayArr: [String] = []
@@ -182,35 +165,8 @@ class ToDoManager {
             }
         }
         
-        selTaskList = sortArr
+        selTaskList.value = sortArr
     }
-    /*
-    func checkSelDateHabit(sortArr: inout[String]){
-        guard mngHabit.habits.count > 0 else { return }
-        
-        let cnt = mngHabit.habits.count - 1
-        
-        for n in 0 ... cnt {
-            let sel: Int = Int(selDate) ?? 1
-            let start: Int = Int(mngHabit.habits[n].start) ?? 2
-            let end: Int = Int(mngHabit.habits[n].end) ?? 0
-            
-            guard (start <= sel) && (sel <= end) else { continue }
-            
-            for i in 0...6 {
-                
-                guard let day = Date.GetIntDayWeek(selDate) else { break }
-                
-                if (day - 1) == i {
-                    if mngHabit.habits[n].days[i] == true {
-                        let name = mngHabit.habits[n].task.name!
-                        sortArr.append(name)
-                    }
-                }
-            }
-        }
-    }
-    */
     
     /**
      If task is setting 'in today', need to sort array out to time. so this function find the tasks to delete in 'sortArr'.
@@ -218,20 +174,20 @@ class ToDoManager {
      - parameter deleteIdx :An array of indices to delete from "sortArr".
      */
     func checkInToday(sortArr: inout[String], deleteIdx: inout[Int]) {
-        let cnt = selTaskList.count - 1
+        let cnt = selTaskList.value.count - 1
         var key: String
         if cnt >= 0 {
             // Seleted "in today"
             for n in 0 ... cnt {
-                key = selTaskList[n]
+                key = selTaskList.value[n]
                 if tasks[key] != nil {
                     if tasks[key]?.inToday == true {
-                        sortArr.append(selTaskList[n])
+                        sortArr.append(selTaskList.value[n])
                         deleteIdx.append(n)
                     }
                 } else if let id = mngHabit.habitId[key] {
                     if mngHabit.habits[id].task.inToday == true {
-                        sortArr.append(selTaskList[n])
+                        sortArr.append(selTaskList.value[n])
                         deleteIdx.append(n)
                     }
                 }
@@ -280,7 +236,7 @@ class ToDoManager {
      - parameter data : 'Task' struct data.
      */
     func createTask(data : Task) {
-        var task:Task = data
+        let task:Task = data
         var key: String = ""
         var id :Int = 0
         
@@ -300,7 +256,9 @@ class ToDoManager {
         // KEY protocol is "NAME + ID"
         key = key + "_" + String(id)
         tasks[key] = task
-        taskList.append(key)
+        if data.date == selDate.value {
+            selTaskList.value.append(key)
+        }
         
         saveTasks()
     }
@@ -329,18 +287,22 @@ class ToDoManager {
             } else {
                 taskIdList[after.name!] = 0
             }
-            if taskList.count > 0 {
-                for n in 0...(taskList.count-1) {
-                    if taskList[n] == beforeKey {
-                        taskList.remove(at: n)
+        }
+        
+        tasks[afterKey]  = after
+        
+        if before.date != after.date {
+            if after.date == selDate.value {
+                selTaskList.value.append(afterKey)
+            } else if before.date == selDate.value {
+                for (idx, val) in selTaskList.value.enumerated() {
+                    if beforeKey == val {
+                        selTaskList.value.remove(at: idx)
                         break
                     }
                 }
             }
-            taskList.append(afterKey)
         }
-        
-        tasks[afterKey]  = after
         saveTasks()
     }
     
@@ -372,15 +334,9 @@ class ToDoManager {
             saveID(data: taskIdList)
         }
         
-        // taskList
-        if let arrIdx = taskList.firstIndex(of: key) {
-            taskList.remove(at: arrIdx)
-            saveTaskList(data: taskList)
-        }
-        
         // selTaskList
-        if let arrIdx = selTaskList.firstIndex(of: key) {
-            selTaskList.remove(at: arrIdx)
+        if let arrIdx = selTaskList.value.firstIndex(of: key) {
+            selTaskList.value.remove(at: arrIdx)
         }
         
         tasks.removeValue(forKey: key)
@@ -392,7 +348,6 @@ class ToDoManager {
     func saveTasks () {
         saveTask(data: tasks)
         saveID(data: taskIdList)
-        saveTaskList(data: taskList)
     }
     
     /**

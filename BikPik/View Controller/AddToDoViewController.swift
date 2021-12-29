@@ -30,15 +30,10 @@ class AddToDoViewController: UIViewController {
             fldTaskName.text = data.name
             swtInToday.isOn = data.inToday
             swtAlram.isOn = data.alram
-            //viewCalendar.
             pickerTime.date = Date.GetDateTime(date: data.time)
-            //pickerDate.date = Date.GetDateDay(date: data.date)
-            
-            
         } else {
             // Data Init
             data.time = Date.GetNowTime()
-            //pickerDate.date = Date.DateForm(data: data.date, input: .fullDate, output: .date) as! Date
         }
     }
     

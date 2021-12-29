@@ -27,58 +27,59 @@ class ToDoViewController: UIViewController {
         
         mngToDo.selDate.bind{ [weak self] date in
             self?.btnDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
+            self?.updateDate()
         }
         
-        updateDate()
+        mngToDo.selTaskList.bind{ [weak self] selList in
+            self?.ToDoTable.reloadData()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         mngToDo.setToday()
-        updateDate()
     }
     
     // 태스크 추가 후에 테이블 뷰 적용될 수 있게 하는 기능
     @objc func didDismissPostCommentNotification(_ noti: Notification) {
         updateDate()
+        ToDoTable.reloadData()
     }
     
-    @objc func timerProc(){
-        updateDate()
-    }
     /***
      sorting the tasks of seleted date.
      */
     func updateDate() {
-        let userDate: String = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .userDate) as! String
-        //btnDay.setTitle(userDate, for: .normal)
+        // task list update
         mngToDo.updateData()
+        // week button update
         updateWeekDate()
-        btnWeekDate()
-        ToDoTable.reloadData() 
+        //ToDoTable.reloadData()
     }
  
     @IBOutlet weak var topView: UIView!
     
     var calendar: FSCalendar? = nil
-    //var datePick: Date = Date()
-    //var datePicker: UIDatePicker? = nil
     @IBOutlet weak var btnDay: UIButton!
     @IBAction func btnDay(_ sender: Any) {
         if calendar == nil {
-            let y = topView.fs_bottom + 60
-            let rect = CGRect(x: (view.fs_width - 300)/2, y: y, width: 300, height: 300)
-            calendar = CustomCalendar(style: .month, frame: rect)//FSCalendar(frame: rect)
-            calendar?.allowsMultipleSelection = false
-            calendar?.delegate = self
-            calendar?.dataSource = self
-            calendar!.currentPage = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .date) as! Date
-            view.addSubview(calendar!)
+            enableCalendar()
         } else {
-            DisableCalendar()
+            disableCalendar()
         }
     }
     
-    func DisableCalendar() {
+    func enableCalendar() {
+        let y = topView.fs_bottom + 60
+        let rect = CGRect(x: (view.fs_width - 300)/2, y: y, width: 300, height: 300)
+        calendar = CustomCalendar(style: .month, frame: rect)
+        calendar?.allowsMultipleSelection = false
+        calendar?.delegate = self
+        calendar?.dataSource = self
+        calendar!.currentPage = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .date) as! Date
+        view.addSubview(calendar!)
+    }
+    
+    func disableCalendar() {
         for view in self.view.subviews {
             if view.isEqual(calendar) {
                 view.removeFromSuperview()
@@ -108,15 +109,6 @@ class ToDoViewController: UIViewController {
         }
         let cnt = idx - (Date.GetIntDayWeek(date: mngToDo.selDate.value) ?? 0) + 1
         mngToDo.changeSelectDate(Date.GetNextDay(date: mngToDo.selDate.value,fewDays: cnt))
-        updateDate()
-    }
-    
-    func btnWeekDate() {
-        let weekIdx = Date.GetIntDayWeek(date: mngToDo.selDate.value) ?? 0
-        let arrBtn: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
-        for i in 0 ... 6 {
-            arrBtn[i].isSelected = (i == (weekIdx-1)) ? true : false
-        }
     }
     
     func updateWeekDate(){
@@ -127,10 +119,11 @@ class ToDoViewController: UIViewController {
         let arrDay: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
         let idx = Date.WeekForm(data: mngToDo.selDate.value, input: .fullDate, output: .intIndex) as! Int
         
-        for i in 1...7 {
-            let strDate = Date.GetNextDay(date: mngToDo.selDate.value,fewDays: i-idx)
+        for i in 0...6 {
+            let strDate = Date.GetNextDay(date: mngToDo.selDate.value,fewDays: i-idx+1)
             Date.GetIntDate(date: strDate, year: &year, month: &month, day: &day)
-            arrDay[i-1].setTitle(String(day), for: .normal)
+            arrDay[i].setTitle(String(day), for: .normal)
+            arrDay[i].isSelected = i == (idx-1) ? true : false
         }
     }
     
@@ -141,7 +134,6 @@ class ToDoViewController: UIViewController {
             var data:Task = Task(name: task!, date: Date.GetNowDate(), inToday: true)
             data.date = mngToDo.selDate.value
             mngToDo.createTask(data: data)
-            updateDate()
             fldFastAddTask.text = ""
         }
     }
@@ -170,7 +162,7 @@ class ToDoViewController: UIViewController {
 extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mngToDo.selTaskList.count
+        return mngToDo.selTaskList.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -193,7 +185,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
      */
     @objc func clickIsDone (_ sender: UIButton) {
         let id = sender.tag
-        let taskName: String = mngToDo.selTaskList[id]
+        let taskName: String = mngToDo.selTaskList.value[id]
         if mngToDo.tasks[taskName] != nil {
             mngToDo.tasks[taskName]?.isDone = sender.isSelected
             mngToDo.saveTask(data: mngToDo.tasks)
@@ -206,15 +198,13 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     
     @objc func clickSetting (_ sender: UIButton) {
         let id = sender.tag
-        let key = mngToDo.selTaskList[id]
+        let key = mngToDo.selTaskList.value[id]
         let name:String = mngToDo.splitToName(key: key) ?? ""
         if mngToDo.tasks[key] != nil {
             mngToDo.deleteTask(key: key)
         } else if mngHabit.habitId[key] != nil {
             presentHabitAlert(name: name, key: key)
         }
-        
-        updateDate()
     }
     
     @objc func longPressCell (_ sender: UIGestureRecognizer) {
@@ -224,7 +214,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
             if let row = ToDoTable.indexPathForRow(at: touchPoint) {
                 let idx = row[1]
                 
-                let key = mngToDo.selTaskList[idx]
+                let key = mngToDo.selTaskList.value[idx]
                 let name = mngToDo.splitToName(key: key) ?? ""
                 if mngToDo.tasks[key] != nil {
                     // To Do
@@ -240,13 +230,16 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     func presentToDoAlert(name: String, key: String) {
         let alert = UIAlertController(title: name, message: "To Do", preferredStyle: .alert)
         let actCorrect = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertCorrect(key)})
-        let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(key)})
         let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(key)})
         let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
         alert.addAction(actCorrect)
-        alert.addAction(actTomorrow)
+        if mngToDo.selDate.value == Date.GetNowDate() {
+            let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(key)})
+            alert.addAction(actTomorrow)
+        }
         alert.addAction(actDelete)
         alert.addAction(cancle)
+        
         present(alert, animated: true, completion: nil)
     }
     
@@ -266,17 +259,16 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         self.present(vc, animated: true, completion: nil)
     }
     
-    func alertTomorrow(_ taskName: String) {
-        let date = mngToDo.tasks[taskName]!.date
-        
-        mngToDo.tasks[taskName]!.date = Date.GetNextDay(date: date)
-        mngToDo.saveTask(data: mngToDo.tasks)
-        updateDate()
+    func alertTomorrow(_ key: String) {
+        if let before:Task = mngToDo.tasks[key] {
+            var after = before
+            after.date = Date.GetNextDay(date: before.date)
+            mngToDo.correctTask(before: before, after: after)
+        }
     }
     
     func alertDelete(_ taskName: String) {
         mngToDo.deleteTask(key: taskName)
-        updateDate()
     }
     
     func alertReviseHabit (habitName : String) {
@@ -364,29 +356,11 @@ class ToDoCell: UITableViewCell {
         return time!
     }
     
-    /*
-    func displayTask(taskID:String) -> String {
-        var name: String = ""
-        if let task = mngToDo.tasks[taskID] {
-            name = task.name ?? ""
-            displayDone(done : mngToDo.tasks[taskID]!.isDone)
-        } else if let habit = mngHabit.searchHabit(name: taskID) {
-            name = habit.name ?? ""
-            
-            let idx =  mngHabit.habitId[name] ?? 0
-            let done = mngHabit.isDoneCheck(habit: mngHabit.habits[idx], date: mngToDo.selDate)
-            
-            displayDone(done: done)
-        }
-        return name
-    }
-     */
-    
     func updateCell(indexPathRow row: Int) {
-        if row >= mngToDo.selTaskList.count{
+        if row >= mngToDo.selTaskList.value.count{
             return
         }
-        let taskID = mngToDo.selTaskList[row]
+        let taskID = mngToDo.selTaskList.value[row]
         if let task = mngToDo.tasks[taskID] {
             displayDone(done: task.isDone)
             setting.setImage(UIImage(systemName: "x.circle"), for: .normal)
@@ -416,8 +390,6 @@ extension ToDoViewController: UITextFieldDelegate{
         {
             let data:Task = Task(name: task, date: Date.GetNowDate(), inToday: true)
             mngToDo.createTask(data: data)
-            mngToDo.updateData()
-            updateDate()
             textField.text = nil
         }
         textField.resignFirstResponder()
@@ -437,9 +409,7 @@ extension ToDoViewController: UITextFieldDelegate{
 extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        let selDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
-        mngToDo.changeSelectDate(selDate)
-        DisableCalendar()
-        updateDate()
+        mngToDo.changeSelectDate(Date.DateForm(data: date, input: .date, output: .fullDate) as! String)
+        disableCalendar()
     }
 }
