@@ -312,7 +312,7 @@ extension Date {
             }
             
             if carry {
-                month += 1
+                month = 1
                 day = 1
             } else {
                 day += 1
