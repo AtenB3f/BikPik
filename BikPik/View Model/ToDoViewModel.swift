@@ -54,8 +54,12 @@ class ToDoManager {
         sortTimeline()
     }
     
-    func changeSelectDate(_ date:String) {
+    func changeSelectDate(date:String) {
         selDate.value = date
+    }
+    
+    func changeSelectDate(index : Int) {
+        selDate.value = Date.GetNextDay(date: selDate.value, fewDays: index)
     }
     
     /**
@@ -221,7 +225,8 @@ class ToDoManager {
             if (start <= sel && sel <= end) {
                 for i in 0...6 {
                     if habit.days[i] {
-                        if (i+1) == Date.GetIntDayWeek(date: selDate.value) {
+                        //if (i+1) == Date.GetIntDayWeek(date: selDate.value) {
+                        if (i+1) == Date.WeekForm(data: selDate.value, input: .fullDate, output: .intIndex) as! Int {
                             return true
                         }
                     }
@@ -402,7 +407,7 @@ class ToDoManager {
     }
     
     func setToday() {
-        changeSelectDate(Date.GetNowDate())
+        changeSelectDate(date: Date.GetNowDate())
     }
 }
 

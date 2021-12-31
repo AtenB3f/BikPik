@@ -35,7 +35,7 @@ class Notifications {
         var miniute = 0
         
         Date.GetIntDate(date: task.date, year: &year, month: &month, day: &day)
-        Date.GetIntTime(date: task.time, hour: &hour, minutes: &miniute)
+        Date.GetIntTime(time: task.time, hour: &hour, minutes: &miniute)
         
         let calendar = Calendar.current
         let cmp = DateComponents(calendar: calendar, year: year, month: month, day: day, hour: hour, minute: miniute)
@@ -95,7 +95,7 @@ class Notifications {
         var hour = 0
         var miniute = 0
         
-        Date.GetIntTime(date: habit.task.time, hour: &hour, minutes: &miniute)
+        Date.GetIntTime(time: habit.task.time, hour: &hour, minutes: &miniute)
         
         let calendar = Calendar.current
         var dateCmp = DateComponents(calendar: calendar, hour: hour, minute: miniute)

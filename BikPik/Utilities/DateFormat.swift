@@ -127,6 +127,12 @@ extension Date {
         return dateFormatter.string(from: nowDate)
     }
     
+    /**
+     
+     - returns
+     case intIndex      day index ( Mon: 1, Tue: 2, Wed: 3, Thr: 4, Fri: 5, Sat: 6 , Sun: 7)
+     case stringDay     Mon / Tue / Wed / Thr / Fri / Sat / Sun
+     */
     static func WeekForm(data : Any, input: WeekInput, output : WeekOutput) -> Any {
         var date: Date = Date()
         var year: Int = 0
@@ -134,7 +140,6 @@ extension Date {
         switch input {
         case .date:
             date = data as! Date
-            
             break
         case .fullDate:
             date = DateForm(data: data, input: .fullDate, output: .date) as! Date
@@ -161,9 +166,6 @@ extension Date {
             return ret
         }
     }
-    
-
-    
     /**
      A function that changes the index so that the week starts on Monday instead of Sunday.
      - parameter idx : day index. ( Sun: 1, Mon: 2, Tue: 3, Wed: 4, Thr: 5, Fri: 6, Sat: 7 )
@@ -175,62 +177,6 @@ extension Date {
         } else {
             return idx - 1
         }
-    }
-    
-    /**
-     A function that converts a date into an index of the day of the week.
-     - parameter year: Year  expressed as an integer.
-     - parameter month:Month expressed as an integer.
-     - parameter day: A day expressed as an integer.
-     - returns : day index ( Mon: 1, Tue: 2, Wed: 3, Thr: 4, Fri: 5, Sat: 6 , Sun: 7).
-                Returns nil when an error occurs.
-     */
-    static func GetIntDayWeek (year: Int, month: Int, day: Int) -> Int? {
-        let calendar = Calendar(identifier: .gregorian)
-        
-        guard let targetDate: Date = {
-            let comps = DateComponents(calendar:calendar, year: year, month: month, day: day)
-            return comps.date
-            }() else { return nil }
-        
-        var dd = Calendar.current.component(.weekday, from: targetDate)
-        if year%4 == 0 {
-            dd -= 1
-        }
-        
-        return MondayFirstInt(idx: dd)
-    }
-    
-    /**
-     A function that converts a date into an index of the day of the week.
-     - parameter date : Date structure data.
-     - returns :day index ( Mon: 1, Tue: 2, Wed: 3, Thr: 4, Fri: 5, Sat: 6 , Sun: 7).
-                Returns nil when an error occurs.
-     */
-    static func GetIntDayWeek(date: Date) -> Int? {
-        let year = Calendar.current.component(.year, from: date)
-        var dd = Calendar.current.component(.weekday, from: date)
-        if year%4 == 0 {
-            dd -= 1
-        }
-        
-        return MondayFirstInt(idx: dd)
-    }
-    
-    /**
-     A function that converts a date into an index of the day of the week.
-     - parameter date : Date string data.
-     - returns :day index ( Mon: 1, Tue: 2, Wed: 3, Thr: 4, Fri: 5, Sat: 6 , Sun: 7).
-                Returns nil when an error occurs.
-     */
-    static func GetIntDayWeek (date: String) -> Int? {
-        var year = 0
-        var month = 0
-        var day = 0
-        
-        GetIntDate(date: date, year: &year, month: &month, day: &day)
-        
-        return GetIntDayWeek(year: year, month: month, day: day)
     }
     
     /*
@@ -265,12 +211,12 @@ extension Date {
      - parameter hour: Int type hour.
      - parameter minutes: Int type minutes.
      */
-    static func GetIntTime (date: String, hour: inout Int, minutes: inout Int) {
-        let preCol = date.index(date.startIndex, offsetBy: 2)
-        let postCol = date.index(date.startIndex, offsetBy: 3)
+    static func GetIntTime (time: String, hour: inout Int, minutes: inout Int) {
+        let preCol = time.index(time.startIndex, offsetBy: 2)
+        let postCol = time.index(time.startIndex, offsetBy: 3)
         
-        hour = Int(date[date.startIndex ..< preCol]) ?? 0
-        minutes = Int(date[postCol ..< date.endIndex]) ?? 0
+        hour = Int(time[time.startIndex ..< preCol]) ?? 0
+        minutes = Int(time[postCol ..< time.endIndex]) ?? 0
     }
     
     /**
@@ -444,7 +390,8 @@ extension Date {
      */
     static func GetWeekDays(start: Date, end: Date, week: Int) -> Int {
         var weekCnt = 0
-        let stWeek = GetIntDayWeek(date: start) ?? 0
+        let stWeek = Date.WeekForm(data: start, input: .date, output: .intIndex) as! Int
+        let edWeek = Date.WeekForm(data: end, input: .date, output: .intIndex) as! Int
         var addDay: Int = 0
         
         if stWeek > week {
@@ -460,9 +407,9 @@ extension Date {
          * 위의 cnt를 구할 때 selWeekDate가 만약 월요일이면 다음주 월요일 까지 반환하는 값이 0이고 화요일부터 1이 됨.
          * 선택한 날짜의 다음 주 부터 1일의 격차가 생겨 아래 if else문이 이를 보완하는 작업이다.
          */
-        if (cnt >= 0) && (week == GetIntDayWeek(date: start)) {
+        if (cnt >= 0) && (week == stWeek) {
             cnt += 1
-        } else if (cnt >= 0) && (week == GetIntDayWeek(date: end)) {
+        } else if (cnt >= 0) && (week == edWeek) {
             cnt += 1
         }
         
@@ -482,13 +429,13 @@ extension Date {
      - parameter date: "HH:mm" format string time.
      - returns : Date structure
      */
-    static func GetDateTime(date: String) -> Date {
+    static func GetDateTime(time: String) -> Date {
         let calendar = Calendar(identifier: .gregorian)
         
         var hour = 0
         var minute = 0
         
-        GetIntTime(date: date, hour: &hour, minutes: &minute)
+        GetIntTime(time: time, hour: &hour, minutes: &minute)
         
         return DateComponents(calendar: calendar, hour: hour, minute: minute).date ?? Date()
     }

@@ -107,8 +107,8 @@ class ToDoViewController: UIViewController {
                 val.isSelected = false
             }
         }
-        let cnt = idx - (Date.GetIntDayWeek(date: mngToDo.selDate.value) ?? 0) + 1
-        mngToDo.changeSelectDate(Date.GetNextDay(date: mngToDo.selDate.value,fewDays: cnt))
+        let cnt = idx - (Date.WeekForm(data: mngToDo.selDate.value, input: .fullDate, output: .intIndex) as! Int) + 1
+        mngToDo.changeSelectDate(index: cnt)
     }
     
     func updateWeekDate(){
@@ -409,7 +409,7 @@ extension ToDoViewController: UITextFieldDelegate{
 extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        mngToDo.changeSelectDate(Date.DateForm(data: date, input: .date, output: .fullDate) as! String)
+        mngToDo.changeSelectDate(date: Date.DateForm(data: date, input: .date, output: .fullDate) as! String)
         disableCalendar()
     }
 }
