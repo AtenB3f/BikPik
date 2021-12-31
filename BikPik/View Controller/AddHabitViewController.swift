@@ -40,7 +40,7 @@ class AddHabitViewController: UIViewController {
             }
             swtInToday.isOn = data.task.inToday
             swtAlram.isOn = data.task.alram
-            pickerTime.date = Date.GetDateTime(date: data.task.time)
+            pickerTime.date = Date.GetDateTime(time: data.task.time)
         }
         setSelectBtn()
         calurateTotal()

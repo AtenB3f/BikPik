@@ -29,8 +29,8 @@ class ToDoViewController: UIViewController {
             self?.btnDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
             self?.updateDate()
         }
-        
-        mngToDo.selTaskList.bind{ [weak self] selList in
+
+        mngToDo.selTaskList.bind{ [weak self] _ in
             self?.ToDoTable.reloadData()
         }
     }

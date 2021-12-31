@@ -33,7 +33,7 @@ import UIKit
 class ToDoManager {
     var tasks: [String: Task] = [:]         // KEY is [task name + "_" + ID]
     var taskIdList: [String : Int] = [:]    // KEY is [task name] , VALUE is [ID]
-    var selTaskList = Observable(Array<String>())//[String] = []
+    var selTaskList = Observable(Array<String>())
     var selDate = Observable(Date.GetNowDate())
     
     let storage = Storage.disk
