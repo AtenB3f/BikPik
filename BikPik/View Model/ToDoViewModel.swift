@@ -127,76 +127,29 @@ class ToDoManager {
      "selTaskList" display in the To Do table. first, display In Today tasks. and and sorted array out to time.
      */
     func sortTimeline() {
-        var tmpArr = selTaskList.value
         var sortArr: [String] = []
-        var deleteIdx: [Int] = []
         var inTodayArr: [String] = []
         var timeArr: [String : String] = [:]
         
-        checkInToday(sortArr: &inTodayArr, deleteIdx: &deleteIdx)
-        sortArr.append(contentsOf: inTodayArr.sorted(by: <))
-        
-        // delete "In Today" Task
-        if deleteIdx.count > 0 {
-            for n in 0...deleteIdx.count-1 {
-                let idx = deleteIdx.count - n - 1
-                tmpArr.remove(at: deleteIdx[idx])
-            }
-        }
-        
-        // time sort
-        if tmpArr.count > 0 {
-            for n in 0...(tmpArr.count-1) {
-                let name = tmpArr[n]
-                if let task = tasks[name] {
-                    timeArr[name] = task.time
-                } else if let id = mngHabit.habitId[name] {
-                    let st:Int = Int(mngHabit.habits[id].start) ?? 0
-                    let ed:Int = Int(mngHabit.habits[id].end) ?? 0
-                    let sel:Int = Int(selDate.value) ?? 0
-                    if (st <= sel) && (ed >= sel) {
-                        timeArr[name] = mngHabit.habits[id].task.time
-                    }
+        for tmp in selTaskList.value {
+            if let task = tasks[tmp] {
+                if task.inToday {
+                    inTodayArr.append(tmp)
+                } else {
+                    timeArr[task.time] = tmp
                 }
             }
         }
         
-        let sortTimeArr = timeArr.sorted{$0.1 < $1.1}
-        
-        if sortTimeArr.count > 0 {
-            for n in 1...sortTimeArr.count {
-                sortArr.append(sortTimeArr[n-1].key)
+        sortArr = inTodayArr.sorted()
+        for key in timeArr.keys.sorted() {
+            if let task = timeArr[key] {
+                sortArr.append(task)
             }
         }
         
         selTaskList.value = sortArr
-    }
-    
-    /**
-     If task is setting 'in today', need to sort array out to time. so this function find the tasks to delete in 'sortArr'.
-     - parameter sortArr : raw array. task list of selected date.
-     - parameter deleteIdx :An array of indices to delete from "sortArr".
-     */
-    func checkInToday(sortArr: inout[String], deleteIdx: inout[Int]) {
-        let cnt = selTaskList.value.count - 1
-        var key: String
-        if cnt >= 0 {
-            // Seleted "in today"
-            for n in 0 ... cnt {
-                key = selTaskList.value[n]
-                if tasks[key] != nil {
-                    if tasks[key]?.inToday == true {
-                        sortArr.append(selTaskList.value[n])
-                        deleteIdx.append(n)
-                    }
-                } else if let id = mngHabit.habitId[key] {
-                    if mngHabit.habits[id].task.inToday == true {
-                        sortArr.append(selTaskList.value[n])
-                        deleteIdx.append(n)
-                    }
-                }
-            }
-        }
+        
     }
     
     /**
@@ -225,7 +178,6 @@ class ToDoManager {
             if (start <= sel && sel <= end) {
                 for i in 0...6 {
                     if habit.days[i] {
-                        //if (i+1) == Date.GetIntDayWeek(date: selDate.value) {
                         if (i+1) == Date.WeekForm(data: selDate.value, input: .fullDate, output: .intIndex) as! Int {
                             return true
                         }
