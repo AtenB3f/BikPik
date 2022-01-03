@@ -54,7 +54,6 @@ class AddHabitViewController: UIViewController {
                 let st = Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date
                 let ed = Date.DateForm(data: data.end, input: .fullDate, output: .date) as! Date
                 total += Date.GetWeekDays(start: st, end: ed, week: n+1)
-                //total += Date.GetWeekDays(start: startDatePicker.date, end: endDatePicker.date, week: n+1)
             }
         }
         data.total = total
@@ -77,7 +76,6 @@ class AddHabitViewController: UIViewController {
         data.task.name = name
         data.task.time = Date.TimeForm(picker: pickerTime)
         calurateTotal()
-        data.isDone = [Bool](repeating: false, count: data.total)
         data.task.alram = swtAlram.isOn
         
         if data.task.alram {

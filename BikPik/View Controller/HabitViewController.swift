@@ -168,22 +168,6 @@ class HabitCollectCell: UICollectionViewCell {
         start.text = "Start    \(Date.DateForm(data: data.start, input: .fullDate, output: .userDate) as! String)"
         end.text = "End      \(Date.DateForm(data: data.end, input: .fullDate, output: .userDate) as! String)"
         total.text = "Total    \(data.total) day"
-        percent.text = "\(calPercent(habit: data))%"
-    }
-    
-    func calPercent(habit data: Habits) -> Int {
-        
-        guard data.isDone != nil else { return 0 }
-        guard data.total>0 else { return 0 }
-        
-        var numDone = 0
-        for n in 0...data.total-1 {
-            if data.isDone![n] == true {
-                numDone += 1
-            }
-        }
-        
-        let percent = round(Float(numDone)/Float(data.total)*100.0)
-        return Int(percent)
+        percent.text = "\(mngHabit.calculatePercent(habit: data))%"
     }
 }

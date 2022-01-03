@@ -106,17 +106,14 @@ class ToDoManager {
     func loadSelTaskList() {
         var arr = [String]()
         let date = selDate.value
-        let idx = Date.WeekForm(data: date, input: .fullDate, output: .intIndex) as! Int
         for (key, val) in tasks {
             if val.date == date {
                 arr.append(key)
             }
         }
         for habit in mngHabit.habits {
-            if habit.start <= date && habit.end >= date {
-                if habit.days[idx-1] {
-                    arr.append(habit.task.name!)
-                }
+            if habit.isDone?[date] != nil {
+                arr.append(habit.task.name!)
             }
         }
         selTaskList.value = arr
@@ -130,14 +127,18 @@ class ToDoManager {
         var sortArr: [String] = []
         var inTodayArr: [String] = []
         var timeArr: [String : String] = [:]
+        var task = Task()
         
         for tmp in selTaskList.value {
-            if let task = tasks[tmp] {
-                if task.inToday {
-                    inTodayArr.append(tmp)
-                } else {
-                    timeArr[task.time] = tmp
-                }
+            if let id = mngHabit.habitId[tmp] {
+                task = mngHabit.habits[id].task
+            } else if tasks.keys.contains(tmp) {
+                task = tasks[tmp]!
+            }
+            if task.inToday {
+                inTodayArr.append(tmp)
+            } else {
+                timeArr[task.time] = tmp
             }
         }
         

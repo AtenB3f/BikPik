@@ -12,7 +12,8 @@ struct Habits: Codable, Equatable {
     var end : String
     var days : [Bool] = [Bool](repeating: true, count: 7)
     var total = 0
-    var isDone : [Bool]?
+    var isDone : [String:Bool]?
+    var percent : Int = 0
     
     init(date:String) {
         self.start = date//Date.GetNowDate()

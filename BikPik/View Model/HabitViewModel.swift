@@ -28,6 +28,9 @@ class HabitManager {
         let name = data.task.name!
         habitId[name] = id
         
+        // isDone Dictionary
+        data.isDone = createIsDone(habit: habit)
+        
         habits.append(data)
         saveHabit()
     }
@@ -135,11 +138,16 @@ class HabitManager {
      - returns : Returns a value if the array value is checked, or nil if the array does not exist.
      */
     func isDoneCheck(habit : Habits ,date: String) -> Bool {
-        let idx = isDoneIndex(habit: habit, date: date) ?? 0
-        if habit.isDone == nil { return false }
-        if habit.isDone!.count <= idx { return false }
-        let done = habit.isDone?[idx] ?? false
-        return done
+        if habit.isDone == nil {
+            print("isDoneCheck Error :: No Exist isDone Array")
+            return false
+        }
+        if let done = habit.isDone?[date] {
+            return done
+        }
+        
+        print("isDoneCheck Error :: No Exist isDone Array value")
+         return false
     }
     
     /**
@@ -149,8 +157,40 @@ class HabitManager {
      - parameter done : true / false
      */
     func isDone(habit: inout Habits,  date: String, done : Bool) {
-        let idx = isDoneIndex(habit: habit, date: date) ?? 0
-        habit.isDone?[idx] = done
+        if habit.isDone == nil { return }
+        if habit.isDone!.keys.contains(date) {
+            habit.isDone?[date] = done
+        }
+    }
+    
+    func createIsDone(habit: Habits) -> [String:Bool] {
+        var dic = [String:Bool]()
+        
+        var date = habit.start
+        for _ in 0..<habit.total {
+            let idx = Date.WeekForm(data: date, input: .fullDate, output: .intIndex) as! Int - 1
+            if habit.days[idx] {
+                dic[date] = false
+            }
+            date = Date.GetNextDay(date: date)
+        }
+        
+        return dic
+    }
+    
+    /** Calcuate Habit percent
+     */
+    func calculatePercent(habit : Habits) -> Int {
+        if habit.isDone == nil { return 0 }
+        
+        var cnt = 0
+        for elemnt in habit.isDone! {
+            if elemnt.value {
+                cnt += 1
+            }
+        }
+        
+        return Int(round(Float(cnt)/Float(habit.total)*100.0))
     }
 }
 
