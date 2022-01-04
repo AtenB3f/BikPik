@@ -242,15 +242,10 @@ extension Date {
      - returns : next day of "date"
      */
     static func GetNextDay(date: String) -> String {
-        var year: Int = 0
-        var month: Int = 0
-        var day: Int = 0
+        let d = DateForm(data: date, input: .fullDate, output: .date) as! Date
+        let n = Calendar.current.date(byAdding: .day, value: 1, to: d) ?? Date()
         
-        self.GetIntDate(date: date, year: &year, month: &month, day: &day)
-        
-        CalculateDate(year: &year, month: &month, day: &day, oper: true)
-        
-        return GetStringDate(year: year, month: month, day: day)
+        return DateForm(data: n, input: .date, output: .fullDate) as! String
     }
     
     /**
@@ -260,91 +255,10 @@ extension Date {
      - returns:A date in the format "yyyyMMdd" with "date" plus "fewDays".
      */
     static func GetNextDay (date: String, fewDays: Int) -> String {
-        var year: Int = 0
-        var month: Int = 0
-        var day: Int = 0
+        let d = DateForm(data: date, input: .fullDate, output: .date) as! Date
+        let n = Calendar.current.date(byAdding: .day, value: fewDays, to: d) ?? Date()
         
-        GetIntDate(date: date, year: &year, month: &month, day: &day)
-        
-        let cnt: Int = (fewDays >= 0) ? fewDays : 0 - fewDays
-        let oper = fewDays >= 0 ? true : false
-        
-        if cnt > 0 {
-            for _ in 1 ... cnt {
-                CalculateDate(year: &year,month: &month,day: &day,oper: oper)
-            }
-        }
-        
-        return GetStringDate(year: year, month: month,day: day)
-    }
-    
-    /**
-     The date entered as a parameter plus one day.
-     - parameter year: Integer type year.
-     - parameter month: Integer type month.
-     - parameter day: Integer type day.
-     - parameter oper: true( add 1 ) / false ( add -1 )
-     */
-    static func CalculateDate (year: inout Int, month: inout Int, day: inout Int, oper: Bool) {
-        var carry = false
-        
-        if oper {
-            // + 1
-            switch month {
-            case 1,3,5,7,8,10:
-                carry = day >= 31 ? true : false
-                break
-            case 2:
-                let standard = (year % 4) == 0 ? 29 : 28
-                carry = day >= standard ? true : false
-                break
-            case 4,6,9,11:
-                carry = day >= 30 ? true : false
-                break
-            case 12:
-                carry = day >= 31 ? true : false
-                if carry {
-                    year += 1
-                }
-                break
-            default :
-                break
-            }
-            
-            if carry {
-                month = 1
-                day = 1
-            } else {
-                day += 1
-            }
-            
-        } else {
-            // - 1
-            if day == 1 {
-                switch month {
-                case 1 :
-                    year -= 1
-                    month = 12
-                    day = 31
-                    break
-                case 5,7,8,10,12:
-                    month -= 1
-                    day = 30
-                    break
-                case 2,4,6,9,11:
-                    month -= 1
-                    day = 31
-                    break
-                case 3:
-                    month = 2
-                    day = (year % 4) == 0 ? 29 : 28
-                default:
-                    break
-                }
-            } else {
-                day -= 1
-            }
-        }
+        return DateForm(data: n, input: .date, output: .fullDate) as! String
     }
     
     /**
