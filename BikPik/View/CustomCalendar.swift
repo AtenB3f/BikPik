@@ -104,9 +104,8 @@ class CustomCalendarCell: FSCalendarCell {
     
     var selectionType: SelectionType = .none {
         didSet {
-            //setCellLayout()
-            setNeedsLayout()
             setLayout()
+            setNeedsLayout()
         }
     }
     
@@ -116,38 +115,20 @@ class CustomCalendarCell: FSCalendarCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setLayout()
-        
-        //let view = UIView(frame: self.bounds)
-        //view.backgroundColor = .white
-        //self.backgroundView = view;
-        
     }
     
     func setLayout() {
         let selectionLayer = CAShapeLayer()
         selectionLayer.fillColor = UIColor(named: "BikPik Color")?.cgColor
-        //selectionLayer.opacity = 0.5
-        //selectionLayer.actions = ["hidden": NSNull()]
-        
         self.selectionLayer = selectionLayer
-        self.shapeLayer.isHidden = true//hide
+        self.shapeLayer.isHidden = true
         self.contentView.layer.insertSublayer(selectionLayer, below: self.titleLabel!.layer)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         setCellLayout()
-    }
-    
-    override func configureAppearance() {
-        super.configureAppearance()
-        // Override the build-in appearance configuration
-        if self.isPlaceholder {
-            //self.eventIndicator.isHidden = true
-            //self.titleLabel.textColor = UIColor.lightGray
-        }
     }
     
     func setCellLayout() {

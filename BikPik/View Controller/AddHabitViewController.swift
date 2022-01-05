@@ -379,6 +379,7 @@ class AddHabitViewController: UIViewController {
 }
 
 extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
+    // Need to use SnapKit
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         calendar.snp.updateConstraints { (make) in
             make.width.equalTo(bounds.width)
@@ -386,60 +387,42 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
             make.centerX.equalTo(view.snp.centerX)
             make.top.equalTo(fldHabitName.snp.bottom).offset(heightGap)
         }
-        self.view.layoutIfNeeded()
     }
     
+    // When selected calendar cell
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         let fullDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
         
-        if (term) {
+        deselectDays()
+        
+        if (term) { // select multi
             if (data.start > fullDate) {
                 data.end = data.start
                 data.start = fullDate
+                selectDays(start:date , end: Date.DateForm(data: data.end, input: .fullDate, output: .date) as! Date)
             } else {
                 data.end = fullDate
+                selectDays(start:Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date , end: date)
             }
-            
-            
-        } else {
-            calendar.selectedDates.forEach { delete in
-                calendar.deselect(delete)
-            }
+        } else {    // select single
             data.start = fullDate
             data.end = fullDate
+            selectDays(start:date , end: date)
         }
         term.toggle()
-        print("start : \(data.start)  end : \(data.end)")
-        let st: Date = Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date
-        setCellLayout(date: st, posi: monthPosition)
         
+        self.view.layoutIfNeeded()
+        self.configureVisibleCells()
     }
     
-    func selectDays(start: Date, end: Date) {
-        let cnt = Date.GetDays(start: start, end: end)
-        let gregorian = Calendar(identifier: .gregorian)
-        
-        for i in 0...(cnt-1) {
-            let next = gregorian.date(byAdding: .day, value: i, to: start)!
-            calendar.select(next)
-        }
-    }
-    
-    func setCellLayout(date: Date, posi: FSCalendarMonthPosition) {
-        let cell = calendar.dequeueReusableCell(withIdentifier: "cell", for: date, at: posi)
-        let gregorian = Calendar(identifier: .gregorian)
-        
-        let st = calendar.currentPage
-        //let cnt = Date.GetDays(start: data.start, end: data.end)
-        for i in 0..<48 {
-            let next = gregorian.date(byAdding: .day, value: i, to: st)!
-            let str = Date.DateForm(data: next, input: .date, output: .fullDate) as! String
-            if data.start <= str && str <= data.end {
-                calendar.select(next)
-            }
-            self.configure(cell: cell, for: next, at: posi)
-        }
-        
+    func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        let fullDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
+        data.start = fullDate
+        data.end = fullDate
+        deselectDays()
+        selectDays(start: date, end: date)
+        self.view.layoutIfNeeded()
+        self.configureVisibleCells()
     }
     
     func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
@@ -449,13 +432,35 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
      
     func calendar(_ calendar: FSCalendar, willDisplay cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
         self.configure(cell: cell, for: date, at: position)
-        //setCellLayout(date: date)
     }
-
+    
+    func configureVisibleCells() {
+        calendar.visibleCells().forEach { (cell) in
+            let date = calendar.date(for: cell)
+            let position = calendar.monthPosition(for: cell)
+            self.configure(cell: cell, for: date!, at: position)
+        }
+    }
+    
+    func selectDays(start: Date, end: Date) {
+        let cnt = Date.GetDays(start: start, end: end)
+        let gregorian = Calendar(identifier: .gregorian)
+        
+        for i in 0..<cnt {
+            let next = gregorian.date(byAdding: .day, value: i, to: start)!
+            calendar.select(next)
+        }
+    }
+    
+    func deselectDays() {
+        calendar.selectedDates.forEach { delete in
+            calendar.deselect(delete)
+        }
+    }
+    
     func configure(cell: FSCalendarCell, for date: Date, at position: FSCalendarMonthPosition) {
-        let diyCell = (cell as! CustomCalendarCell)
+        let diyCell = cell as! CustomCalendarCell
         var selectionType = SelectionType.none
-        print("date: \(date)")
         
         if calendar.selectedDates.contains(date) {
             let st = Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date
@@ -481,7 +486,5 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
             diyCell.selectionLayer.isHidden = false
         }
         diyCell.selectionType = selectionType
-        diyCell.hide = diyCell.selectionLayer.isHidden
-        diyCell.setCellLayout()
     }
 }

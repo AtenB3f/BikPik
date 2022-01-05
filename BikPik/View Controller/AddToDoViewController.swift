@@ -12,6 +12,11 @@ import SnapKit
 let notiAddToDo: Notification.Name = Notification.Name("notiAddToDo")
 
 class AddToDoViewController: UIViewController {
+    
+    deinit {
+        print("DeInit")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

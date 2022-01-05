@@ -27,7 +27,9 @@ class ToDoViewController: UIViewController {
         
         mngToDo.selDate.bind{ [weak self] date in
             self?.btnDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
-            self?.updateDate()
+            self?.updateWeekDate()
+            self?.mngToDo.loadSelTaskList()
+            self?.mngToDo.sortTimeline()
         }
 
         mngToDo.selTaskList.bind{ [weak self] _ in
@@ -166,7 +168,6 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         if let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? ToDoCell {
             cell.updateCell(indexPathRow: indexPath.row)
             cell.isDone.addTarget(self, action: #selector(clickIsDone(_:)), for: .touchUpInside)
