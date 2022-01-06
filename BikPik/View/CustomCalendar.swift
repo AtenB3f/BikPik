@@ -118,11 +118,16 @@ class CustomCalendarCell: FSCalendarCell {
         setLayout()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.selectionLayer.fillColor = UIColor.systemBackground.cgColor
+        selectionType = .none
+    }
+    
     func setLayout() {
         let selectionLayer = CAShapeLayer()
         selectionLayer.fillColor = UIColor(named: "BikPik Color")?.cgColor
         self.selectionLayer = selectionLayer
-        self.shapeLayer.isHidden = true
         self.contentView.layer.insertSublayer(selectionLayer, below: self.titleLabel!.layer)
     }
     

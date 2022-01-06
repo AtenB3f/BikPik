@@ -411,7 +411,6 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
         }
         term.toggle()
         
-        self.view.layoutIfNeeded()
         self.configureVisibleCells()
     }
     
@@ -421,7 +420,6 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
         data.end = fullDate
         deselectDays()
         selectDays(start: date, end: date)
-        self.view.layoutIfNeeded()
         self.configureVisibleCells()
     }
     
