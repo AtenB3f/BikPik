@@ -27,9 +27,7 @@ class ToDoViewController: UIViewController {
         
         mngToDo.selDate.bind{ [weak self] date in
             self?.btnDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
-            self?.updateWeekDate()
-            self?.mngToDo.loadSelTaskList()
-            self?.mngToDo.sortTimeline()
+            self?.updateDate()
         }
 
         mngToDo.selTaskList.bind{ [weak self] _ in
@@ -282,7 +280,6 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 class ToDoCell: UITableViewCell {
-
     let mngToDo = ToDoManager.mngToDo
     let mngHabit = HabitManager.mngHabit
     @IBOutlet weak var time: UILabel!
@@ -301,34 +298,24 @@ class ToDoCell: UITableViewCell {
     
     func displayDone(done: Bool) {
         isDone.isSelected = done
+        task.textColor = UIColor(named: "TextLightColor") ?? .lightText
+        time.textColor = UIColor(named: "TextLightColor") ?? .lightText
         if done {
             let col: UIColor = UIColor.init(named: "BikPik Dark Color") ?? .cyan
             let img = UIImage(named: "CheckBox_fill.png")?.withRenderingMode(.alwaysTemplate)
             isDone.setImage(img, for: .normal)
             isDone.tintColor = col
-            task.textColor = col
-            time.textColor = col
-            
-            /*
-            let attr = NSAttributedString(
-                string: self.task.text! ,
-                attributes: [NSAttributedString.Key.strikethroughStyle : NSUnderlineStyle.single.rawValue])
-            task.attributedText = attr
-             */
+            task.attributedText = NSAttributedString(
+                                    string: self.task.text ?? ""  ,
+                                    attributes: [NSAttributedString.Key.strikethroughStyle : NSUnderlineStyle.single.rawValue])
         } else {
             let col: UIColor = UIColor(named: "TextLightColor") ?? .lightText
             let img = UIImage(named: "CheckBox.png")?.withRenderingMode(.alwaysTemplate)
             isDone.setImage(img, for: .normal)
             isDone.tintColor = col
-            task.textColor = col
-            time.textColor = col
-            
-            /*
-            let attr = NSAttributedString(
-                string: self.task.text! ,
-                attributes: [NSAttributedString.Key.ligature : NSUnderlineStyle.single.rawValue])
-            task.attributedText = attr
-             */
+            task.attributedText = NSAttributedString(
+                                    string: self.task.text ?? "" ,
+                                    attributes: [NSAttributedString.Key.strikethroughStyle:NSUnderlineStyle.byWord])
         }
     }
     
