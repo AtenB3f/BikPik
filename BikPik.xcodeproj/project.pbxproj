@@ -19,6 +19,7 @@
 		31806387273AA53B0058C886 /* CustomCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31806386273AA53B0058C886 /* CustomCalendar.swift */; };
 		318136EB2768896700DD94C6 /* GmarketSansTTFLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 318136EA2768896700DD94C6 /* GmarketSansTTFLight.ttf */; };
 		318136ED2768896A00DD94C6 /* GmarketSansTTFMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 318136EC2768896A00DD94C6 /* GmarketSansTTFMedium.ttf */; };
+		3185DE272787EC7000F5EB91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3185DE262787EC7000F5EB91 /* GoogleService-Info.plist */; };
 		31867C6F2714815E007C6F58 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31867C6E2714815E007C6F58 /* Notifications.swift */; };
 		318729092774B70A007D438C /* ToDoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318729082774B70A007D438C /* ToDoViewModel.swift */; };
 		3187290B2774B85A007D438C /* HabitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3187290A2774B85A007D438C /* HabitViewModel.swift */; };
@@ -56,6 +57,7 @@
 		31806386273AA53B0058C886 /* CustomCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalendar.swift; sourceTree = "<group>"; };
 		318136EA2768896700DD94C6 /* GmarketSansTTFLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFLight.ttf; sourceTree = "<group>"; };
 		318136EC2768896A00DD94C6 /* GmarketSansTTFMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFMedium.ttf; sourceTree = "<group>"; };
+		3185DE262787EC7000F5EB91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		31867C6E2714815E007C6F58 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		318729082774B70A007D438C /* ToDoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewModel.swift; sourceTree = "<group>"; };
 		3187290A2774B85A007D438C /* HabitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewModel.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				3146790F266B6118008AEC4D /* Main.storyboard */,
 				31467912266B611B008AEC4D /* Assets.xcassets */,
 				31467914266B611B008AEC4D /* LaunchScreen.storyboard */,
+				3185DE262787EC7000F5EB91 /* GoogleService-Info.plist */,
 				31467917266B611B008AEC4D /* Info.plist */,
 			);
 			path = BikPik;
@@ -261,6 +264,7 @@
 				31467911266B6118008AEC4D /* Main.storyboard in Resources */,
 				318136EB2768896700DD94C6 /* GmarketSansTTFLight.ttf in Resources */,
 				318136ED2768896A00DD94C6 /* GmarketSansTTFMedium.ttf in Resources */,
+				3185DE272787EC7000F5EB91 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -490,7 +494,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = AtenB.BikPik;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AtenB.BikPik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -510,7 +514,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = AtenB.BikPik;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AtenB.BikPik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
