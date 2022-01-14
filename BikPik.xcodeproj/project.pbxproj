@@ -35,6 +35,8 @@
 		319DEF65267782A200299580 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF64267782A200299580 /* Storage.swift */; };
 		31A132F42716B88D004C6ACC /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A132F32716B88D004C6ACC /* SideMenuViewController.swift */; };
 		31B4E2A727773D3200445331 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B4E2A627773D3200445331 /* Observable.swift */; };
+		31C37CFE278FAD3200D8FBB8 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C37CFD278FAD3200D8FBB8 /* Firebase.swift */; };
+		31C37D0227900B1E00D8FBB8 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C37D0127900B1E00D8FBB8 /* LogInViewController.swift */; };
 		31F58501271D6D8600DD89A1 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F58500271D6D8600DD89A1 /* SettingViewController.swift */; };
 		ACC189454E0F54C2FCE53B04 /* Pods_BikPik.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B409A4D7E305B7205E8A04 /* Pods_BikPik.framework */; };
 /* End PBXBuildFile section */
@@ -72,6 +74,8 @@
 		319DEF64267782A200299580 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		31A132F32716B88D004C6ACC /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		31B4E2A627773D3200445331 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		31C37CFD278FAD3200D8FBB8 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
+		31C37D0127900B1E00D8FBB8 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		31F58500271D6D8600DD89A1 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		AE1DE5914FF9628B3EAD1C39 /* Pods-BikPik.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BikPik.release.xcconfig"; path = "Target Support Files/Pods-BikPik/Pods-BikPik.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -140,6 +144,7 @@
 				3124057D2716EEE20056C1F6 /* CustomSideMenuViewController.swift */,
 				31F58500271D6D8600DD89A1 /* SettingViewController.swift */,
 				31795343271D96BF00EA6034 /* OpenSourceViewController.swift */,
+				31C37D0127900B1E00D8FBB8 /* LogInViewController.swift */,
 			);
 			path = "View Controller";
 			sourceTree = "<group>";
@@ -179,6 +184,7 @@
 				319DEF64267782A200299580 /* Storage.swift */,
 				31867C6E2714815E007C6F58 /* Notifications.swift */,
 				31B4E2A627773D3200445331 /* Observable.swift */,
+				31C37CFD278FAD3200D8FBB8 /* Firebase.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -335,10 +341,12 @@
 				3146790C266B6118008AEC4D /* SceneDelegate.swift in Sources */,
 				31806387273AA53B0058C886 /* CustomCalendar.swift in Sources */,
 				3199943826DF606000F4DD5D /* HabitViewController.swift in Sources */,
+				31C37CFE278FAD3200D8FBB8 /* Firebase.swift in Sources */,
 				319DEF5C26770F4200299580 /* CalendarViewController.swift in Sources */,
 				3187290D2774BB23007D438C /* SettingsViewModel.swift in Sources */,
 				3141F0D92678965F00E14EDF /* DateFormat.swift in Sources */,
 				319657FF274E2543009B4618 /* Settings.swift in Sources */,
+				31C37D0227900B1E00D8FBB8 /* LogInViewController.swift in Sources */,
 				31B4E2A727773D3200445331 /* Observable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

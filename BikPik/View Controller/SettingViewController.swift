@@ -62,6 +62,7 @@ class SettingViewController: UIViewController {
     let offsetTop = 20
     let heightClose = 56
     let hightTheme = 78
+    let iconSize = 44
     
     func addSubView(){
         self.view.addSubview(contentsView)
@@ -198,6 +199,7 @@ class SettingViewController: UIViewController {
         btnAccount.snp.makeConstraints { make in
             make.centerY.equalTo(labelAccount.snp.centerY)
             make.trailing.equalToSuperview().offset(offsetTrailling)
+            make.width.height.equalTo(iconSize)
         }
     }
     func themeLayout() {
@@ -211,6 +213,7 @@ class SettingViewController: UIViewController {
         btnTheme.snp.makeConstraints { make in
             make.centerY.equalTo(labelTheme.snp.centerY)
             make.trailing.equalToSuperview().offset(offsetTrailling)
+            make.width.height.equalTo(iconSize)
         }
         
         viewThemeDetail.backgroundColor = .yellow
@@ -270,6 +273,7 @@ class SettingViewController: UIViewController {
         btnTag.snp.makeConstraints { make in
             make.centerY.equalTo(labelTag.snp.centerY)
             make.trailing.equalToSuperview().offset(offsetTrailling)
+            make.width.height.equalTo(iconSize)
         }
     }
     
@@ -289,7 +293,12 @@ class SettingViewController: UIViewController {
     
     @objc func actionAccount(_ sender: UIButton) {
         // 계정 뷰 컨트롤러 이동
+        let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LogInVC") as! LogInViewController
+        loginVC.modalPresentationStyle = .fullScreen
+        loginVC.modalTransitionStyle = .crossDissolve
+        present(loginVC, animated: true, completion: nil)
     }
+    
     @objc func actionTheme(_ sender: UIButton) {
         sender.isSelected.toggle()
         if sender.isSelected {
