@@ -25,6 +25,8 @@
 		3187290B2774B85A007D438C /* HabitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3187290A2774B85A007D438C /* HabitViewModel.swift */; };
 		3187290D2774BB23007D438C /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3187290C2774BB23007D438C /* SettingsViewModel.swift */; };
 		3188ACA62671E61E003239CC /* AddToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31467922266BBABD008AEC4D /* AddToDoViewController.swift */; };
+		3189A0132792AB59007B24B6 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3189A0122792AB59007B24B6 /* Account.swift */; };
+		3189A0152792ACB2007B24B6 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3189A0142792ACB2007B24B6 /* AccountModel.swift */; };
 		319657FF274E2543009B4618 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319657FE274E2543009B4618 /* Settings.swift */; };
 		3199943826DF606000F4DD5D /* HabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3199943726DF606000F4DD5D /* HabitViewController.swift */; };
 		3199943A26DF658700F4DD5D /* AddHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3199943926DF658700F4DD5D /* AddHabitViewController.swift */; };
@@ -64,6 +66,8 @@
 		318729082774B70A007D438C /* ToDoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewModel.swift; sourceTree = "<group>"; };
 		3187290A2774B85A007D438C /* HabitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewModel.swift; sourceTree = "<group>"; };
 		3187290C2774BB23007D438C /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		3189A0122792AB59007B24B6 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		3189A0142792ACB2007B24B6 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 		319657FE274E2543009B4618 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		3199943726DF606000F4DD5D /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
 		3199943926DF658700F4DD5D /* AddHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHabitViewController.swift; sourceTree = "<group>"; };
@@ -155,6 +159,7 @@
 				319DEF6026775F8100299580 /* ToDo.swift */,
 				3199943B26DF65C400F4DD5D /* Habit.swift */,
 				319657FE274E2543009B4618 /* Settings.swift */,
+				3189A0122792AB59007B24B6 /* Account.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -165,6 +170,7 @@
 				318729082774B70A007D438C /* ToDoViewModel.swift */,
 				3187290A2774B85A007D438C /* HabitViewModel.swift */,
 				3187290C2774BB23007D438C /* SettingsViewModel.swift */,
+				3189A0142792ACB2007B24B6 /* AccountModel.swift */,
 			);
 			path = "View Model";
 			sourceTree = "<group>";
@@ -324,6 +330,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				318729092774B70A007D438C /* ToDoViewModel.swift in Sources */,
+				3189A0132792AB59007B24B6 /* Account.swift in Sources */,
 				3188ACA62671E61E003239CC /* AddToDoViewController.swift in Sources */,
 				3199943A26DF658700F4DD5D /* AddHabitViewController.swift in Sources */,
 				319DEF6126775F8100299580 /* ToDo.swift in Sources */,
@@ -341,6 +348,7 @@
 				3146790C266B6118008AEC4D /* SceneDelegate.swift in Sources */,
 				31806387273AA53B0058C886 /* CustomCalendar.swift in Sources */,
 				3199943826DF606000F4DD5D /* HabitViewController.swift in Sources */,
+				3189A0152792ACB2007B24B6 /* AccountModel.swift in Sources */,
 				31C37CFE278FAD3200D8FBB8 /* Firebase.swift in Sources */,
 				319DEF5C26770F4200299580 /* CalendarViewController.swift in Sources */,
 				3187290D2774BB23007D438C /* SettingsViewModel.swift in Sources */,

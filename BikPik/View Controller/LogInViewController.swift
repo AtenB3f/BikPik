@@ -73,7 +73,6 @@ class LogInViewController: UIViewController {
             let fullName = user.profile?.name
             let givenName = user.profile?.givenName
             let familyName = user.profile?.familyName
-
             let profilePicUrl = user.profile?.imageURL(withDimension: 320)
             
             print(emailAddress)
