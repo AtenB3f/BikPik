@@ -11,14 +11,26 @@ import GoogleSignIn
 class AccountManager {
     
     static let mngAccount = AccountManager()
-    private init() {}
+    private init() {
+        loadAccount()
+    }
     
     let mngFirebase = Firebase.mngFirebase
+    let store = Storage.disk
     
     var account = Account()
     
     func loadAccount () {
-
+        loadEmail()
+        
+    }
+    
+    func loadEmail() {
+        if let googleAccount = GIDSignIn.sharedInstance.currentUser?.profile?.email {
+            print(googleAccount)
+            account.email = googleAccount
+            return
+        }
     }
     
 }

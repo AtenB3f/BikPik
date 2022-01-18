@@ -77,6 +77,7 @@ class LogInViewController: UIViewController {
             
             print(emailAddress)
         }
+        
     }
 
 }

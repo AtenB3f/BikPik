@@ -13,14 +13,12 @@ enum LoginType {
     case apple
 }
 
-struct Account {
-    var nickName:String
-    var email:String
+struct Account{
+    var nickName:String?
+    var email:String?
     var type:LoginType
     
     init () {
-        nickName = ""
-        email = ""
         type = .none
     }
     
