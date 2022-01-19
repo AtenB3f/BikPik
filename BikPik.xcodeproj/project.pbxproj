@@ -19,6 +19,7 @@
 		31806387273AA53B0058C886 /* CustomCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31806386273AA53B0058C886 /* CustomCalendar.swift */; };
 		318136EB2768896700DD94C6 /* GmarketSansTTFLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 318136EA2768896700DD94C6 /* GmarketSansTTFLight.ttf */; };
 		318136ED2768896A00DD94C6 /* GmarketSansTTFMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 318136EC2768896A00DD94C6 /* GmarketSansTTFMedium.ttf */; };
+		3184B78A279848C0002D0E07 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3184B789279848C0002D0E07 /* AccountViewController.swift */; };
 		3185DE272787EC7000F5EB91 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3185DE262787EC7000F5EB91 /* GoogleService-Info.plist */; };
 		31867C6F2714815E007C6F58 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31867C6E2714815E007C6F58 /* Notifications.swift */; };
 		318729092774B70A007D438C /* ToDoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318729082774B70A007D438C /* ToDoViewModel.swift */; };
@@ -61,6 +62,7 @@
 		31806386273AA53B0058C886 /* CustomCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCalendar.swift; sourceTree = "<group>"; };
 		318136EA2768896700DD94C6 /* GmarketSansTTFLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFLight.ttf; sourceTree = "<group>"; };
 		318136EC2768896A00DD94C6 /* GmarketSansTTFMedium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansTTFMedium.ttf; sourceTree = "<group>"; };
+		3184B789279848C0002D0E07 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		3185DE262787EC7000F5EB91 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		31867C6E2714815E007C6F58 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		318729082774B70A007D438C /* ToDoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewModel.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				31F58500271D6D8600DD89A1 /* SettingViewController.swift */,
 				31795343271D96BF00EA6034 /* OpenSourceViewController.swift */,
 				31C37D0127900B1E00D8FBB8 /* LogInViewController.swift */,
+				3184B789279848C0002D0E07 /* AccountViewController.swift */,
 			);
 			path = "View Controller";
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 			files = (
 				318729092774B70A007D438C /* ToDoViewModel.swift in Sources */,
 				3189A0132792AB59007B24B6 /* Account.swift in Sources */,
+				3184B78A279848C0002D0E07 /* AccountViewController.swift in Sources */,
 				3188ACA62671E61E003239CC /* AddToDoViewController.swift in Sources */,
 				3199943A26DF658700F4DD5D /* AddHabitViewController.swift in Sources */,
 				319DEF6126775F8100299580 /* ToDo.swift in Sources */,
