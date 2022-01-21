@@ -623,9 +623,9 @@
                                 <color key="barTintColor" systemColor="systemBackgroundColor"/>
                                 <items>
                                     <navigationItem title="Login" id="HTH-zH-NRE">
-                                        <barButtonItem key="rightBarButtonItem" image="xmark" catalog="system" id="BX9-6D-g6H">
+                                        <barButtonItem key="leftBarButtonItem" image="chevron.left" catalog="system" id="l8P-1h-aAq">
                                             <connections>
-                                                <action selector="navigationClose:" destination="5gY-Iy-i8Q" id="zn8-PW-R6F"/>
+                                                <action selector="navigationClose:" destination="5gY-Iy-i8Q" id="7xn-Si-hGT"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -635,6 +635,8 @@
                         <viewLayoutGuide key="safeArea" id="lcU-hd-Yji"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="navigationBar" destination="wBk-ef-Wci" id="ZWV-0G-yXG"/>
                     </connections>
@@ -657,9 +659,9 @@
                                 <color key="tintColor" name="BikPik Color"/>
                                 <items>
                                     <navigationItem title="Account" id="9ur-xl-GfI">
-                                        <barButtonItem key="rightBarButtonItem" image="xmark" catalog="system" id="jOH-DL-X2J">
+                                        <barButtonItem key="leftBarButtonItem" image="chevron.left" catalog="system" style="plain" id="bur-E7-bNZ">
                                             <connections>
-                                                <action selector="navigationClose:" destination="MVv-nM-gU3" id="0XK-uE-HWA"/>
+                                                <action selector="navigationClose:" destination="MVv-nM-gU3" id="Nt4-wT-ei0"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -669,6 +671,9 @@
                         <viewLayoutGuide key="safeArea" id="XS3-9n-PSK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="navigationBar" destination="v0L-YA-FJ4" id="qKk-Ta-uxc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rt0-rE-gYX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1339,13 +1344,13 @@
     <resources>
         <image name="CheckBox" width="128" height="128"/>
         <image name="arrow.left" catalog="system" width="128" height="98"/>
+        <image name="chevron.left" catalog="system" width="96" height="128"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="ellipsis.circle" catalog="system" width="128" height="121"/>
         <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <image name="plus.app" catalog="system" width="128" height="114"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
         <image name="square.grid.2x2.fill" catalog="system" width="128" height="114"/>
-        <image name="xmark" catalog="system" width="128" height="113"/>
         <namedColor name="Background Color">
             <color red="0.94999998807907104" green="0.94999998807907104" blue="0.94999998807907104" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

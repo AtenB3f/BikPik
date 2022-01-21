@@ -140,18 +140,18 @@
 		317FBA5326E7740100A02091 /* View Controller */ = {
 			isa = PBXGroup;
 			children = (
-				319DEF55267705C200299580 /* PageViewController.swift */,
-				3146791E266B6203008AEC4D /* ToDoViewController.swift */,
+				3184B789279848C0002D0E07 /* AccountViewController.swift */,
+				3199943926DF658700F4DD5D /* AddHabitViewController.swift */,
 				31467922266BBABD008AEC4D /* AddToDoViewController.swift */,
 				319DEF5B26770F4200299580 /* CalendarViewController.swift */,
-				3199943726DF606000F4DD5D /* HabitViewController.swift */,
-				3199943926DF658700F4DD5D /* AddHabitViewController.swift */,
-				31A132F32716B88D004C6ACC /* SideMenuViewController.swift */,
 				3124057D2716EEE20056C1F6 /* CustomSideMenuViewController.swift */,
-				31F58500271D6D8600DD89A1 /* SettingViewController.swift */,
-				31795343271D96BF00EA6034 /* OpenSourceViewController.swift */,
+				3199943726DF606000F4DD5D /* HabitViewController.swift */,
 				31C37D0127900B1E00D8FBB8 /* LogInViewController.swift */,
-				3184B789279848C0002D0E07 /* AccountViewController.swift */,
+				31795343271D96BF00EA6034 /* OpenSourceViewController.swift */,
+				319DEF55267705C200299580 /* PageViewController.swift */,
+				31F58500271D6D8600DD89A1 /* SettingViewController.swift */,
+				31A132F32716B88D004C6ACC /* SideMenuViewController.swift */,
+				3146791E266B6203008AEC4D /* ToDoViewController.swift */,
 			);
 			path = "View Controller";
 			sourceTree = "<group>";
