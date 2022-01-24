@@ -242,7 +242,7 @@ class AddToDoViewController: UIViewController {
         }
     }
     
-    func addTarget() {
+    private func addTarget() {
         swtAlram.addTarget(self, action: #selector(self.actionAlram(_:)), for: .allTouchEvents)
         swtInToday.addTarget(self, action: #selector(self.actionInToday(_:)), for: .allTouchEvents)
     }

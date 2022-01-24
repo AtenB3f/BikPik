@@ -1245,6 +1245,7 @@
                         <outlet property="btnOpenSource" destination="Tlk-c0-Kc2" id="wLk-ba-Fud"/>
                         <outlet property="btnSetting" destination="GWg-NL-Yid" id="hAB-Nq-Lbf"/>
                         <outlet property="labelEmail" destination="VY0-Ql-4GT" id="DlS-Cl-6fT"/>
+                        <outlet property="labelName" destination="MmS-5q-c3x" id="M14-EW-sjP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yew-4H-tCu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

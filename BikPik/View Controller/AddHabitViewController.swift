@@ -323,7 +323,7 @@ class AddHabitViewController: UIViewController {
         }
     }
     
-    func addTarget() {
+    private func addTarget() {
         let arrBtn: [UIButton] = [btnMon, btnTue, btnWed, btnThu, btnFri, btnSat, btnSun]
         
         swtAlram.addTarget(self, action: #selector(self.actionAlram(_:)), for: .allTouchEvents)

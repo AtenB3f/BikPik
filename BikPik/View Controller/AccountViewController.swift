@@ -15,6 +15,7 @@ class AccountViewController: UIViewController {
         super.viewDidLoad()
         
         setLayout()
+        addTarget()
     }
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBAction func navigationClose(_ sender: Any) {
@@ -26,6 +27,7 @@ class AccountViewController: UIViewController {
     let labelName = UILabel()
     let btnName = UIButton()
     let fldName = UITextField()
+    let btnSave = UIButton()
     let viewEmail = UIView()
     let labelEmail = UILabel()
     let btnEmail = UIButton()
@@ -40,8 +42,15 @@ class AccountViewController: UIViewController {
     var correctName = false
     
     private func setLayout() {
+        setViewContent()
+        setLayoutName()
+        setLayoutEmail()
+        setLayoutLogout()
+    }
+    
+    private func setViewContent() {
         self.view.addSubview(viewContent)
-        viewContent.snp.makeConstraints { make in
+        viewContent.snp.remakeConstraints { make in
             make.top.equalTo(navigationBar.snp.bottom).offset(40)
             make.width.centerX.equalTo(self.view.safeAreaLayoutGuide)
             countContent = correctName ? 4 : 3
@@ -51,12 +60,6 @@ class AccountViewController: UIViewController {
         viewContent.axis = .vertical
         viewContent.spacing = spacing
         viewContent.distribution = .fillProportionally
-        
-        setLayoutName()
-        setFldName()
-        setLayoutEmail()
-        setLayoutLogout()
-        
     }
     
     // Name Set
@@ -82,26 +85,58 @@ class AccountViewController: UIViewController {
     
     private func setButtonName() {
         viewName.addSubview(btnName)
-        //setValueButton(button: btnName, text: mngAccount.account.nickName)
-        setValueButton(button: btnName, text: "yopret", onImage: true)
+        setValueButton(button: btnName, text: mngAccount.account.name, onImage: true)
     }
     
-    private func setFldName() {
+    private func setCorrectName() {
+        viewName.snp.remakeConstraints { make in
+            make.width.centerX.equalToSuperview()
+            let height = correctName ? heightContent*2+spacing : heightContent
+            make.height.equalTo(height)
+        }
         if correctName {
-            viewName.addSubview(fldName)
-            fldName.snp.makeConstraints { make in
-                make.bottom.equalToSuperview()
-                make.leading.equalTo(labelName.snp.trailing).offset(leading)
-                make.trailing.equalToSuperview().offset(-leading)
-                make.height.equalTo(heightContent)
-            }
+            setButtonSave()
+            setFieldName()
         } else {
             for view in viewName.subviews {
-                if view == fldName {
+                if view == fldName || view == btnSave {
                     view.removeFromSuperview()
                 }
             }
         }
+    }
+    
+    private func setFieldName() {
+        viewName.addSubview(fldName)
+        fldName.snp.remakeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview().offset(leading)
+            make.trailing.equalTo(btnSave.snp.leading)
+            make.height.equalTo(heightContent)
+        }
+        fldName.text = mngAccount.account.name
+        fldName.backgroundColor = UIColor(named: "BikPik Light Color")
+        fldName.layer.cornerRadius = 10.0
+    }
+    
+    private func setButtonSave() {
+        viewName.addSubview(btnSave)
+        btnSave.setTitle("Save", for: .normal)
+        btnSave.setTitleColor(UIColor(named: "BikPik Color"), for: .normal)
+        btnSave.contentHorizontalAlignment = .right
+        btnSave.snp.remakeConstraints { make in
+            make.trailing.equalToSuperview().offset(-leading)
+            make.width.equalTo(70)
+            make.height.equalTo(heightContent)
+            make.bottom.equalToSuperview()
+        }
+        btnSave.addTarget(self, action: #selector(actionSave), for: .touchUpInside)
+    }
+    
+    @objc private func actionSave() {
+        mngAccount.setName(name: fldName.text)
+        actionCorrectName()
+        setValueButton(button: btnName, text: mngAccount.account.name, onImage: true)
     }
     
     // Email Set
@@ -147,7 +182,7 @@ class AccountViewController: UIViewController {
             make.leading.equalToSuperview().offset(leading)
             make.width.equalTo(100)
             make.height.equalTo(heightContent)
-            make.centerY.equalToSuperview()
+            make.top.equalToSuperview()
         }
     }
     
@@ -169,6 +204,43 @@ class AccountViewController: UIViewController {
             make.height.equalTo(heightContent)
             make.top.equalToSuperview()
             make.trailing.equalToSuperview().offset(-leading)
+        }
+    }
+    
+    private func addTarget() {
+        btnName.addTarget(self, action: #selector(actionCorrectName), for: .touchUpInside)
+        btnLogout.addTarget(self, action: #selector(actionLogout), for: .touchUpInside)
+    }
+    
+    @objc private func actionLogout() {
+        let alert = UIAlertController(title: mngAccount.account.email, message: nil, preferredStyle: .alert)
+        let logout = UIAlertAction(title: "로그아웃", style: .destructive, handler: {action in self.presentingViewController?.dismiss(animated: true, completion: {self.mngAccount.logoutEmail()})
+        })
+        let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
+        alert.addAction(logout)
+        alert.addAction(cancle)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func actionCorrectName() {
+        correctName.toggle()
+        if correctName {
+            setViewContent()
+            setCorrectName()
+            UIView.animate(withDuration: 0.6, animations: {
+                self.viewContent.layoutIfNeeded()
+                self.viewName.layoutIfNeeded()
+            }, completion: {_ in
+                self.setFieldName()
+                self.setButtonSave()
+            })
+        } else {
+            setViewContent()
+            setCorrectName()
+            UIView.animate(withDuration: 0.6) {
+                self.viewContent.layoutIfNeeded()
+                self.viewName.layoutIfNeeded()
+            }
         }
     }
 }

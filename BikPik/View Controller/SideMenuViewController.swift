@@ -34,13 +34,20 @@ class SideMenuViewController: UIViewController {
         present(vc, animated: true, completion: nil)
     }
     
+    @IBOutlet weak var labelName: UILabel!
     @IBOutlet weak var labelEmail: UILabel!
     
     func updateAccount() {
+        if let name = mngAccount.account.name {
+            labelName.text = name
+        } else {
+            labelName.text = "로그인 하기"
+        }
+        
         if let email = mngAccount.account.email {
             labelEmail.text = email
         } else {
-            labelEmail.text = "로그인 하기"
+            labelEmail.text = "E-mail"
         }
         
     }

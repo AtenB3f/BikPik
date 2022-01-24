@@ -13,18 +13,16 @@ enum LoginType {
     case apple
 }
 
-struct Account{
-    var nickName:String?
-    var email:String?
-    var type:LoginType
+struct Account: Codable, Equatable {
+    var name:String? = nil
+    var email:String? = nil
+    //var type:LoginType = .none
     
-    init () {
-        type = .none
-    }
+    init () {}
     
     init (name: String, email: String, type: LoginType) {
-        self.nickName = name
+        self.name = name
         self.email = email
-        self.type = type
+        //self.type = type
     }
 }

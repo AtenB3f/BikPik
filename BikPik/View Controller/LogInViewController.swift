@@ -12,6 +12,7 @@ import GoogleSignIn
 class LogInViewController: UIViewController {
     
     let mngFirebase = Firebase.mngFirebase
+    let mngAccount = AccountManager.mngAccount
 
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBAction func navigationClose(_ sender: Any) {
@@ -68,16 +69,15 @@ class LogInViewController: UIViewController {
             guard error == nil else { return }
             guard let user = user else { return }
             
-            let emailAddress = user.profile?.email
-
-            let fullName = user.profile?.name
-            let givenName = user.profile?.givenName
-            let familyName = user.profile?.familyName
-            let profilePicUrl = user.profile?.imageURL(withDimension: 320)
-            
-            print(emailAddress)
+            self.mngAccount.account.email = user.profile?.email
+//            let emailAddress = user.profile?.email
+//            let fullName = user.profile?.name
+//            let givenName = user.profile?.givenName
+//            let familyName = user.profile?.familyName
+//            let profilePicUrl = user.profile?.imageURL(withDimension: 320)
+            print(self.mngAccount.account.email)
         }
-        
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
 
 }
