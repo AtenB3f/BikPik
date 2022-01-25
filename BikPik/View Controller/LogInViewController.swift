@@ -41,13 +41,10 @@ class LogInViewController: UIViewController {
     
     
     // Set View
-    
     private func setButtonView() {
         self.view.addSubview(viewButtons)
         viewButtons.snp.remakeConstraints ({ make in
             make.centerX.centerY.equalTo(self.view.center)
-//            make.leading.equalToSuperview().offset(20)
-//            make.right.equalToSuperview().offset(-20)
             make.width.equalTo(300)
             make.height.equalTo(100)
         })
@@ -57,7 +54,6 @@ class LogInViewController: UIViewController {
         googleButton.snp.remakeConstraints { make in
             make.centerX.equalToSuperview()
         }
-        //viewButtons.backgroundColor = .blue
     }
     
     // apple, etc ...
@@ -70,12 +66,9 @@ class LogInViewController: UIViewController {
             guard let user = user else { return }
             
             self.mngAccount.account.email = user.profile?.email
-//            let emailAddress = user.profile?.email
-//            let fullName = user.profile?.name
-//            let givenName = user.profile?.givenName
-//            let familyName = user.profile?.familyName
-//            let profilePicUrl = user.profile?.imageURL(withDimension: 320)
-            print(self.mngAccount.account.email)
+            if self.mngAccount.account.name == nil {
+                self.mngAccount.account.name = user.profile?.name
+            }
         }
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
