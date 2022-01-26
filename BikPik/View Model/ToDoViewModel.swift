@@ -40,6 +40,7 @@ class ToDoManager {
     static let mngToDo = ToDoManager()
     let mngHabit = HabitManager.mngHabit
     let mngNoti = Notifications.mngNotification
+    let mngFirebase = Firebase.mngFirebase
     
     private init() { }
     
@@ -217,6 +218,8 @@ class ToDoManager {
         if data.date == selDate.value {
             selTaskList.value.append(key)
         }
+        
+        mngFirebase.uploadTask(task: task)
         
         saveTasks()
     }

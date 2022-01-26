@@ -5,14 +5,22 @@
 //  Created by jihee moon on 2022/01/13.
 //
 
-import Foundation
+//import Foundation
 import Firebase
 import GoogleSignIn
+
 
 class Firebase {
     
     static let mngFirebase = Firebase()
-    private init() {}
+    private init() { }
     
-    let signInConfig = GIDConfiguration.init(clientID: "935887439924-lucmkjqd8k3v69i0jdm93r19su2rcedi.apps.googleusercontent.com")
+    var ref: DatabaseReference! = Database.database().reference()
+    
+    func uploadTask(task: Task) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        //self.ref.child("test/users/\(uid)/tasks/\(task.date)").setValue(task)
+    }
+    
 }
