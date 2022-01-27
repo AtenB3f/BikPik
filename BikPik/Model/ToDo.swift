@@ -7,7 +7,7 @@
 
 struct Task: Codable, Equatable{
     var id : Int = 0
-    var name : String? = nil
+    var name : String = ""
     var inToday : Bool = false
     var date : String = ""
     var time : String = "00:00"
@@ -17,7 +17,7 @@ struct Task: Codable, Equatable{
     var tag : String?
     var color : String?     //0xFFFFFF
     
-    init(){
+    init() {
         
     }
     

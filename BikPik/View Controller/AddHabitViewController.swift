@@ -27,7 +27,7 @@ class AddHabitViewController: UIViewController {
         setLayout()
         addTarget()
         
-        if data.task.name == nil {
+        if data.task.name == "" {
             // new habit create
             data = Habits(date: Date.GetNowDate())
         } else {
@@ -67,7 +67,7 @@ class AddHabitViewController: UIViewController {
         var id :Int?
         if revise {
             mngNoti.removeNotificationHabit(habit: data)
-            id = mngHabit.habitId[data.task.name!]
+            id = mngHabit.habitId[data.task.name]
             if id == nil { return }
         } else {
             if mngHabit.habitId[name] != nil { return }
@@ -85,7 +85,7 @@ class AddHabitViewController: UIViewController {
         if revise == true {
             mngHabit.correctHabit(id: id!, habit: data)
         } else {
-            if mngHabit.habitId[data.task.name!] != nil { return }
+            if mngHabit.habitId[data.task.name] != nil { return }
             mngHabit.createHabit(habit: data)
         }
         

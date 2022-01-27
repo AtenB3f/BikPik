@@ -25,8 +25,7 @@ class HabitManager {
         // setting ID
         let id = habits.count
         data.id = id
-        let name = data.task.name!
-        habitId[name] = id
+        habitId[data.task.name] = id
         
         // isDone Dictionary
         data.isDone = createIsDone(habit: habit)
@@ -57,8 +56,7 @@ class HabitManager {
         let cnt = habits.count - 1
         guard cnt >= 0 else { return }
         for n in 0...cnt {
-            let name = habits[n].task.name!
-            habitId[name] = habits[n].id
+            habitId[habits[n].task.name] = habits[n].id
         }
     }
     
@@ -74,8 +72,7 @@ class HabitManager {
      Delete "habits" array value of "id" Index.
      */
     func deleteHabit(id: Int) {
-        let name = habits[id].task.name!
-        habitId.removeValue(forKey: name)
+        habitId.removeValue(forKey: habits[id].task.name)
         habits.remove(at: id)
         saveHabit()
     }

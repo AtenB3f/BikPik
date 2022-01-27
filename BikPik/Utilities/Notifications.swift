@@ -24,7 +24,7 @@ class Notifications {
     
     func createNotificationTask(task: Task) -> String {
         let content = 	UNMutableNotificationContent()
-        content.title = task.name!
+        content.title = task.name
         content.body = "오늘 할일 했나요?"
         content.sound = .default
         
@@ -40,7 +40,7 @@ class Notifications {
         let calendar = Calendar.current
         let cmp = DateComponents(calendar: calendar, year: year, month: month, day: day, hour: hour, minute: miniute)
         
-        let key = task.name! + "_" + String(task.id)
+        let key = task.name + "_" + String(task.id)
         let uuid = addNotification(content: content, dateComponents: cmp, repeats: false)
         listIdentifer[key] = uuid
         
@@ -64,7 +64,7 @@ class Notifications {
     
     
     func removeNotificationTask(task: Task) {
-        let key = task.name! + "_" + String(task.id)
+        let key = task.name + "_" + String(task.id)
         guard let identifers = listIdentifer[key] else {
             print("removeNotificationTask :: no identifer")
             return
@@ -88,7 +88,7 @@ class Notifications {
     func createNotificationHabit(habit: Habits) {
         var uuid: String?
         let content = UNMutableNotificationContent()
-        content.title = habit.task.name!
+        content.title = habit.task.name
         content.body = "습관 생성 중..."
         content.sound = .default
         
@@ -104,7 +104,7 @@ class Notifications {
             if habit.days[n] == true {
                 dateCmp.weekday = n+1
                 uuid = addNotification(content: content, dateComponents: dateCmp, repeats: false)
-                let key = habit.task.name! + String(n+1)
+                let key = habit.task.name + String(n+1)
                 listIdentifer[key] = uuid
             }
         }
@@ -112,7 +112,7 @@ class Notifications {
     }
     
     func removeNotificationHabit(habit: Habits) {
-        let name = habit.task.name!
+        let name = habit.task.name
         
         UNUserNotificationCenter.current().getPendingNotificationRequests { [self] (notiRequests) in
             var removeIdentifiers = [String]()

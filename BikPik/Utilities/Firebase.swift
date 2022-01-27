@@ -20,7 +20,7 @@ class Firebase {
     func uploadTask(task: Task) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let taskRef = self.ref.child("test/users/\(uid)/tasks/\(task.date)/\(task.name!)_\(task.id)")
+        let taskRef = self.ref.child("test/users/\(uid)/tasks/\(task.date)/\(task.name)_\(task.id)")
         
         setRefTask(task: task, ref: taskRef)
     }
@@ -41,7 +41,7 @@ class Firebase {
     func uploadHabit(habit: Habits) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(habit.task.name!)")
+        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(habit.task.name)")
         
         habitRef.child("start").setValue(habit.start)
         habitRef.child("end").setValue(habit.end)

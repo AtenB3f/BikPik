@@ -13,10 +13,6 @@ let notiAddToDo: Notification.Name = Notification.Name("notiAddToDo")
 
 class AddToDoViewController: UIViewController {
     
-    deinit {
-        print("DeInit")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,7 +25,7 @@ class AddToDoViewController: UIViewController {
            self.calendar.select(date, scrollToDate: false)
        }
         
-        if data.name != nil && data.name != "" {
+        if data.name != "" {
             revise = true
             reviseTask = data
             fldTaskName.text = data.name
@@ -58,9 +54,9 @@ class AddToDoViewController: UIViewController {
     
     // Navigation Add
     @IBAction func btnAdd(_ sender: Any) {
-
         guard let name = fldTaskName.text else { return }
-        guard  name != "" else { return }
+        guard name != "" else { return }
+        
         if revise == true {
             mngNoti.removeNotificationTask(task: data)
         }

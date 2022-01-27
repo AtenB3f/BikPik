@@ -114,7 +114,7 @@ class ToDoManager {
         }
         for habit in mngHabit.habits {
             if habit.isDone?[date] != nil {
-                arr.append(habit.task.name!)
+                arr.append(habit.task.name)
             }
         }
         selTaskList.value = arr
@@ -195,31 +195,27 @@ class ToDoManager {
      - parameter data : 'Task' struct data.
      */
     func createTask(data : Task) {
-        let task:Task = data
-        var key: String = ""
-        var id :Int = 0
+        if data.name == "" { return }
         
-        if task.name == "" || task.name == nil { return }
-        
-        key = task.name!
+        let task = data
+        var id = 0
         
         // Find same named Task
-        if taskIdList[key] == nil {
-            id = 0
-            taskIdList[key] = 0
+        if taskIdList[task.name] == nil {
+            taskIdList[task.name] = 0
         } else {
-            taskIdList[key]! += 1
-            id = taskIdList[key]!
+            taskIdList[task.name]! += 1
+            id = taskIdList[task.name]!
         }
         
         // KEY protocol is "NAME + ID"
-        key = key + "_" + String(id)
+        let key = task.name + "_" + String(id)
         tasks[key] = task
         if data.date == selDate.value {
             selTaskList.value.append(key)
         }
         
-        mngFirebase.uploadTask(task: task)
+        //mngFirebase.uploadTask(task: task)
         
         saveTasks()
     }
@@ -230,23 +226,22 @@ class ToDoManager {
      - parameter after : the 'Task' data after correction.
      */
     func correctTask(before: Task, after: Task) {
-        if before.name == nil { return }
-        if after.name == nil { return }
+        if before.name == "" || after.name == "" { return }
         
-        let beforeKey = before.name! + "_" + String(before.id)
-        let afterKey = after.name! + "_" + String(after.id)
+        let beforeKey = before.name + "_" + String(before.id)
+        let afterKey = after.name + "_" + String(after.id)
         
         if beforeKey != afterKey {
             tasks.removeValue(forKey: beforeKey)
-            if (taskIdList[before.name!]! == 0) {
-                taskIdList.removeValue(forKey: before.name!)
+            if (taskIdList[before.name]! == 0) {
+                taskIdList.removeValue(forKey: before.name)
             } else {
-                taskIdList[before.name!]! -= 1
+                taskIdList[before.name]! -= 1
             }
-            if taskIdList[after.name!] != nil {
-                taskIdList[after.name!]! += 1
+            if taskIdList[after.name] != nil {
+                taskIdList[after.name]! += 1
             } else {
-                taskIdList[after.name!] = 0
+                taskIdList[after.name] = 0
             }
         }
         
@@ -275,7 +270,7 @@ class ToDoManager {
     func deleteTask(key: String) {
         guard let data = tasks[key] else { return }
         
-        let taskName = data.name!
+        let name = data.name
         
         if data.alram == true {
             mngNoti.removeNotificationTask(task: data)
@@ -286,11 +281,11 @@ class ToDoManager {
         saveTask(data: tasks)
         
         // taskIdList
-        if let id = taskIdList[taskName] {
+        if let id = taskIdList[name] {
             if id > 0 {
-                taskIdList[taskName] = taskIdList[taskName]! - 1
+                taskIdList[name] = taskIdList[name]! - 1
             } else {
-                taskIdList.removeValue(forKey: taskName)
+                taskIdList.removeValue(forKey: name)
             }
             saveID(data: taskIdList)
         }
