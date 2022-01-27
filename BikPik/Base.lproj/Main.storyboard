@@ -215,7 +215,6 @@
                                         </state>
                                         <connections>
                                             <action selector="btnMenu:" destination="BYZ-38-t0r" eventType="touchUpInside" id="b6u-ye-gjB"/>
-                                            <segue destination="Lxy-1g-mst" kind="show" id="YaW-Sg-2k0"/>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gan-bg-mKI" userLabel="WeekView">
@@ -371,9 +370,9 @@
                                 <rect key="frame" x="0.0" y="194" width="375" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WKj-gG-Yzp">
-                                        <rect key="frame" x="30" y="4.6666666666666572" width="40" height="31"/>
+                                        <rect key="frame" x="30" y="0.0" width="40" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="31" id="3Gx-Hg-efS"/>
+                                            <constraint firstAttribute="height" constant="40" id="3Gx-Hg-efS"/>
                                             <constraint firstAttribute="width" constant="40" id="hrx-Gb-YPz"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -386,7 +385,7 @@
                                         </connections>
                                     </button>
                                     <textField opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add Task" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="OWa-Xn-TTE">
-                                        <rect key="frame" x="72" y="9.6666666666666572" width="273" height="21"/>
+                                        <rect key="frame" x="78" y="9.6666666666666572" width="267" height="21"/>
                                         <color key="textColor" name="TextColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
@@ -395,7 +394,7 @@
                                 <color key="backgroundColor" name="BikPik Light Color"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="OWa-Xn-TTE" secondAttribute="trailing" constant="30" id="53F-bR-p9v"/>
-                                    <constraint firstItem="OWa-Xn-TTE" firstAttribute="leading" secondItem="WKj-gG-Yzp" secondAttribute="trailing" constant="2" id="Vuc-ge-pQN"/>
+                                    <constraint firstItem="OWa-Xn-TTE" firstAttribute="leading" secondItem="WKj-gG-Yzp" secondAttribute="trailing" constant="8" symbolic="YES" id="Vuc-ge-pQN"/>
                                     <constraint firstItem="WKj-gG-Yzp" firstAttribute="leading" secondItem="u9e-F2-lEG" secondAttribute="leading" constant="30" id="Yzd-bo-Qv5"/>
                                     <constraint firstItem="WKj-gG-Yzp" firstAttribute="centerY" secondItem="u9e-F2-lEG" secondAttribute="centerY" id="lBX-Ua-ALJ"/>
                                     <constraint firstAttribute="height" constant="40" id="mUx-mJ-D7t"/>
@@ -429,7 +428,7 @@
                                                             <rect key="frame" x="72" y="14.666666666666664" width="15" height="15"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="15" id="Cx4-HS-h0g"/>
-                                                                <constraint firstAttribute="width" constant="15" id="LSg-r5-mYz"/>
+                                                                <constraint firstAttribute="width" constant="15" id="u9t-hw-ceP"/>
                                                             </constraints>
                                                             <state key="normal" title="isDone" image="CheckBox"/>
                                                             <connections>
@@ -457,6 +456,7 @@
                                                         <constraint firstItem="ifi-li-3Gt" firstAttribute="leadingMargin" secondItem="e4p-n3-jRk" secondAttribute="leading" constant="80" id="9Ig-Nb-k0M"/>
                                                         <constraint firstItem="z6f-sz-mB2" firstAttribute="leading" secondItem="e4p-n3-jRk" secondAttribute="leading" constant="10" id="Ioi-ao-hsX"/>
                                                         <constraint firstItem="z6f-sz-mB2" firstAttribute="centerY" secondItem="e4p-n3-jRk" secondAttribute="centerY" id="L2i-iY-Xvn"/>
+                                                        <constraint firstItem="ifi-li-3Gt" firstAttribute="leading" secondItem="z6f-sz-mB2" secondAttribute="trailing" constant="2" id="PBh-UA-45M"/>
                                                         <constraint firstItem="8A4-JQ-VQa" firstAttribute="leading" secondItem="ifi-li-3Gt" secondAttribute="trailing" constant="10" id="S31-hM-Umm"/>
                                                         <constraint firstItem="ifi-li-3Gt" firstAttribute="centerY" secondItem="e4p-n3-jRk" secondAttribute="centerY" id="lHq-2i-kyh"/>
                                                         <constraint firstItem="8A4-JQ-VQa" firstAttribute="centerY" secondItem="e4p-n3-jRk" secondAttribute="centerY" id="mcW-Kn-bpN"/>
@@ -971,7 +971,6 @@
                                         </state>
                                         <connections>
                                             <action selector="btnMenu:" destination="6js-RS-qy0" eventType="touchUpInside" id="IJn-XW-GNL"/>
-                                            <segue destination="Lxy-1g-mst" kind="show" id="vxh-sa-Zed"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1139,14 +1138,23 @@
         <!--Custom Side Menu View Controller-->
         <scene sceneID="lGE-cG-Zje">
             <objects>
-                <navigationController id="Lxy-1g-mst" customClass="CustomSideMenuViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="SideMenuNaviVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Lxy-1g-mst" customClass="CustomSideMenuViewController" customModule="BikPik" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="3bs-yL-sL0"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZXU-kf-PU1">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftSide" value="NO"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="menuWidth">
+                            <real key="value" value="100"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="initialSpringVelocity">
+                            <real key="value" value="2"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
-                        <segue destination="rwR-kh-w2w" kind="relationship" relationship="rootViewController" id="r5Z-q5-L90"/>
+                        <segue destination="rwR-kh-w2w" kind="presentation" id="L79-M6-UN4"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rjx-x8-Gvq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1162,7 +1170,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lzI-wg-QYS" userLabel="Profile">
-                                <rect key="frame" x="12.666666666666657" y="56" width="350" height="128"/>
+                                <rect key="frame" x="12.666666666666657" y="0.0" width="350" height="128"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MmS-5q-c3x" userLabel="Name">
                                         <rect key="frame" x="109.66666666666664" y="30" width="130.33333333333337" height="36"/>
@@ -1186,7 +1194,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dMM-GY-2OR" userLabel="Settings">
-                                <rect key="frame" x="0.0" y="608" width="375" height="120"/>
+                                <rect key="frame" x="0.0" y="574" width="375" height="120"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GWg-NL-Yid" userLabel="Setting">
                                         <rect key="frame" x="152.66666666666666" y="20" width="70" height="31"/>
@@ -1239,7 +1247,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="Ybz-yL-DnB"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftSide" value="YES"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftSide" value="NO"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="btnOpenSource" destination="Tlk-c0-Kc2" id="wLk-ba-Fud"/>
@@ -1338,9 +1346,6 @@
             <point key="canvasLocation" x="2842" y="67"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="YaW-Sg-2k0"/>
-    </inferredMetricsTieBreakers>
     <color key="tintColor" name="BikPik Color"/>
     <resources>
         <image name="CheckBox" width="128" height="128"/>

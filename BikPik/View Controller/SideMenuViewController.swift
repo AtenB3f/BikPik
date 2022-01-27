@@ -16,6 +16,7 @@ class SideMenuViewController: UIViewController {
         super.viewDidLoad()
         
         updateAccount()
+        
     }
     
     @IBOutlet weak var btnSetting: UIButton!
