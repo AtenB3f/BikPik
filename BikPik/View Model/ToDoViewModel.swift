@@ -215,7 +215,7 @@ class ToDoManager {
             selTaskList.value.append(key)
         }
         
-        //mngFirebase.uploadTask(task: task)
+        mngFirebase.uploadTask(task: task)
         
         saveTasks()
     }

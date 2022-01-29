@@ -12,7 +12,7 @@ import FSCalendar
 class ToDoViewController: UIViewController {
     let mngToDo = ToDoManager.mngToDo
     let mngHabit = HabitManager.mngHabit
-    
+    let mngFirebase = Firebase.mngFirebase
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -143,6 +143,7 @@ class ToDoViewController: UIViewController {
     @IBAction func btnMenu(_ sender: Any) {
         let sideMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "SideMenuVC") as! SideMenuViewController
         let menu = CustomSideMenuViewController(rootViewController: sideMenuViewController)
+        
         
         present(menu, animated: true, completion: nil)
     }
