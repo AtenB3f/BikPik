@@ -198,6 +198,8 @@ class ToDoManager {
                 }
             }
         }
+        
+        mngFirebase.correctTask(uuid: uuid, task: after)
         saveTasks()
     }
     
@@ -223,6 +225,7 @@ class ToDoManager {
         }
         
         tasks.removeValue(forKey: uuid)
+        mngFirebase.removeTask(uuid: uuid)
     }
     
     /**

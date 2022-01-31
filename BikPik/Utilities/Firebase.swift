@@ -23,10 +23,11 @@ class Firebase {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let taskRef = self.ref.child("test/users/\(uid)/tasks/\(uuid)")
-        setRefTask(task: task, ref: taskRef)
+        let data = setTask(task: task)
+        taskRef.setValue(data)
     }
     
-    private func setRefTask(task: Task, ref: DatabaseReference) {
+    private func setTask(task: Task) -> [String:Any]{
         var data:[String:Any] = [
                     "name" : task.name,
                     "date" : task.date,
@@ -41,8 +42,22 @@ class Firebase {
         if let color = task.color {
             data["color"] = color
         }
+        return data
+    }
+    
+    func removeTask(uuid: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        ref.setValue(data)
+        let taskRef = self.ref.child("test/users/\(uid)/tasks/\(uuid)")
+        taskRef.removeValue()
+    }
+    
+    func correctTask(uuid: String, task: Task) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let taskRef = self.ref.child("test/users/\(uid)/tasks/\(uuid)")
+        let data = setTask(task: task)
+        taskRef.updateChildValues(data)
     }
     
     func uploadHabit(habit: Habits) {
@@ -57,7 +72,8 @@ class Firebase {
             habitRef.child("isDone").setValue(habit.isDone)
         }
         
-        setRefTask(task: habit.task, ref: habitRef)
+        let data = setTask(task: habit.task)
+        habitRef.setValue(data)
     }
     
     
