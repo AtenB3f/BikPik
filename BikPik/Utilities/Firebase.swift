@@ -19,16 +19,15 @@ class Firebase {
     
     let ref: DatabaseReference! = Database.database().reference()
     
-    func uploadTask(task: Task) {
+    func uploadTask(uuid: String ,task: Task) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let taskRef = self.ref.child("test/users/\(uid)/tasks/\(task.name)_\(task.id)")
+        let taskRef = self.ref.child("test/users/\(uid)/tasks/\(uuid)")
         setRefTask(task: task, ref: taskRef)
     }
     
     private func setRefTask(task: Task, ref: DatabaseReference) {
         var data:[String:Any] = [
-                    "id" : task.id,
                     "name" : task.name,
                     "date" : task.date,
                     "time" : task.time,
@@ -83,8 +82,6 @@ class Firebase {
         var task = Task()
         for v in value.keys {
             switch v {
-            case "id":
-                task.id = value[v] as! Int
             case "name":
                 task.name = value[v] as! String
             case "alram":

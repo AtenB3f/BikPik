@@ -198,12 +198,12 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     
     @objc func clickSetting (_ sender: UIButton) {
         let id = sender.tag
-        let key = mngToDo.selTaskList.value[id]
-        let name:String = mngToDo.splitToName(key: key) ?? ""
-        if mngToDo.tasks[key] != nil {
-            mngToDo.deleteTask(key: key)
-        } else if mngHabit.habitId[key] != nil {
-            presentHabitAlert(name: name, key: key)
+        let uuid = mngToDo.selTaskList.value[id]
+        let name = mngToDo.tasks[uuid]!.name
+        if mngToDo.tasks[uuid] != nil {
+            mngToDo.deleteTask(uuid: uuid)
+        } else if mngHabit.habitId[uuid] != nil {
+            presentHabitAlert(name: name, uuid: uuid)
         }
     }
     
@@ -214,27 +214,31 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
             if let row = ToDoTable.indexPathForRow(at: touchPoint) {
                 let idx = row[1]
                 
-                let key = mngToDo.selTaskList.value[idx]
-                let name = mngToDo.splitToName(key: key) ?? ""
-                if mngToDo.tasks[key] != nil {
+                let uuid = mngToDo.selTaskList.value[idx]
+                
+                if mngToDo.tasks[uuid] != nil {
                     // To Do
-                    presentToDoAlert(name: name, key: key)
+                    let name = mngToDo.tasks[uuid]!.name
+                    presentToDoAlert(name: name, uuid: uuid)
                 } else {
                     // habit
-                    presentHabitAlert(name: name, key: key)
+                    if let idx = mngHabit.habitId[uuid] {
+                        let habit = mngHabit.habits[idx]
+                        presentHabitAlert(name: habit.task.name, uuid: uuid)
+                    }
                 }
             }
         }
     }
     
-    func presentToDoAlert(name: String, key: String) {
+    func presentToDoAlert(name: String, uuid: String) {
         let alert = UIAlertController(title: name, message: "To Do", preferredStyle: .alert)
-        let actCorrect = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertCorrect(key)})
-        let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(key)})
+        let actCorrect = UIAlertAction(title: "수정", style: .default, handler: {alertAction in self.alertCorrect(uuid: uuid)})
+        let actDelete = UIAlertAction(title: "삭제", style: .default, handler: {alertAction in self.alertDelete(uuid: uuid)})
         let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
         alert.addAction(actCorrect)
         if mngToDo.selDate.value == Date.GetNowDate() {
-            let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(key)})
+            let actTomorrow = UIAlertAction(title: "내일 하기", style: .default, handler: {alertAction in self.alertTomorrow(uuid: uuid)})
             alert.addAction(actTomorrow)
         }
         alert.addAction(actDelete)
@@ -243,32 +247,33 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         present(alert, animated: true, completion: nil)
     }
     
-    func presentHabitAlert(name: String, key: String) {
-        let alert = UIAlertController(title: key, message: "Habit", preferredStyle: .alert)
-        let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertReviseHabit(habitName: key)})
+    func presentHabitAlert(name: String, uuid: String) {
+        let alert = UIAlertController(title: uuid, message: "Habit", preferredStyle: .alert)
+        let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertReviseHabit(habitName: uuid)})
         let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
         alert.addAction(revise)
         alert.addAction(cancle)
         present(alert, animated: true, completion: nil)
     }
     
-    func alertCorrect(_ taskname: String) {
+    func alertCorrect(uuid: String) {
         let vc = storyboard.self?.instantiateViewController(withIdentifier: "AddToDoVC") as! AddToDoViewController
         vc.modalTransitionStyle = .coverVertical
-        vc.data = mngToDo.tasks[taskname]!
+        vc.uuid = uuid
+        vc.data = mngToDo.tasks[uuid]!
         self.present(vc, animated: true, completion: nil)
     }
     
-    func alertTomorrow(_ key: String) {
-        if let before:Task = mngToDo.tasks[key] {
+    func alertTomorrow(uuid: String) {
+        if let before:Task = mngToDo.tasks[uuid] {
             var after = before
             after.date = Date.GetNextDay(date: before.date)
-            mngToDo.correctTask(before: before, after: after)
+            mngToDo.correctTask(uuid: uuid, after: after)
         }
     }
     
-    func alertDelete(_ taskName: String) {
-        mngToDo.deleteTask(key: taskName)
+    func alertDelete(uuid: String) {
+        mngToDo.deleteTask(uuid: uuid)
     }
     
     func alertReviseHabit (habitName : String) {
@@ -320,17 +325,17 @@ class ToDoCell: UITableViewCell {
         }
     }
     
-    func displayTime(_ taskId: String) -> String{
+    func displayTime(uuid: String) -> String{
         var time: String?
         
-        if mngToDo.tasks[taskId] != nil {
-            if mngToDo.tasks[taskId]?.inToday == true {
+        if mngToDo.tasks[uuid] != nil {
+            if mngToDo.tasks[uuid]?.inToday == true {
                 time = "Today"
             } else {
-                time = mngToDo.tasks[taskId]?.time
+                time = mngToDo.tasks[uuid]?.time
             }
-        } else if (mngHabit.habitId[taskId] != nil) {
-            let id = mngHabit.habitId[taskId] ?? 0
+        } else if (mngHabit.habitId[uuid] != nil) {
+            let id = mngHabit.habitId[uuid] ?? 0
             let habit = mngHabit.habits[id]
             if habit.task.inToday == true {
                 time = "Today"
@@ -349,23 +354,20 @@ class ToDoCell: UITableViewCell {
         if row >= mngToDo.selTaskList.value.count{
             return
         }
-        let taskID = mngToDo.selTaskList.value[row]
-        if let task = mngToDo.tasks[taskID] {
-            displayDone(done: task.isDone)
+        let uuid = mngToDo.selTaskList.value[row]
+        if let data = mngToDo.tasks[uuid] {
+            displayDone(done: data.isDone)
             setting.setImage(UIImage(systemName: "x.circle"), for: .normal)
-        } else if let id = mngHabit.habitId[taskID] {
+            self.task.text = data.name
+        } else if let id = mngHabit.habitId[uuid] {
             let habit = mngHabit.habits[id]
             let done = mngHabit.isDoneCheck(habit: habit, date: mngToDo.selDate.value)
             displayDone(done: done)
             setting.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
+            self.task.text = habit.task.name
         }
         
-        if let name = mngToDo.splitToName(key: taskID) {
-            task.text = name
-        } else {
-            task.text = taskID
-        }
-        time.text = displayTime(taskID)
+        time.text = displayTime(uuid: uuid)
         
         isDone.tag = row
         setting.tag = row

@@ -42,6 +42,7 @@ class AddToDoViewController: UIViewController {
     let managerToDo = ToDoManager.mngToDo
     let mngNoti = Notifications.mngNotification
     
+    var uuid: String?
     var data: Task = Task()
     var revise: Bool = false
     var reviseTask :Task?	
@@ -58,18 +59,24 @@ class AddToDoViewController: UIViewController {
         guard name != "" else { return }
         
         if revise == true {
-            mngNoti.removeNotificationTask(task: data)
+            if uuid == nil { return }
+            if data.notiUUID != nil {
+                mngNoti.removeNotificationTask(uuid: uuid!)
+            }
+        } else {
+            uuid = UUID().uuidString
         }
         
         data.name = name
         data.time = Date.TimeForm(picker: pickerTime)
         
         if data.alram {
-            data.notiUUID = mngNoti.createNotificationTask(task: data)
+            data.notiUUID = mngNoti.createNotificationTask(uuid: uuid!, task: data)
         }
         
         if revise == true {
-            managerToDo.correctTask(before: reviseTask ?? Task() , after: data)
+            // Revise
+            managerToDo.correctTask(uuid: uuid!, after: data)
         } else {
             // Save Data
             managerToDo.createTask(data: data)

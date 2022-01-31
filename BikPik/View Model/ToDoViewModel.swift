@@ -32,7 +32,7 @@ import UIKit
  */
 class ToDoManager {
     var tasks: [String: Task] = [:]         // KEY is [task name + "_" + ID]
-    var taskIdList: [String : Int] = [:]    // KEY is [task name] , VALUE is [ID]
+    //var taskIdList: [String : Int] = [:]    // KEY is [task name] , VALUE is [ID]
     var selTaskList = Observable(Array<String>())
     var selDate = Observable(Date.GetNowDate())
     
@@ -49,7 +49,6 @@ class ToDoManager {
      */
     func updateData() {
         mngHabit.loadHabit()
-        loadTaskIdList()
         loadTask()
         loadSelTaskList()
         sortTimeline()
@@ -64,25 +63,6 @@ class ToDoManager {
     }
     
     /**
-     Search To Do ID.
-     - parameter name : task name
-     - returns : ID number
-     */
-    func searchId(name: String) -> Int {
-        var num: Int = 0
-        let idFile: String = "ToDoIdList.json"
-        taskIdList = storage.Search(idFile, as: [String: Int].self) ?? [:]
-        if (taskIdList[name] != nil) {
-            // Start ID to 0, so number of ID is plus one.
-            num = taskIdList[name]! + 1
-        } else {
-            num = 0
-        }
-        
-        return num
-    }
-    
-    /**
      'tasks' dictionary loading. "ToDoLisk.json" file read.
      */
     func loadTask() {
@@ -90,15 +70,6 @@ class ToDoManager {
         
         tasks.removeAll()
         tasks = storage.Search(taskFile, as: [String: Task].self) ?? [:]
-    }
-    
-    /**
-     'taskIdList' dictionary loading. "ToDoIdList.json" file read.
-     */
-    func loadTaskIdList() {
-        let file = "ToDoIdList.json"
-        taskIdList.removeAll()
-        taskIdList = storage.Search(file, as: [String:Int].self) ?? [:]
     }
     
     /**
@@ -197,26 +168,13 @@ class ToDoManager {
     func createTask(data : Task) {
         if data.name == "" { return }
         
-        let task = data
-        var id = 0
-        
-        // Find same named Task
-        if taskIdList[task.name] == nil {
-            taskIdList[task.name] = 0
-        } else {
-            taskIdList[task.name]! += 1
-            id = taskIdList[task.name]!
-        }
-        
-        // KEY protocol is "NAME + ID"
-        let key = task.name + "_" + String(id)
-        tasks[key] = task
+        let uuid = UUID().uuidString
+        tasks[uuid] = data
         if data.date == selDate.value {
-            selTaskList.value.append(key)
+            selTaskList.value.append(uuid)
         }
         
-        mngFirebase.uploadTask(task: task)
-        
+        mngFirebase.uploadTask(uuid: uuid, task: data)
         saveTasks()
     }
     
@@ -225,37 +183,18 @@ class ToDoManager {
      - parameter before : the 'Task' data before modification.
      - parameter after : the 'Task' data after correction.
      */
-    func correctTask(before: Task, after: Task) {
-        if before.name == "" || after.name == "" { return }
+    func correctTask(uuid: String, after: Task) {
+        guard let before = tasks[uuid] else { return }
+        if after.name == "" { return }
         
-        let beforeKey = before.name + "_" + String(before.id)
-        let afterKey = after.name + "_" + String(after.id)
-        
-        if beforeKey != afterKey {
-            tasks.removeValue(forKey: beforeKey)
-            if (taskIdList[before.name]! == 0) {
-                taskIdList.removeValue(forKey: before.name)
-            } else {
-                taskIdList[before.name]! -= 1
-            }
-            if taskIdList[after.name] != nil {
-                taskIdList[after.name]! += 1
-            } else {
-                taskIdList[after.name] = 0
-            }
-        }
-        
-        tasks[afterKey]  = after
+        tasks[uuid]  = after
         
         if before.date != after.date {
             if after.date == selDate.value {
-                selTaskList.value.append(afterKey)
+                selTaskList.value.append(uuid)
             } else if before.date == selDate.value {
-                for (idx, val) in selTaskList.value.enumerated() {
-                    if beforeKey == val {
-                        selTaskList.value.remove(at: idx)
-                        break
-                    }
+                if let idx = selTaskList.value.firstIndex(of: uuid) {
+                    selTaskList.value.remove(at: idx)
                 }
             }
         }
@@ -267,35 +206,23 @@ class ToDoManager {
      - parameter key :If the task is a habit, the form is the habit name. However, if the task is To Do, the format is "task name" + "_"+"ID".
                         ex) study_01
      */
-    func deleteTask(key: String) {
-        guard let data = tasks[key] else { return }
-        
-        let name = data.name
+    func deleteTask(uuid: String) {
+        guard let data = tasks[uuid] else { return }
         
         if data.alram == true {
-            mngNoti.removeNotificationTask(task: data)
+            mngNoti.removeNotificationTask(uuid: uuid)
         }
         
         // tasks
-        tasks.removeValue(forKey: key)
+        tasks.removeValue(forKey: uuid)
         saveTask(data: tasks)
         
-        // taskIdList
-        if let id = taskIdList[name] {
-            if id > 0 {
-                taskIdList[name] = taskIdList[name]! - 1
-            } else {
-                taskIdList.removeValue(forKey: name)
-            }
-            saveID(data: taskIdList)
-        }
-        
         // selTaskList
-        if let arrIdx = selTaskList.value.firstIndex(of: key) {
+        if let arrIdx = selTaskList.value.firstIndex(of: uuid) {
             selTaskList.value.remove(at: arrIdx)
         }
         
-        tasks.removeValue(forKey: key)
+        tasks.removeValue(forKey: uuid)
     }
     
     /**
@@ -303,7 +230,6 @@ class ToDoManager {
      */
     func saveTasks () {
         saveTask(data: tasks)
-        saveID(data: taskIdList)
     }
     
     /**
@@ -328,33 +254,6 @@ class ToDoManager {
      */
     func saveTaskList (data: [String]) {
         storage.Save(data, "ToDoTaskList.json")
-    }
-    
-    /**
-     key format of "tasks" dictionary is "task name"+"_"+"ID", If you need only task name, use this function.
-     - parameter key : "task name" + "_" + "ID" format
-     - returns : If sucessed split to name, return string data.
-     */
-    func splitToName(key : String) -> String? {
-        var idx: [Int]? = []
-        var cnt = 0
-        for i in key {
-            cnt += 1
-            if i == "_" {
-                idx!.append(cnt)
-            }
-        }
-        if idx?.count == 0 {
-            return nil
-        } else {
-            if idx!.last! <= 0 { return nil }
-            let nameIdx = key.index(key.startIndex, offsetBy: (idx!.last! - 1))
-            let name: String = String(key[key.startIndex ..< nameIdx])
-            print (name)
-            
-            return name
-        }
-        
     }
     
     func setToday() {

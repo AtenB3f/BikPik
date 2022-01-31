@@ -12,6 +12,8 @@ class Notifications {
     static let mngNotification = Notifications()
     
     let notificationCenter = UNUserNotificationCenter.current()
+    
+    // [task uuid : notification uuid]
     var listIdentifer:[String: String] = [:]
     
     // test code
@@ -22,7 +24,7 @@ class Notifications {
         }
     }
     
-    func createNotificationTask(task: Task) -> String {
+    func createNotificationTask(uuid: String, task: Task) -> String {
         let content = 	UNMutableNotificationContent()
         content.title = task.name
         content.body = "오늘 할일 했나요?"
@@ -40,12 +42,11 @@ class Notifications {
         let calendar = Calendar.current
         let cmp = DateComponents(calendar: calendar, year: year, month: month, day: day, hour: hour, minute: miniute)
         
-        let key = task.name + "_" + String(task.id)
-        let uuid = addNotification(content: content, dateComponents: cmp, repeats: false)
-        listIdentifer[key] = uuid
+        let uuidNoti = addNotification(content: content, dateComponents: cmp, repeats: false)
+        listIdentifer[uuid] = uuidNoti
         
         print(listIdentifer)
-        return uuid
+        return uuidNoti
     }
     
     func addNotification(content: UNMutableNotificationContent, dateComponents: DateComponents, repeats: Bool) -> String {
@@ -62,11 +63,13 @@ class Notifications {
         return uuidString
     }
     
-    
-    func removeNotificationTask(task: Task) {
-        let key = task.name + "_" + String(task.id)
-        guard let identifers = listIdentifer[key] else {
+    /**
+     - parameter uuid: UUID of Task.
+     */
+    func removeNotificationTask(uuid: String) {
+        guard let identifers = listIdentifer[uuid] else {
             print("removeNotificationTask :: no identifer")
+            checkNoti()
             return
         }
         
@@ -81,7 +84,7 @@ class Notifications {
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: removeIdentifiers)
         }
         
-        listIdentifer.removeValue(forKey: key)
+        listIdentifer.removeValue(forKey: uuid)
         print(listIdentifer)
     }
 

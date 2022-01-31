@@ -6,7 +6,6 @@
 //
 
 struct Task: Codable, Equatable{
-    var id : Int = 0
     var name : String = ""
     var inToday : Bool = false
     var date : String = ""
@@ -18,7 +17,6 @@ struct Task: Codable, Equatable{
     var color : String?     //0xFFFFFF
     
     init() {
-        
     }
     
     init(name: String, date:String, inToday:Bool) {
