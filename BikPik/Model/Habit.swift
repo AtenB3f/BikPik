@@ -6,7 +6,6 @@
 //
 
 struct Habits: Codable, Equatable {
-    var id: Int?
     var task: Task = Task()
     var start : String
     var end : String
@@ -16,7 +15,7 @@ struct Habits: Codable, Equatable {
     var percent : Int = 0
     
     init(date:String) {
-        self.start = date//Date.GetNowDate()
-        self.end = date//Date.GetNowDate()
+        self.start = date
+        self.end = date
     }
 }

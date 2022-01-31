@@ -12,9 +12,8 @@ class HabitManager {
     static let mngHabit = HabitManager()
     private init() { }
     
-    var habits: [Habits] = []
-    var habitId: [String:Int] = [:]
-    
+    var habits: [String:Habits] = [:]
+    var listHabit: [String] = []
     /**
      Create and save the habit data.
      - parameter haibt : "Habits" struct data.
@@ -22,15 +21,13 @@ class HabitManager {
     func createHabit(habit: Habits) {
         var data = habit
         
-        // setting ID
-        let id = habits.count
-        data.id = id
-        habitId[data.task.name] = id
+        let uuid = UUID().uuidString
         
         // isDone Dictionary
         data.isDone = createIsDone(habit: habit)
         
-        habits.append(data)
+        habits[uuid] = data
+        listHabit.append(uuid)
         saveHabit()
     }
     
@@ -39,8 +36,8 @@ class HabitManager {
      - parameter id : "habits" of index
      - parameter habit: "Habit" struct data.
      */
-    func correctHabit(id: Int, habit : Habits) {
-        habits[id] = habit
+    func correctHabit(uuid: String, habit : Habits) {
+        habits[uuid] = habit
         saveHabit()
     }
     
@@ -50,14 +47,8 @@ class HabitManager {
     func loadHabit() {
         let fileName = "HabitList.json"
         habits.removeAll()
-        habits = storage.Search(fileName, as: [Habits].self) ?? []
-        habitId.removeAll()
-        
-        let cnt = habits.count - 1
-        guard cnt >= 0 else { return }
-        for n in 0...cnt {
-            habitId[habits[n].task.name] = habits[n].id
-        }
+        habits = storage.Search(fileName, as: [String:Habits].self) ?? [:]
+        listHabit = habits.keys.sorted()
     }
     
     /**
@@ -71,21 +62,12 @@ class HabitManager {
     /**
      Delete "habits" array value of "id" Index.
      */
-    func deleteHabit(id: Int) {
-        habitId.removeValue(forKey: habits[id].task.name)
-        habits.remove(at: id)
+    func deleteHabit(uuid: String) {
+        habits.removeValue(forKey: uuid)
+        if let idx = listHabit.firstIndex(of: uuid) {
+            listHabit.remove(at: idx)
+        }
         saveHabit()
-    }
-    
-    /**
-     Search task in "habits" array.
-     - parameter name : habit name
-     - returns : The task element of the habit structure.
-     */
-    func searchHabitTask (name: String) -> Task? {
-        guard let id = habitId[name] else { return nil }
-        
-        return habits[id].task
     }
     
     /**

@@ -61,7 +61,9 @@ class HabitViewController: UIViewController {
         habitCollection?.indexPathsForVisibleItems.forEach { idx in
             let cell = habitCollection?.cellForItem(at: idx) as! HabitCollectCell
             let id = idx.row
-            cell.update(data: mngHabit.habits[id])
+            if let habit = mngHabit.habits[mngHabit.listHabit[id]] {
+                cell.update(data: habit)
+            }
         }
     }
 }
@@ -90,8 +92,9 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HabitCell", for: indexPath) as? HabitCollectCell {
             let size = calCellSize()//CGSize(width: 330.0, height: 128.0)
             let id = indexPath.row
-            let data = mngHabit.habits[id]
-            cell.update(data: data)
+            if let habit = mngHabit.habits[mngHabit.listHabit[id]] {
+                cell.update(data: habit)
+            }
             cell.frame.size = size
             cell.updateConstraints()
             cell.layer.cornerRadius = 15
@@ -121,10 +124,12 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
             let point = sender.location(in: habitCollection)
             let row = habitCollection.indexPathForItem(at: point)
             let id:Int  = row?[1] ?? 0
+            let uuid = mngHabit.listHabit[id]
+            let habit = mngHabit.habits[uuid]
             
-            let alert = UIAlertController(title: mngHabit.habits[id].task.name, message: "습관을 삭제하시겠습니까?", preferredStyle: .alert)
-            let deleteAct = UIAlertAction(title: "Delete", style: .destructive, handler: {UIAlertAction in self.alertDelete(id: id) })
-            let reviseAct = UIAlertAction(title: "Revise", style: .default, handler: {UIAlertAction in self.alertRevise(id: id)})
+            let alert = UIAlertController(title: habit?.task.name, message: "습관을 삭제하시겠습니까?", preferredStyle: .alert)
+            let deleteAct = UIAlertAction(title: "Delete", style: .destructive, handler: {UIAlertAction in self.alertDelete(uuid: uuid) })
+            let reviseAct = UIAlertAction(title: "Revise", style: .default, handler: {UIAlertAction in self.alertRevise(uuid: uuid)})
             let cancleAct = UIAlertAction(title: "Cancle", style: .default, handler: nil)
             alert.addAction(deleteAct)
             alert.addAction(reviseAct)
@@ -134,21 +139,22 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
         
     }
     
-    func alertDelete(id: Int) {
-        let habit = mngHabit.habits[id]
+    func alertDelete(uuid: String) {
+        guard let habit = mngHabit.habits[uuid] else { return }
         if habit.task.alram == true {
             mngNoti.removeNotificationHabit(habit: habit)
         }
-        mngHabit.deleteHabit(id : id)
+        mngHabit.deleteHabit(uuid : uuid)
         mngHabit.loadHabit()
         mngToDo.updateData()
         habitCollection.reloadData()
     }
     
-    func alertRevise(id: Int) {
+    func alertRevise(uuid: String) {
         let vc  = storyboard.self?.instantiateViewController(withIdentifier: "AddHabitVC") as! AddHabitViewController
         vc.modalTransitionStyle = .coverVertical
-        vc.data = mngHabit.habits[id]
+        vc.data = mngHabit.habits[uuid]!
+        vc.uuid = uuid
         self.present(vc, animated: true, completion: nil)
     }
     

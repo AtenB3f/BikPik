@@ -16,6 +16,7 @@ class AddHabitViewController: UIViewController {
     let mngHabit = HabitManager.mngHabit
     let mngNoti = Notifications.mngNotification
     
+    var uuid: String?
     var data: Habits = Habits(date: Date.GetNowDate())
     var revise : Bool = false
     
@@ -64,13 +65,13 @@ class AddHabitViewController: UIViewController {
         guard let name = fldHabitName.text else { return }
         if name == "" { return }
         
-        var id :Int?
         if revise {
-            mngNoti.removeNotificationHabit(habit: data)
-            id = mngHabit.habitId[data.task.name]
-            if id == nil { return }
+            if self.uuid == nil { return }
+            if data.task.notiUUID != nil {
+                mngNoti.removeNotificationHabit(habit: data)
+            }
         } else {
-            if mngHabit.habitId[name] != nil { return }
+            self.uuid = UUID().uuidString
         }
         
         data.task.name = name
@@ -83,9 +84,9 @@ class AddHabitViewController: UIViewController {
         }
         
         if revise == true {
-            mngHabit.correctHabit(id: id!, habit: data)
+            mngHabit.correctHabit(uuid: uuid!, habit: data)
         } else {
-            if mngHabit.habitId[data.task.name] != nil { return }
+            // create Habit
             mngHabit.createHabit(habit: data)
         }
         

@@ -83,9 +83,10 @@ class ToDoManager {
                 arr.append(key)
             }
         }
-        for habit in mngHabit.habits {
+        
+        for (uuid,habit) in mngHabit.habits {
             if habit.isDone?[date] != nil {
-                arr.append(habit.task.name)
+                arr.append(uuid)
             }
         }
         selTaskList.value = arr
@@ -102,8 +103,8 @@ class ToDoManager {
         var task = Task()
         
         for tmp in selTaskList.value {
-            if let id = mngHabit.habitId[tmp] {
-                task = mngHabit.habits[id].task
+            if mngHabit.habits.keys.contains(tmp) {
+                task = mngHabit.habits[tmp]!.task
             } else if tasks.keys.contains(tmp) {
                 task = tasks[tmp]!
             }
@@ -123,42 +124,6 @@ class ToDoManager {
         
         selTaskList.value = sortArr
         
-    }
-    
-    /**
-     Search task in the Habit list and the To Do list.
-     - parameter date :format is yyyyMMdd. ex) 20210928
-     - parameter taskName : If the task is a habit, the form is the habit name. However, if the task is To Do, the format is "task name" + "_"+"ID".
-                            ex) study_01
-     - returns : If find the task in the list, return true. didn't find task, return false.
-     */
-    func searchTask (date: String, taskName: String) -> Bool{
-        if tasks[taskName]?.date == date{
-            return true
-        }
-        
-        if let id = mngHabit.habitId[taskName] {
-            
-            if mngHabit.habits.count <= id {
-                return false
-            }
-            
-            let habit = mngHabit.habits[id]
-            
-            let start = Int(habit.start) ?? 0
-            let end = Int(habit.end) ?? 0
-            let sel = Int(selDate.value) ?? 0
-            if (start <= sel && sel <= end) {
-                for i in 0...6 {
-                    if habit.days[i] {
-                        if (i+1) == Date.WeekForm(data: selDate.value, input: .fullDate, output: .intIndex) as! Int {
-                            return true
-                        }
-                    }
-                }
-            }
-        }
-        return false
     }
     
     /**

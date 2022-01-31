@@ -185,13 +185,12 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
      */
     @objc func clickIsDone (_ sender: UIButton) {
         let id = sender.tag
-        let taskName: String = mngToDo.selTaskList.value[id]
-        if mngToDo.tasks[taskName] != nil {
-            mngToDo.tasks[taskName]?.isDone = sender.isSelected
+        let uuid: String = mngToDo.selTaskList.value[id]
+        if mngToDo.tasks[uuid] != nil {
+            mngToDo.tasks[uuid]?.isDone = sender.isSelected
             mngToDo.saveTask(data: mngToDo.tasks)
-        } else if mngHabit.searchHabitTask(name: taskName) != nil {
-            let id = mngHabit.habitId[taskName]!
-            mngHabit.isDone(habit: &mngHabit.habits[id], date: mngToDo.selDate.value, done: sender.isSelected)
+        } else if mngHabit.habits[uuid] != nil {
+            mngHabit.isDone(habit: &mngHabit.habits[uuid]!, date: mngToDo.selDate.value, done: sender.isSelected)
             mngHabit.saveHabit()
         }
     }
@@ -202,7 +201,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         let name = mngToDo.tasks[uuid]!.name
         if mngToDo.tasks[uuid] != nil {
             mngToDo.deleteTask(uuid: uuid)
-        } else if mngHabit.habitId[uuid] != nil {
+        } else if mngHabit.habits[uuid] != nil {
             presentHabitAlert(name: name, uuid: uuid)
         }
     }
@@ -220,12 +219,9 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
                     // To Do
                     let name = mngToDo.tasks[uuid]!.name
                     presentToDoAlert(name: name, uuid: uuid)
-                } else {
+                } else if let habit = mngHabit.habits[uuid] {
                     // habit
-                    if let idx = mngHabit.habitId[uuid] {
-                        let habit = mngHabit.habits[idx]
-                        presentHabitAlert(name: habit.task.name, uuid: uuid)
-                    }
+                    presentHabitAlert(name: habit.task.name, uuid: uuid)
                 }
             }
         }
@@ -249,7 +245,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func presentHabitAlert(name: String, uuid: String) {
         let alert = UIAlertController(title: uuid, message: "Habit", preferredStyle: .alert)
-        let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertReviseHabit(habitName: uuid)})
+        let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertReviseHabit(uuid: uuid)})
         let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
         alert.addAction(revise)
         alert.addAction(cancle)
@@ -276,11 +272,12 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         mngToDo.deleteTask(uuid: uuid)
     }
     
-    func alertReviseHabit (habitName : String) {
+    func alertReviseHabit (uuid : String) {
         let vc = storyboard.self?.instantiateViewController(withIdentifier: "AddHabitVC") as! AddHabitViewController
         vc.modalTransitionStyle = .coverVertical
-        guard let id = mngHabit.habitId[habitName] else { return }
-        vc.data = mngHabit.habits[id]
+        guard let habit = mngHabit.habits[uuid] else { return }
+        vc.data = habit
+        vc.uuid = uuid
         self.present(vc, animated: true, completion: nil)
     }
 }
@@ -334,13 +331,11 @@ class ToDoCell: UITableViewCell {
             } else {
                 time = mngToDo.tasks[uuid]?.time
             }
-        } else if (mngHabit.habitId[uuid] != nil) {
-            let id = mngHabit.habitId[uuid] ?? 0
-            let habit = mngHabit.habits[id]
+        } else if let habit = mngHabit.habits[uuid] {
             if habit.task.inToday == true {
                 time = "Today"
             } else {
-                time = mngHabit.habits[id].task.time
+                time = habit.task.time
             }
             
         } else {
@@ -359,8 +354,7 @@ class ToDoCell: UITableViewCell {
             displayDone(done: data.isDone)
             setting.setImage(UIImage(systemName: "x.circle"), for: .normal)
             self.task.text = data.name
-        } else if let id = mngHabit.habitId[uuid] {
-            let habit = mngHabit.habits[id]
+        } else if let habit = mngHabit.habits[uuid] {
             let done = mngHabit.isDoneCheck(habit: habit, date: mngToDo.selDate.value)
             displayDone(done: done)
             setting.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
