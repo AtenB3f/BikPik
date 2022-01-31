@@ -61,18 +61,22 @@ class Firebase {
         setRefTask(task: habit.task, ref: habitRef)
     }
     
-    func updateTask() -> Task? {
-        guard let uid = Auth.auth().currentUser?.uid else { return nil }
-        var task: Task?
+    
+    
+    func updateTask(saveTask: (_ task: Task)->()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        var ret: Task?
         
         self.ref.child("test/users/\(uid)/tasks/").observe(.childChanged, with: { [self] snapshot in
             let value = snapshot.value as! [String:Any]
-            
-            task = handleUpdateTask(value)
+            ret = handleUpdateTask(value)
         }) { error in
             print(error.localizedDescription)
-          }
-        return task
+        }
+        
+        if ret != nil {
+            saveTask(ret!)
+        }
     }
     
     private func handleUpdateTask(_ value :[String:Any]) -> Task {
