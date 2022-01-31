@@ -14,6 +14,8 @@ class HabitManager {
     
     var habits: [String:Habits] = [:]
     var listHabit: [String] = []
+    
+    let mngFirebase = Firebase.mngFirebase
     /**
      Create and save the habit data.
      - parameter haibt : "Habits" struct data.
@@ -28,6 +30,8 @@ class HabitManager {
         
         habits[uuid] = data
         listHabit.append(uuid)
+        
+        mngFirebase.uploadHabit(uuid: uuid, habit: data)
         saveHabit()
     }
     
@@ -38,6 +42,7 @@ class HabitManager {
      */
     func correctHabit(uuid: String, habit : Habits) {
         habits[uuid] = habit
+        mngFirebase.correctHabit(uuid: uuid, habit: habit)
         saveHabit()
     }
     
@@ -67,6 +72,7 @@ class HabitManager {
         if let idx = listHabit.firstIndex(of: uuid) {
             listHabit.remove(at: idx)
         }
+        mngFirebase.removeHabit(uuid: uuid)
         saveHabit()
     }
     

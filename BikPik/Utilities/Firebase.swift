@@ -60,23 +60,47 @@ class Firebase {
         taskRef.updateChildValues(data)
     }
     
-    func uploadHabit(habit: Habits) {
+    func uploadHabit(uuid: String, habit: Habits) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(habit.task.name)")
-        
-        habitRef.child("start").setValue(habit.start)
-        habitRef.child("end").setValue(habit.end)
-        habitRef.child("days").setValue(habit.days)
-        if habit.isDone != nil {
-            habitRef.child("isDone").setValue(habit.isDone)
-        }
-        
-        let data = setTask(task: habit.task)
+        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(uuid)")
+        let data = setHabit(habit: habit)
         habitRef.setValue(data)
     }
     
+    private func setHabit(habit: Habits) -> [String:Any]{
+        var data = [
+            "start" : habit.start,
+            "end" : habit.end,
+            "days" : habit.days,
+            "name" : habit.task.name,
+            "date" : habit.task.date,
+            "time" : habit.task.time,
+            "alram" : habit.task.alram,
+            "inToday" : habit.task.inToday,
+            "isDone" : habit.task.isDone,
+        ] as [String : Any]
+        if habit.isDone != nil {
+            data["isDone"] = habit.isDone
+        }
+        
+        return data
+    }
     
+    func removeHabit(uuid: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(uuid)")
+        habitRef.removeValue()
+    }
+    
+    func correctHabit(uuid:String, habit: Habits) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(uuid)")
+        let data = setHabit(habit: habit)
+        habitRef.updateChildValues(data)
+    }
     
     func updateTask(saveTask: (_ task: Task)->()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
