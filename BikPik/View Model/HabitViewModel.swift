@@ -10,7 +10,9 @@ import UIKit
 class HabitManager {
     let storage: Storage = Storage.disk
     static let mngHabit = HabitManager()
-    private init() { }
+    private init() {
+        mngFirebase.updateHabit(handleSaveHabit: saveServerHabit(uuid:habit:))
+    }
     
     var habits: [String:Habits] = [:]
     var listHabit: [String] = []
@@ -74,6 +76,19 @@ class HabitManager {
         }
         mngFirebase.removeHabit(uuid: uuid)
         saveHabit()
+    }
+    
+    func saveServerHabit(uuid: String, habit: Habits) {
+        var data = habit
+        data.percent = self.calculatePercent(habit: data)
+        if habits[uuid] == nil {
+            // create
+            self.habits[uuid] = habit
+            self.saveHabit()
+        } else {
+            // correct
+            self.correctHabit(uuid: uuid, habit: habit)
+        }
     }
     
     /**
@@ -167,6 +182,10 @@ class HabitManager {
      */
     func calculatePercent(habit : Habits) -> Int {
         if habit.isDone == nil { return 0 }
+        var total = habit.total
+        if total == 0 {
+            total = calurateTotal(haibt: habit)
+        }
         
         var cnt = 0
         for elemnt in habit.isDone! {
@@ -175,7 +194,20 @@ class HabitManager {
             }
         }
         
-        return Int(round(Float(cnt)/Float(habit.total)*100.0))
+        return Int(round(Float(cnt)/Float(total)*100.0))
+    }
+    
+    func calurateTotal(haibt: Habits) -> Int{
+        var total = 0
+        
+        for (idx, n) in haibt.days.enumerated() {
+            if n == true {
+                let st = Date.DateForm(data: haibt.start, input: .fullDate, output: .date) as! Date
+                let ed = Date.DateForm(data: haibt.end, input: .fullDate, output: .date) as! Date
+                total += Date.GetWeekDays(start: st, end: ed, week: idx+1)
+            }
+        }
+        return total
     }
 }
 

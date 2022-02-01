@@ -42,7 +42,9 @@ class ToDoManager {
     let mngNoti = Notifications.mngNotification
     let mngFirebase = Firebase.mngFirebase
     
-    private init() { }
+    private init() {
+        mngFirebase.updateTask(handleSaveTask: saveServerTask)
+    }
     
     /**
           Reloading To Do Table View
@@ -52,6 +54,19 @@ class ToDoManager {
         loadTask()
         loadSelTaskList()
         sortTimeline()
+    }
+    
+    func saveServerTask(uuid: String, task: Task) {
+        if tasks[uuid] == nil {
+            // create
+            self.tasks[uuid] = task
+            self.saveTasks()
+        } else {
+            // correct
+            self.correctTask(uuid: uuid, after: task)
+        }
+        
+        self.updateData()
     }
     
     func changeSelectDate(date:String) {

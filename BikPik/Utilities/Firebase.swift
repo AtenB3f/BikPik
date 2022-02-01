@@ -73,12 +73,12 @@ class Firebase {
             "start" : habit.start,
             "end" : habit.end,
             "days" : habit.days,
+            "total" : habit.total,
             "name" : habit.task.name,
             "date" : habit.task.date,
             "time" : habit.task.time,
             "alram" : habit.task.alram,
             "inToday" : habit.task.inToday,
-            "isDone" : habit.task.isDone,
         ] as [String : Any]
         if habit.isDone != nil {
             data["isDone"] = habit.isDone
@@ -102,23 +102,18 @@ class Firebase {
         habitRef.updateChildValues(data)
     }
     
-    func updateTask(saveTask: (_ task: Task)->()) {
+    func updateTask(handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        var ret: Task?
         
         self.ref.child("test/users/\(uid)/tasks/").observe(.childChanged, with: { [self] snapshot in
+            let uuid = snapshot.key
             let value = snapshot.value as! [String:Any]
-            ret = handleUpdateTask(value)
-        }) { error in
-            print(error.localizedDescription)
-        }
-        
-        if ret != nil {
-            saveTask(ret!)
-        }
+            
+            handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
+        })
     }
     
-    private func handleUpdateTask(_ value :[String:Any]) -> Task {
+    private func handleUpdateTask(uuid: String, value :[String:Any], handleSaveTask: @escaping(_ uuid: String, _ task: Task) -> ()) {
         var task = Task()
         for v in value.keys {
             switch v {
@@ -142,6 +137,52 @@ class Firebase {
                 print("Error :: handleUpdateTask() ")
             }
         }
-        return task
+        handleSaveTask(uuid, task)
+    }
+    
+    func updateHabit(handleSaveHabit: @escaping (_ uuid: String, _ habit: Habits) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        self.ref.child("test/users/\(uid)/haibts/").observe(.childChanged, with: { [self] snapshot in
+            let uuid = snapshot.key
+            let value = snapshot.value as! [String:Any]
+            
+            handleUpdateHabit(uuid: uuid, value: value, handleSaveHabit: handleSaveHabit)
+        })
+    }
+    
+    private func handleUpdateHabit(uuid: String, value :[String:Any], handleSaveHabit: @escaping(_ uuid: String, _ habit: Habits) -> ()) {
+        var habit = Habits(date: value["date"] as! String)
+        for v in value.keys {
+            switch v {
+            case "name":
+                habit.task.name = value[v] as! String
+            case "alram":
+                habit.task.alram = value[v] as! Bool
+            case "date":
+                habit.task.date = value[v] as! String
+            case "inToday":
+                habit.task.inToday = value[v] as! Bool
+            case "time":
+                habit.task.time = value[v] as! String
+            case "tag":
+                habit.task.tag = value[v] as? String
+            case "color":
+                habit.task.color = value[v] as? String
+            case "start":
+                habit.start = value[v] as! String
+            case "end":
+                habit.end = value[v] as! String
+            case "days":
+                habit.days = value[v] as! [Bool]
+            case "isDone":
+                habit.isDone = value[v] as? [String:Bool]
+            case "total":
+                habit.total = value[v] as! Int
+            default:
+                print("Error :: handleUpdateHabit() ")
+            }
+        }
+        handleSaveHabit(uuid, habit)
     }
 }
