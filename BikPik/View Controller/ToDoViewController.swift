@@ -192,6 +192,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         } else if mngHabit.habits[uuid] != nil {
             mngHabit.isDone(habit: &mngHabit.habits[uuid]!, date: mngToDo.selDate.value, done: sender.isSelected)
             mngHabit.saveHabit()
+            mngFirebase.uploadHabitDone(uuid: uuid, habit: mngHabit.habits[uuid]!)
         }
     }
     

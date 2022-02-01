@@ -19,6 +19,9 @@ class Firebase {
     
     let ref: DatabaseReference! = Database.database().reference()
     
+    
+    // Task
+    
     func uploadTask(uuid: String ,task: Task) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -60,6 +63,48 @@ class Firebase {
         taskRef.updateChildValues(data)
     }
     
+    
+    func updateTask(handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        self.ref.child("test/users/\(uid)/tasks/").observe(.childChanged, with: { [self] snapshot in
+            let uuid = snapshot.key
+            let value = snapshot.value as! [String:Any]
+            
+            handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
+        })
+    }
+    
+    private func handleUpdateTask(uuid: String, value :[String:Any], handleSaveTask: @escaping(_ uuid: String, _ task: Task) -> ()) {
+        var task = Task()
+        for v in value.keys {
+            switch v {
+            case "name":
+                task.name = value[v] as! String
+            case "alram":
+                task.alram = value[v] as! Bool
+            case "date":
+                task.date = value[v] as! String
+            case "inToday":
+                task.inToday = value[v] as! Bool
+            case "isDone":
+                task.isDone = value[v] as! Bool
+            case "time":
+                task.time = value[v] as! String
+            case "tag":
+                task.tag = value[v] as? String
+            case "color":
+                task.color = value[v] as? String
+            default:
+                print("Error :: handleUpdateTask() ")
+            }
+        }
+        handleSaveTask(uuid, task)
+    }
+    
+    
+    //Habit
+    
     func uploadHabit(uuid: String, habit: Habits) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -100,44 +145,6 @@ class Firebase {
         let habitRef = self.ref.child("test/users/\(uid)/haibts/\(uuid)")
         let data = setHabit(habit: habit)
         habitRef.updateChildValues(data)
-    }
-    
-    func updateTask(handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        self.ref.child("test/users/\(uid)/tasks/").observe(.childChanged, with: { [self] snapshot in
-            let uuid = snapshot.key
-            let value = snapshot.value as! [String:Any]
-            
-            handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
-        })
-    }
-    
-    private func handleUpdateTask(uuid: String, value :[String:Any], handleSaveTask: @escaping(_ uuid: String, _ task: Task) -> ()) {
-        var task = Task()
-        for v in value.keys {
-            switch v {
-            case "name":
-                task.name = value[v] as! String
-            case "alram":
-                task.alram = value[v] as! Bool
-            case "date":
-                task.date = value[v] as! String
-            case "inToday":
-                task.inToday = value[v] as! Bool
-            case "isDone":
-                task.isDone = value[v] as! Bool
-            case "time":
-                task.time = value[v] as! String
-            case "tag":
-                task.tag = value[v] as? String
-            case "color":
-                task.color = value[v] as? String
-            default:
-                print("Error :: handleUpdateTask() ")
-            }
-        }
-        handleSaveTask(uuid, task)
     }
     
     func updateHabit(handleSaveHabit: @escaping (_ uuid: String, _ habit: Habits) -> ()) {
@@ -184,5 +191,13 @@ class Firebase {
             }
         }
         handleSaveHabit(uuid, habit)
+    }
+    
+    func uploadHabitDone(uuid: String, habit: Habits) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let isDone = habit.isDone else { return }
+        
+        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(uuid)/isDone")
+        habitRef.updateChildValues(isDone)
     }
 }
