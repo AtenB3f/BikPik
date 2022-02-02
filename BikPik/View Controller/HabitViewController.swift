@@ -128,11 +128,12 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
             let habit = mngHabit.habits[uuid]
             
             let alert = UIAlertController(title: habit?.task.name, message: "습관을 삭제하시겠습니까?", preferredStyle: .alert)
-            let deleteAct = UIAlertAction(title: "Delete", style: .destructive, handler: {UIAlertAction in self.alertDelete(uuid: uuid) })
-            let reviseAct = UIAlertAction(title: "Revise", style: .default, handler: {UIAlertAction in self.alertRevise(uuid: uuid)})
-            let cancleAct = UIAlertAction(title: "Cancle", style: .default, handler: nil)
-            alert.addAction(deleteAct)
+            let deleteAct = UIAlertAction(title: "삭제", style: .default, handler: {UIAlertAction in self.alertDelete(uuid: uuid) })
+            let reviseAct = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertRevise(uuid: uuid)})
+            let cancleAct = UIAlertAction(title: "취소", style: .default, handler: nil)
+            
             alert.addAction(reviseAct)
+            alert.addAction(deleteAct)
             alert.addAction(cancleAct)
             present(alert, animated: true, completion: nil)
         }

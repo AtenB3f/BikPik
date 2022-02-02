@@ -245,7 +245,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func presentHabitAlert(name: String, uuid: String) {
-        let alert = UIAlertController(title: uuid, message: "Habit", preferredStyle: .alert)
+        let alert = UIAlertController(title: name, message: "Habit", preferredStyle: .alert)
         let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertReviseHabit(uuid: uuid)})
         let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
         alert.addAction(revise)
