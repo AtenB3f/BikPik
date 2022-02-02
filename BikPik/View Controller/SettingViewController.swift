@@ -16,9 +16,8 @@ class SettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addSubView()
-        addTarget()
         setLayout()
+        addTarget()
         updateSetting()
     }
     
@@ -32,30 +31,96 @@ class SettingViewController: UIViewController {
     @IBAction func navBtnBack(_ sender: Any) {
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
-    let contentsView = UIScrollView()
+    
+    let scrollView = UIScrollView()
+    let contentsView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.spacing = 0
+        view.distribution = .fill
+        return view
+    }()
     
     let viewAccount = UIView()
-    var labelAccount = UILabel()
-    let btnAccount = UIButton()
+    var labelAccount: UILabel = {
+        let label = UILabel()
+        label.text = "계정"
+        return label
+    }()
+    let btnAccount:UIButton = {
+        let button = UIButton()
+        let image = UIImage(systemName: "arrow.right")
+        button.setImage(image, for: .normal)
+        button.tintColor = UIColor(named: "BikPik Color")
+        return button
+    }()
+    
+    let viewStartSunday = UIView()
+    let labelStartSunday:UILabel = {
+        let label = UILabel()
+        label.text = "달력 일요일부터 시작하기"
+        return label
+    }()
+    let swtStartSunday:UISwitch = {
+        let swt = UISwitch()
+        swt.onTintColor = UIColor(named: "BikPik Color")
+        return swt
+    }()
     
     let viewTheme = UIView()
-    let labelTheme = UILabel()
-    let btnTheme = UIButton()
-    let viewThemeDetail = UIView()
-    let labelTimeTheme = UILabel()
-    let swtTimeTheme = UISwitch()
-    
-    let viewStartSun = UIView()
-    let labelStartSun = UILabel()
-    let swtStartSun = UISwitch()
+    let labelTheme: UILabel = {
+        let label = UILabel()
+        label.text = "시간 테마 적용"
+        return label
+    }()
+    let swtTheme: UISwitch = {
+        let swt = UISwitch()
+        swt.onTintColor = UIColor(named: "BikPik Color")
+        return swt
+    }()
     
     let viewAutoDelete = UIView()
-    let labelAutoDelete = UILabel()
-    let swtAutoDelete = UISwitch()
+    let labelAutoDelete: UILabel = {
+        let label = UILabel()
+        label.text = "1년 지난 데이터 자동 삭제"
+        return label
+    }()
+    let swtAutoDelete:UISwitch = {
+        let swt = UISwitch()
+        swt.onTintColor = UIColor(named: "BikPik Color")
+        return swt
+    }()
     
     let viewTag = UIView()
-    let labelTag = UILabel()
-    let btnTag = UIButton()
+    let labelTag:UILabel = {
+        let label = UILabel()
+        label.text = "태그"
+        return label
+    }()
+    let btnTag:UIButton = {
+        let button = UIButton()
+        let image = UIImage(systemName: "arrowtriangle.down.fill")
+        button.setImage(image, for: .normal)
+        button.tintColor = UIColor(named: "BikPik Color")
+        return button
+    }()
+    
+    let emptyView = UIView()
+    
+    private func setScrollView() {
+        self.view.addSubview(scrollView)
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(navigationBar.snp.bottom)
+            make.leading.trailing.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        }
+    }
+    
+    private func setStackView() {
+        scrollView.addSubview(contentsView)
+        contentsView.snp.makeConstraints { make in
+            make.width.height.centerX.centerY.equalToSuperview()
+        }
+    }
     
     let offsetLabelTop = 5
     let offsetLeading = 15
@@ -65,78 +130,61 @@ class SettingViewController: UIViewController {
     let hightTheme = 78
     let iconSize = 44
     
-    func addSubView(){
-        self.view.addSubview(contentsView)
-        contentsView.addSubview(viewAccount)
-        contentsView.addSubview(viewTheme)
-        contentsView.addSubview(viewStartSun)
-        contentsView.addSubview(viewAutoDelete)
-        contentsView.addSubview(viewTag)
-        
-        viewAccount.addSubview(labelAccount)
-        viewAccount.addSubview(btnAccount)
-        
-        viewTheme.addSubview(labelTheme)
-        viewTheme.addSubview(btnTheme)
-        viewTheme.addSubview(viewThemeDetail)
-        viewThemeDetail.addSubview(labelTimeTheme)
-        viewThemeDetail.addSubview(swtTimeTheme)
-        
-        viewStartSun.addSubview(labelStartSun)
-        viewStartSun.addSubview(swtStartSun)
-        
-        viewAutoDelete.addSubview(labelAutoDelete)
-        viewAutoDelete.addSubview(swtAutoDelete)
-        
-        viewTag.addSubview(labelTag)
-        viewTag.addSubview(btnTag)
+    let leading = 20.0
+    let heightObject = 44.0
+    
+    private func setLayout(){
+        setScrollView()
+        setStackView()
+        setViewObject(view: viewAccount, label: labelAccount, button: btnAccount)
+        setViewObject(view: viewStartSunday, label: labelStartSunday, swit: swtStartSunday)
+        contentsView.addArrangedSubview(emptyView)
     }
     
-    func setLayout(){
-        contentsLayout()
-        viewLayout()
-        accountLayout()
-        themeLayout()
-        startSunLayout()
-        deleteDataLayout()
-        tagLayout()
-    }
-    
-    func contentsLayout() {
-        contentsView.snp.makeConstraints {
-            $0.top.equalTo(navigationBar.snp.bottom).offset(offsetTop)
-            $0.bottom.equalTo(view.snp.bottom)
-            $0.width.equalToSuperview()
+    private func setViewObject(view: UIView, label: UILabel, button: UIButton) {
+        contentsView.addArrangedSubview(view)
+        view.snp.makeConstraints { make in
+            make.height.equalTo(heightObject)
+            make.width.equalToSuperview()
+        }
+        
+        view.addSubview(label)
+        label.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(leading)
+            make.height.equalTo(heightObject)
+            make.centerY.equalToSuperview()
+        }
+        
+        view.addSubview(button)
+        button.snp.makeConstraints { make in
+            make.height.equalTo(heightObject)
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-leading)
         }
     }
     
-    func viewLayout() {
-        viewAccount.snp.makeConstraints { make in
-            make.top.equalTo(navigationBar.snp.bottom).offset(offsetTop)
+    private func setViewObject(view: UIView, label: UILabel, swit: UISwitch) {
+        contentsView.addArrangedSubview(view)
+        view.snp.makeConstraints { make in
+            make.height.equalTo(heightObject)
             make.width.equalToSuperview()
-            make.height.equalTo(heightClose)
         }
-        viewTheme.snp.makeConstraints { make in
-            make.top.equalTo(viewAccount.snp.bottom)
-            make.width.equalToSuperview()
-            make.height.equalTo(heightClose)
+        
+        view.addSubview(label)
+        label.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(leading)
+            make.height.equalTo(heightObject)
+            make.centerY.equalToSuperview()
         }
-        viewStartSun.snp.makeConstraints{ make in
-            make.top.equalTo(viewTheme.snp.bottom)
-            make.width.equalToSuperview()
-            make.height.equalTo(heightClose)
-        }
-        viewAutoDelete.snp.makeConstraints { make in
-            make.top.equalTo(viewStartSun.snp.bottom)
-            make.width.equalToSuperview()
-            make.height.equalTo(heightClose)
-        }
-        viewTag.snp.makeConstraints { make in
-            make.top.equalTo(viewAutoDelete.snp.bottom)
-            make.width.equalToSuperview()
-            make.height.equalTo(heightClose)
+        
+        view.addSubview(swit)
+        swit.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-leading)
         }
     }
+    
+
     func viewLayoutResize(setting :OpenSetting, open: Bool) {
         var height = heightClose
         switch setting {
@@ -166,13 +214,13 @@ class SettingViewController: UIViewController {
             make.top.equalTo(viewAccount.snp.bottom)
             make.width.equalToSuperview()
         }
-        viewStartSun.snp.remakeConstraints{ make in
+        viewStartSunday.snp.remakeConstraints{ make in
             make.top.equalTo(viewTheme.snp.bottom)
             make.width.equalToSuperview()
             make.height.equalTo(heightClose)
         }
         viewAutoDelete.snp.makeConstraints { make in
-            make.top.equalTo(viewStartSun.snp.bottom)
+            make.top.equalTo(viewStartSunday.snp.bottom)
             make.width.equalToSuperview()
         }
         viewTag.snp.makeConstraints { make in
@@ -185,110 +233,22 @@ class SettingViewController: UIViewController {
         
         var size = contentsView.frame.size
         size.height = viewTag.frame.maxY - contentsView.layer.frame.minY
-        contentsView.contentSize = size
-    }
-    
-    func accountLayout() {
-        labelAccount.text = "계정"
-        labelAccount.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(offsetLabelTop)
-            make.leading.equalToSuperview().offset(offsetLeading)
-        }
-        let img = UIImage(systemName: "arrow.right")
-        btnAccount.setImage(img, for: .normal)
-        btnAccount.tintColor = UIColor(named: "BikPik Color")
-        btnAccount.snp.makeConstraints { make in
-            make.centerY.equalTo(labelAccount.snp.centerY)
-            make.trailing.equalToSuperview().offset(offsetTrailling)
-            make.width.height.equalTo(iconSize)
-        }
-    }
-    func themeLayout() {
-        labelTheme.text = "테마"
-        labelTheme.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(offsetLabelTop)
-            make.leading.equalToSuperview().offset(offsetLeading)
-        }
-        let img = UIImage(systemName: "arrowtriangle.down.fill")
-        btnTheme.setImage(img, for: .normal)
-        btnTheme.snp.makeConstraints { make in
-            make.centerY.equalTo(labelTheme.snp.centerY)
-            make.trailing.equalToSuperview().offset(offsetTrailling)
-            make.width.height.equalTo(iconSize)
-        }
-        
-        viewThemeDetail.backgroundColor = .yellow
-        viewThemeDetail.snp.makeConstraints { make in
-            make.top.equalTo(labelTheme.snp.bottom)
-            make.width.equalToSuperview()
-            make.height.equalTo(0)
-        }
-        
-        labelTimeTheme.text = "시간 테마 적용"
-        labelTimeTheme.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(offsetLeading)
-            make.top.equalTo(labelTheme.snp.bottom).offset(offsetTop)
-        }
-        labelTimeTheme.isHidden = true
-        
-        swtTimeTheme.onTintColor = UIColor(named: "BikPik Color")
-        swtTimeTheme.snp.makeConstraints { make in
-            make.top.equalTo(labelTheme.snp.bottom).offset(offsetTop)
-            make.trailing.equalToSuperview().offset(offsetTrailling)
-        }
-        swtTimeTheme.isHidden = true
-    }
-    func startSunLayout() {
-        labelStartSun.text = "달력 일요일 부터 시작하기"
-        labelStartSun.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(offsetLabelTop)
-            make.leading.equalToSuperview().offset(offsetLeading)
-        }
-        swtStartSun.onTintColor = UIColor(named: "BikPik Color")
-        swtStartSun.snp.makeConstraints { make in
-            make.centerY.equalTo(labelStartSun.snp.centerY)
-            make.trailing.equalToSuperview().offset(offsetTrailling)
-        }
-    }
-    func deleteDataLayout() {
-        labelAutoDelete.text = "이전 데이터 자동 삭제"
-        labelAutoDelete.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(offsetLabelTop)
-            make.leading.equalToSuperview().offset(offsetLeading)
-            
-        }
-        swtAutoDelete.onTintColor = UIColor(named: "BikPik Color")
-        swtAutoDelete.snp.makeConstraints { make in
-            make.centerY.equalTo(labelAutoDelete.snp.centerY)
-            make.trailing.equalToSuperview().offset(offsetTrailling)
-        }
-    }
-    func tagLayout() {
-        labelTag.text = "태그 관리"
-        labelTag.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(offsetLabelTop)
-            make.leading.equalToSuperview().offset(offsetLeading)
-        }
-        let img = UIImage(systemName: "arrowtriangle.down.fill")
-        btnTag.setImage(img, for: .normal)
-        btnTag.snp.makeConstraints { make in
-            make.centerY.equalTo(labelTag.snp.centerY)
-            make.trailing.equalToSuperview().offset(offsetTrailling)
-            make.width.height.equalTo(iconSize)
-        }
+        //contentsView.contentSize = size
     }
     
     func addTarget() {
+        let gestureAccount = UITapGestureRecognizer(target: self, action: #selector(actionAccount(_:)))
+        viewAccount.addGestureRecognizer(gestureAccount)
         btnAccount.addTarget(self, action: #selector(actionAccount(_:)), for: .touchUpInside)
-        btnTheme.addTarget(self, action: #selector(self.actionTheme(_:)), for: .touchUpInside)
-        swtStartSun.addTarget(self, action: #selector(self.actionStartSun(_:)), for: .touchUpInside)
-        swtAutoDelete.addTarget(self, action: #selector(self.actionAutoDelete(_:)), for: .touchUpInside)
-        btnTag.addTarget(self, action: #selector(self.actionTag(_:)), for: .touchUpInside)
+        //swtTheme.addTarget(self, action: #selector(self.actionTheme(_:)), for: .touchUpInside)
+        swtStartSunday.addTarget(self, action: #selector(self.actionStartSun(_:)), for: .touchUpInside)
+        //swtAutoDelete.addTarget(self, action: #selector(self.actionAutoDelete(_:)), for: .touchUpInside)
+        //btnTag.addTarget(self, action: #selector(self.actionTag(_:)), for: .touchUpInside)
     }
     
     func updateSetting() {
         mngSetting.LoadSetting()
-        swtStartSun.isOn = mngSetting.data.startSun
+        swtStartSunday.isOn = mngSetting.data.startSun
         swtAutoDelete.isOn = mngSetting.data.autoDelete
     }
     
@@ -309,13 +269,6 @@ class SettingViewController: UIViewController {
     
     @objc func actionTheme(_ sender: UIButton) {
         sender.isSelected.toggle()
-        if sender.isSelected {
-            openTheme()
-            viewLayoutResize(setting: .theme, open: true)
-        } else {
-            viewLayoutResize(setting: .theme, open: false)
-            closeTheme()
-        }
     }
     @objc func actionStartSun(_ sender: UISwitch) {
         let select = sender.isOn
@@ -338,46 +291,4 @@ class SettingViewController: UIViewController {
         }
     }
     
-    
-    func openTheme() {
-        viewThemeDetail.backgroundColor = UIColor(named: "BikPik Light Color")
-        viewThemeDetail.layer.cornerRadius = 10
-        labelTimeTheme.isHidden = false
-        swtTimeTheme.isHidden = false
-        
-        viewThemeDetail.snp.remakeConstraints({ make in
-            make.height.equalTo(hightTheme)
-            make.top.equalTo(labelTheme.snp.bottom)
-            make.width.equalToSuperview().offset(10)
-        })
-        
-        labelTimeTheme.text = "시간 테마 적용"
-        labelTimeTheme.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(offsetLeading)
-            make.top.equalTo(labelTheme.snp.bottom).offset(offsetTop)
-        }
-        
-        swtTimeTheme.onTintColor = UIColor(named: "BikPik Color")
-        swtTimeTheme.snp.makeConstraints { make in
-            make.top.equalTo(labelTheme.snp.bottom).offset(offsetTop)
-            make.trailing.equalToSuperview().offset(offsetTrailling)
-        }
-        
-    }
-    func closeTheme() {
-        viewThemeDetail.snp.remakeConstraints({ make in
-            make.height.equalTo(0)
-            make.top.equalTo(labelTheme.snp.bottom)
-            make.width.equalToSuperview()
-        })
-        
-        labelTimeTheme.isHidden = true
-        swtTimeTheme.isHidden = true
-    }
-    func openDeleteData() {
-    
-    }
-    func closeDeleteData() {
-        
-    }
 }

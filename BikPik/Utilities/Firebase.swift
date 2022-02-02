@@ -25,7 +25,7 @@ class Firebase {
     func uploadTask(uuid: String ,task: Task) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let taskRef = self.ref.child("test/users/\(uid)/tasks/\(uuid)")
+        let taskRef = self.ref.child("users/\(uid)/tasks/\(uuid)")
         let data = setTask(task: task)
         taskRef.setValue(data)
     }
@@ -51,14 +51,14 @@ class Firebase {
     func removeTask(uuid: String) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let taskRef = self.ref.child("test/users/\(uid)/tasks/\(uuid)")
+        let taskRef = self.ref.child("users/\(uid)/tasks/\(uuid)")
         taskRef.removeValue()
     }
     
     func correctTask(uuid: String, task: Task) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let taskRef = self.ref.child("test/users/\(uid)/tasks/\(uuid)")
+        let taskRef = self.ref.child("users/\(uid)/tasks/\(uuid)")
         let data = setTask(task: task)
         taskRef.updateChildValues(data)
     }
@@ -67,7 +67,7 @@ class Firebase {
     func updateTask(handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        self.ref.child("test/users/\(uid)/tasks/").observe(.childChanged, with: { [self] snapshot in
+        self.ref.child("users/\(uid)/tasks/").observe(.childChanged, with: { [self] snapshot in
             let uuid = snapshot.key
             let value = snapshot.value as! [String:Any]
             
@@ -108,7 +108,7 @@ class Firebase {
     func uploadHabit(uuid: String, habit: Habits) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(uuid)")
+        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)")
         let data = setHabit(habit: habit)
         habitRef.setValue(data)
     }
@@ -135,14 +135,14 @@ class Firebase {
     func removeHabit(uuid: String) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(uuid)")
+        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)")
         habitRef.removeValue()
     }
     
     func correctHabit(uuid:String, habit: Habits) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(uuid)")
+        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)")
         let data = setHabit(habit: habit)
         habitRef.updateChildValues(data)
     }
@@ -150,7 +150,7 @@ class Firebase {
     func updateHabit(handleSaveHabit: @escaping (_ uuid: String, _ habit: Habits) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        self.ref.child("test/users/\(uid)/haibts/").observe(.childChanged, with: { [self] snapshot in
+        self.ref.child("users/\(uid)/haibts/").observe(.childChanged, with: { [self] snapshot in
             let uuid = snapshot.key
             let value = snapshot.value as! [String:Any]
             
@@ -197,7 +197,7 @@ class Firebase {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let isDone = habit.isDone else { return }
         
-        let habitRef = self.ref.child("test/users/\(uid)/haibts/\(uuid)/isDone")
+        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)/isDone")
         habitRef.updateChildValues(isDone)
     }
 }
