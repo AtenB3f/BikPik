@@ -392,35 +392,13 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
     
     // When selected calendar cell
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        let fullDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
-        
-        deselectDays()
-        
-        if (term) { // select multi
-            if (data.start > fullDate) {
-                data.end = data.start
-                data.start = fullDate
-                selectDays(start:date , end: Date.DateForm(data: data.end, input: .fullDate, output: .date) as! Date)
-            } else {
-                data.end = fullDate
-                selectDays(start:Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date , end: date)
-            }
-        } else {    // select single
-            data.start = fullDate
-            data.end = fullDate
-            selectDays(start:date , end: date)
-        }
+        setStartEnd(date: date)
         term.toggle()
-        
         self.configureVisibleCells()
     }
     
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        let fullDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
-        data.start = fullDate
-        data.end = fullDate
-        deselectDays()
-        selectDays(start: date, end: date)
+        setStartEnd(date: date)
         self.configureVisibleCells()
     }
     
@@ -441,7 +419,26 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
         }
     }
     
-    func selectDays(start: Date, end: Date) {
+    private func setStartEnd(date: Date) {
+        let fullDate: String = Date.DateForm(data: date, input: .date, output: .fullDate) as! String
+        deselectDays()
+        if (term) { // select multi
+            if (data.start > fullDate) {
+                data.end = data.start
+                data.start = fullDate
+                selectDays(start:date , end: Date.DateForm(data: data.end, input: .fullDate, output: .date) as! Date)
+            } else {
+                data.end = fullDate
+                selectDays(start:Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date , end: date)
+            }
+        } else {    // select single
+            data.start = fullDate
+            data.end = fullDate
+            selectDays(start:date , end: date)
+        }
+    }
+    
+    private func selectDays(start: Date, end: Date) {
         let cnt = Date.GetDays(start: start, end: end)
         let gregorian = Calendar(identifier: .gregorian)
         
@@ -451,7 +448,7 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
         }
     }
     
-    func deselectDays() {
+    private func deselectDays() {
         calendar.selectedDates.forEach { delete in
             calendar.deselect(delete)
         }
@@ -464,6 +461,7 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
         if calendar.selectedDates.contains(date) {
             let st = Date.DateForm(data: data.start, input: .fullDate, output: .date) as! Date
             let ed = Date.DateForm(data: data.end, input: .fullDate, output: .date) as! Date
+            
             if st == ed {
                 selectionType = .single
             } else if date == st {
@@ -475,15 +473,15 @@ extension AddHabitViewController: FSCalendarDelegate, FSCalendarDataSource {
             }
         }
         else {
-            selectionType = .none
+            let today = Date.GetNowDate()
+            if Date.DateForm(data: date, input: .date, output: .fullDate) as! String == today {
+                selectionType = .today
+            } else {
+                selectionType = .none
+            }
         }
         
-        if selectionType == .none {
-            diyCell.selectionLayer.isHidden = true
-            
-        } else {
-            diyCell.selectionLayer.isHidden = false
-        }
         diyCell.selectionType = selectionType
+        
     }
 }

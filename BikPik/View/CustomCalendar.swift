@@ -96,6 +96,7 @@ class CustomCalendar: FSCalendar{
      case leftBorder
      case middle
      case rightBorder
+     case today
  }
  
 class CustomCalendarCell: FSCalendarCell {
@@ -132,13 +133,14 @@ class CustomCalendarCell: FSCalendarCell {
     }
     
     override func layoutSubviews() {
-        super.layoutSubviews()
         setCellLayout()
+        super.layoutSubviews()
     }
     
     func setCellLayout() {
         self.backgroundView?.frame = self.bounds.insetBy(dx: 1, dy: 1)
         self.selectionLayer.frame = self.contentView.bounds
+        
         
         if selectionType == .middle {
             self.selectionLayer.path = UIBezierPath(rect: self.selectionLayer.bounds).cgPath
@@ -151,7 +153,15 @@ class CustomCalendarCell: FSCalendarCell {
         }
         else if selectionType == .single {
             let diameter: CGFloat = min(self.selectionLayer.frame.height, self.selectionLayer.frame.width)
+            self.selectionLayer.backgroundColor = UIColor.systemBackground.cgColor
             self.selectionLayer.path = UIBezierPath(ovalIn: CGRect(x: self.contentView.frame.width / 2 - diameter / 2, y: self.contentView.frame.height / 2 - diameter / 2, width: diameter, height: diameter)).cgPath
+        } else if selectionType == .today {
+            let diameter: CGFloat = min(self.selectionLayer.frame.height, self.selectionLayer.frame.width)
+            self.selectionLayer.path = UIBezierPath(ovalIn: CGRect(x: self.contentView.frame.width / 2 - diameter / 2, y: self.contentView.frame.height / 2 - diameter / 2, width: diameter, height: diameter)).cgPath
+            self.selectionLayer.fillColor = UIColor(named: "BikPik Light Color")?.cgColor
+        } else {
+            self.selectionLayer.path = UIBezierPath(rect: self.selectionLayer.bounds).cgPath
+            self.selectionLayer.fillColor = UIColor.systemBackground.cgColor
         }
     }
 }
