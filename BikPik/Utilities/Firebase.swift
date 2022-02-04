@@ -197,7 +197,7 @@ class Firebase {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let isDone = habit.isDone else { return }
         
-        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)/isDone")
+        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)/isDone/")
         habitRef.updateChildValues(isDone)
     }
 }

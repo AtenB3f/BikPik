@@ -43,6 +43,15 @@ class HabitManager {
      - parameter habit: "Habit" struct data.
      */
     func correctHabit(uuid: String, habit : Habits) {
+        var data = habit
+        data.isDone?.removeAll()
+        data.isDone = createIsDone(habit: data)
+        habits[uuid] = data
+        mngFirebase.correctHabit(uuid: uuid, habit: data)
+        saveHabit()
+    }
+    
+    func correctServerHabit(uuid: String, habit : Habits) {
         habits[uuid] = habit
         mngFirebase.correctHabit(uuid: uuid, habit: habit)
         saveHabit()
@@ -87,7 +96,7 @@ class HabitManager {
             self.saveHabit()
         } else {
             // correct
-            self.correctHabit(uuid: uuid, habit: habit)
+            self.correctServerHabit(uuid: uuid, habit: habit)
         }
     }
     
