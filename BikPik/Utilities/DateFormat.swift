@@ -303,40 +303,41 @@ extension Date {
      - returns :
      */
     static func GetWeekDays(start: Date, end: Date, week: Int) -> Int {
-        var weekCnt = 0
-        let stWeek = Date.WeekForm(data: start, input: .date, output: .intIndex) as! Int
-        let edWeek = Date.WeekForm(data: end, input: .date, output: .intIndex) as! Int
-        var addDay: Int = 0
-        
-        if stWeek > week {
-            addDay = 7 - (stWeek - week)
-        } else {
-            addDay = week - stWeek
-        }
-        
-        var selWeekDate = Calendar.current.date(byAdding: .day, value: addDay, to: start) ?? start
-        var cnt = (Calendar.current.dateComponents([.weekOfYear], from: selWeekDate, to: end).weekOfYear ?? 0)
-        
-        /*
-         * 위의 cnt를 구할 때 selWeekDate가 만약 월요일이면 다음주 월요일 까지 반환하는 값이 0이고 화요일부터 1이 됨.
-         * 선택한 날짜의 다음 주 부터 1일의 격차가 생겨 아래 if else문이 이를 보완하는 작업이다.
-         */
-        if (cnt >= 0) && (week == stWeek) {
-            cnt += 1
-        } else if (cnt >= 0) && (week == edWeek) {
-            cnt += 1
-        }
-        
-        for _ in 0...cnt {
-            if Calendar.current.compare(selWeekDate, to: end, toGranularity: .day).rawValue > 0 {
-                return weekCnt
-            } else {
-                weekCnt += 1
-                selWeekDate = Calendar.current.date(byAdding: .day, value: 7, to: selWeekDate)!
+        var count = 0
+        var current = start
+        var cmp = start.compare(end)
+        while (cmp == .orderedAscending || cmp == .orderedSame){
+            let index = self.WeekForm(data: current, input: .date, output: .intIndex) as! Int
+            var add = 1
+            if index == week {
+                count += 1
+                add = 7
             }
+            
+            current = Calendar.current.date(byAdding: .day, value: add, to: current) ?? Date()
+            cmp = current.compare(end)
         }
         
-        return weekCnt
+        return count
+    }
+    
+    static func GetWeekDaysArray(start: Date, end: Date, week: Int) -> [String] {
+        var days:[String] = []
+        var current = start
+        var cmp = start.compare(end)
+        while (cmp == .orderedAscending || cmp == .orderedSame){
+            let index = self.WeekForm(data: current, input: .date, output: .intIndex) as! Int
+            var add = 1
+            if index == week {
+                days.append(self.DateForm(data: current, input: .date, output: .fullDate) as! String)
+                add = 7
+            }
+            
+            current = Calendar.current.date(byAdding: .day, value: add, to: current) ?? Date()
+            cmp = current.compare(end)
+        }
+        
+        return days
     }
     /**
      "HH:mm" format string convert to Date structure.

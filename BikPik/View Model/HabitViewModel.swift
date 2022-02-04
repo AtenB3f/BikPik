@@ -165,14 +165,15 @@ class HabitManager {
     
     func createIsDone(habit: Habits) -> [String:Bool] {
         var dic = [String:Bool]()
-        
-        var date = habit.start
-        for _ in 0..<habit.total {
-            let idx = Date.WeekForm(data: date, input: .fullDate, output: .intIndex) as! Int - 1
-            if habit.days[idx] {
-                dic[date] = false
+        let st = Date.DateForm(data: habit.start, input: .fullDate, output: .date) as! Date
+        let ed = Date.DateForm(data: habit.end, input: .fullDate, output: .date) as! Date
+        for week in 1...7 {
+            if habit.days[week-1] {
+                let date = Date.GetWeekDaysArray(start: st, end: ed, week: week)
+                for d in date {
+                    dic[d] = false
+                }
             }
-            date = Date.GetNextDay(date: date)
         }
         
         return dic
