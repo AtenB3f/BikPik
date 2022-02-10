@@ -27,8 +27,8 @@ class LogInViewController: UIViewController {
     
     private func setLayout() {
         setContentView()
-        //setLoginView()
-        //setButtonView()
+        setLoginView()
+        setButtonView()
     }
     
     // instance
@@ -36,6 +36,7 @@ class LogInViewController: UIViewController {
     
     private let viewScroll = UIScrollView()
     private let viewContent = UIView()
+    private let viewBottom = UIView()
     private let viewLogin: UIView = {
         let view = UIView()
         return view
@@ -60,7 +61,7 @@ class LogInViewController: UIViewController {
         text.layer.borderWidth = 1.0
         text.leftView = padding
         text.leftViewMode = UITextField.ViewMode.always
-        text.layer.borderColor = UIColor.systemGray6.cgColor
+        text.layer.borderColor = UIColor.systemGray5.cgColor
         text.textColor = UIColor(named: "TextLightColor")
         text.addSubview(left)
         return text
@@ -80,7 +81,7 @@ class LogInViewController: UIViewController {
         text.layer.borderWidth = 1.0
         text.leftView = padding
         text.leftViewMode = UITextField.ViewMode.always
-        text.layer.borderColor = UIColor.systemGray6.cgColor
+        text.layer.borderColor = UIColor.systemGray5.cgColor
         text.textColor = UIColor(named: "TextLightColor")
         text.addSubview(left)
         return text
@@ -93,6 +94,7 @@ class LogInViewController: UIViewController {
         button.backgroundColor = UIColor(named: "BikPik Color")
         button.layer.cornerRadius = 8.0
         button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
     private let labelLinkedLogin: UILabel = {
@@ -116,15 +118,21 @@ class LogInViewController: UIViewController {
             make.top.equalTo(navigationBar.snp.bottom)
             make.bottom.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
         }
-        /*
+        
         viewScroll.addSubview(viewContent)
         viewContent.snp.remakeConstraints { make in
-            make.centerX.top.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(20)
             make.width.equalTo(300)
-            make.height.equalTo(500)
+            make.height.equalTo(380)
         }
-        viewContent.backgroundColor = .red
-         */
+        
+        viewScroll.addSubview(viewBottom)
+        viewBottom.snp.makeConstraints { make in
+            make.width.bottom.centerX.equalToSuperview()
+            make.height.equalTo(30)
+            make.top.equalToSuperview().inset(450)
+        }
     }
     
     private func setLoginView() {
@@ -212,7 +220,24 @@ class LogInViewController: UIViewController {
             }
         }
         self.presentingViewController?.dismiss(animated: true, completion: nil)
-        
     }
-
+    
+    @objc func handleLogin() {
+        let id = self.idText.text
+        let password = self.passwordText.text
+        if id == "" {
+            self.idText.layer.borderColor = UIColor.red.cgColor
+            return
+        } else {
+            self.idText.layer.borderColor = UIColor.systemGray5.cgColor
+        }
+        if password == "" {
+            self.passwordText.layer.borderColor = UIColor.red.cgColor
+            return
+        } else {
+            self.passwordText.layer.borderColor = UIColor.systemGray5.cgColor
+        }
+        
+        // login
+    }
 }
