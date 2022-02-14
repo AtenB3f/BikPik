@@ -13,11 +13,6 @@ class LogInViewController: UIViewController {
     
     let mngFirebase = Firebase.mngFirebase
     let mngAccount = AccountManager.mngAccount
-
-    @IBOutlet weak var navigationBar: UINavigationBar!
-    @IBAction func navigationClose(_ sender: Any) {
-        self.presentingViewController?.dismiss(animated: true, completion: nil)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +29,17 @@ class LogInViewController: UIViewController {
     // instance
     let heightButton = 40.0
     
+    private let buttonClose: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.init(systemName: "xmark"), for: .normal)
+        button.tintColor = UIColor(named: "BikPik Color")
+        button.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+        return button
+    }()
     private let viewScroll = UIScrollView()
     private let viewContent = UIView()
     private let viewBottom = UIView()
+    
     private let viewLogin: UIView = {
         let view = UIView()
         return view
@@ -46,6 +49,16 @@ class LogInViewController: UIViewController {
         view.axis = .vertical
         view.spacing = 14.0
         return view
+    }()
+    private let labelIntro: UILabel = {
+        let label = UILabel()
+        label.text = "다른 기기에서도" + "\n" + "할 일을 관리하세요 :)"
+        label.textColor = UIColor(named: "TextLightColor")
+        label.font = UIFont(name: "GmarketSansTTFLight", size: 24.0)
+        label.textAlignment = .left
+        label.contentMode = .top
+        //label.sizeToFit()
+        return label
     }()
     private let idText: UITextField = {
         let text = UITextField()
@@ -66,6 +79,7 @@ class LogInViewController: UIViewController {
         text.addSubview(left)
         return text
     }()
+    private let viewPassword = UIView()
     private let passwordText: UITextField = {
         let text = UITextField()
         let padding = UIView(frame: CGRect(x: 0, y: 0, width: 50 , height: 40))
@@ -83,13 +97,19 @@ class LogInViewController: UIViewController {
         text.leftViewMode = UITextField.ViewMode.always
         text.layer.borderColor = UIColor.systemGray5.cgColor
         text.textColor = UIColor(named: "TextLightColor")
-        text.addSubview(left)
+        //text.addSubview(left)
         return text
+    }()
+    private let labelError: UILabel = {
+        let label = UILabel()
+        label.textColor = .red
+        label.font = UIFont.systemFont(ofSize: 11.0)
+        return label
     }()
     private let loginButton: UIButton = {
        let button = UIButton()
         //button.titleLabel?.font = UIFont(name: "GmarketSansTTFLight", size: 16.0)
-        button.setTitle("로그인", for: .normal)
+        button.setTitle("계속하기", for: .normal)
         button.setTitleColor(UIColor(named: "TextColor"), for: .normal)
         button.backgroundColor = UIColor(named: "BikPik Color")
         button.layer.cornerRadius = 8.0
@@ -113,10 +133,16 @@ class LogInViewController: UIViewController {
     
     
     private func setContentView() {
+        self.view.addSubview(buttonClose)
+        buttonClose.snp.makeConstraints { make in
+            make.width.height.equalTo(heightButton)
+            make.left.equalToSuperview().inset(16)
+            make.top.equalTo(self.view.safeAreaLayoutGuide).inset(16)
+        }
+        
         self.view.addSubview(viewScroll)
         viewScroll.snp.makeConstraints { make in
-            make.top.equalTo(navigationBar.snp.bottom)
-            make.bottom.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+            make.bottom.leading.trailing.top.equalTo(self.view.safeAreaLayoutGuide)
         }
         
         viewScroll.addSubview(viewContent)
@@ -131,15 +157,23 @@ class LogInViewController: UIViewController {
         viewBottom.snp.makeConstraints { make in
             make.width.bottom.centerX.equalToSuperview()
             make.height.equalTo(30)
-            make.top.equalToSuperview().inset(450)
+            make.top.equalToSuperview().inset(500)
         }
     }
     
     private func setLoginView() {
+        viewContent.addSubview(labelIntro)
+        labelIntro.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.top.centerX.equalToSuperview()
+            make.height.equalTo(200)
+            make.width.equalTo(300)
+        }
+        
         viewContent.addSubview(viewLogin)
         viewLogin.snp.makeConstraints { make in
-            make.top.centerX.equalToSuperview()
-            //make.top.equalTo(navigationBar.snp.bottom).offset(30)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(160)
             make.height.width.equalTo(300)
         }
         
@@ -147,30 +181,42 @@ class LogInViewController: UIViewController {
         idText.snp.makeConstraints { make in
             make.width.centerX.equalToSuperview()
             make.height.equalTo(heightButton)
-            make.top.equalToSuperview().offset(100)
+            make.top.equalToSuperview()
         }
         
-        viewLogin.addSubview(passwordText)
-        passwordText.snp.makeConstraints { make in
+        viewLogin.addSubview(viewPassword)
+        viewPassword.snp.makeConstraints { make in
             make.centerX.width.equalToSuperview()
-            make.height.equalTo(heightButton)
+            make.height.equalTo(0)
             make.top.equalTo(idText.snp.bottom).offset(5)
         }
+        viewPassword.addSubview(passwordText)
+        /*
+        passwordText.snp.makeConstraints { make in
+            make.centerX.width.top.equalToSuperview()
+            make.height.equalTo(0)
+        }
+         */
         
         viewLogin.addSubview(loginButton)
         loginButton.snp.makeConstraints { make in
             make.centerX.width.equalToSuperview()
             make.height.equalTo(heightButton)
-            make.top.equalTo(passwordText.snp.bottom).offset(20)
+            make.top.equalTo(viewPassword.snp.bottom).offset(40)
         }
         
+        viewLogin.addSubview(labelError)
+        labelError.snp.makeConstraints { make in
+            make.right.equalToSuperview()
+            make.bottom.equalTo(loginButton.snp.top).offset(-6)
+        }
         
-        //
         viewLogin.addSubview(labelLinkedLogin)
         labelLinkedLogin.snp.makeConstraints { make in
             make.centerX.bottom.equalToSuperview()
         }
-         
+        
+        
     }
     
     // Set View
@@ -195,6 +241,9 @@ class LogInViewController: UIViewController {
     // apple, etc ...
     
     // Actons
+    @objc func closeView() {
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
     
     @objc func handleGoogleLogin() {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
@@ -225,19 +274,51 @@ class LogInViewController: UIViewController {
     @objc func handleLogin() {
         let id = self.idText.text
         let password = self.passwordText.text
-        if id == "" {
-            self.idText.layer.borderColor = UIColor.red.cgColor
-            return
-        } else {
-            self.idText.layer.borderColor = UIColor.systemGray5.cgColor
-        }
-        if password == "" {
-            self.passwordText.layer.borderColor = UIColor.red.cgColor
-            return
-        } else {
-            self.passwordText.layer.borderColor = UIColor.systemGray5.cgColor
-        }
+        
+        if emailConform(email: id) == false { return }
         
         // login
+        // 가입된 이메일이 있는지 찾기
+        // 있으면 패스워드 창 보여주고
+        // 없으면 로그인 버튼 "회원가입" 하기로 변경하고 패스워드 입력 창 + 패스워드 컨펌
+        if passwordConform(password: password) == false { return }
+    }
+    
+    private func emailConform(email:String?)->Bool {
+        let emailForm = { (_ email: String)->Bool in
+            let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+            let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+            return emailTest.evaluate(with: email)
+        }
+        
+        if email == "" || email == nil{
+            self.idText.layer.borderColor = UIColor.red.cgColor
+            self.labelError.text = "이메일을 입력하세요."
+            return false
+        } else if emailForm(email!) == false {
+            self.idText.layer.borderColor = UIColor.red.cgColor
+            self.labelError.text = "이메일 형식이 아닙니다."
+            return false
+        } else {
+            self.idText.layer.borderColor = UIColor.systemGray5.cgColor
+            self.labelError.text = ""
+            return true
+        }
+    }
+    
+    private func passwordConform(password:String?)->Bool {
+        if password == "" || password == nil {
+            self.passwordText.layer.borderColor = UIColor.red.cgColor
+            self.labelError.text = "비밀번호를 입력하세요."
+            return false
+        } else if password!.count < 6{
+            self.passwordText.layer.borderColor = UIColor.red.cgColor
+            self.labelError.text = "6자리 이상의 비밀번호를 설정해주세요."
+            return false
+        } else {
+            self.passwordText.layer.borderColor = UIColor.systemGray5.cgColor
+            self.labelError.text = ""
+            return true
+        }
     }
 }
