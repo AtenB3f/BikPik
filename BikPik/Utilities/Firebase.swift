@@ -9,6 +9,8 @@
 import Firebase
 import GoogleSignIn
 import FirebaseDatabase
+import FirebaseAuth
+import UIKit
 
 
 class Firebase {
@@ -19,6 +21,64 @@ class Firebase {
     
     let ref: DatabaseReference! = Database.database().reference()
     
+    func createUser(email:String, password:String)->Bool {
+        var ret = false
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            if error != nil {
+                print("create user error")
+                ret = false
+            } else {
+                if password == "" {
+                    print("you need to set password")
+                }
+                print("success create user : \(email)")
+                ret = true
+            }
+        }
+        // 기존 데이터 동기화
+        return ret
+    }
+    
+    func loginUser(email:String, password:String) {
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
+          guard let strongSelf = self else { return }
+            if error != nil {
+                print("login error")
+            }
+        }
+    }
+    
+    func changePassword() {
+        
+    }
+    
+    func findUser(email:String, errorHander: @escaping (_ :String) -> ()) -> Bool {
+        var ret = false
+        Auth.auth().signIn(withEmail: email, password: UUID().uuidString , completion: { (auth, error) in
+            if let err = error as NSError? {
+                switch err.code {
+                case AuthErrorCode.wrongPassword.rawValue:
+                    // 존재하는 이메일
+                    errorHander("")
+                    ret = true
+                default:
+                    errorHander("")
+                    print(err)
+                }
+            } else {
+                ret = true
+            }
+        })
+        return ret
+    }
+    
+    func linkedUser(id:String) {
+
+    }
+    
+    func deleteUser(id:String) {
+        
+    }
     
     // Task
     

@@ -190,13 +190,6 @@ class LogInViewController: UIViewController {
             make.height.equalTo(0)
             make.top.equalTo(idText.snp.bottom).offset(5)
         }
-        viewPassword.addSubview(passwordText)
-        /*
-        passwordText.snp.makeConstraints { make in
-            make.centerX.width.top.equalToSuperview()
-            make.height.equalTo(0)
-        }
-         */
         
         viewLogin.addSubview(loginButton)
         loginButton.snp.makeConstraints { make in
@@ -215,8 +208,6 @@ class LogInViewController: UIViewController {
         labelLinkedLogin.snp.makeConstraints { make in
             make.centerX.bottom.equalToSuperview()
         }
-        
-        
     }
     
     // Set View
@@ -236,6 +227,10 @@ class LogInViewController: UIViewController {
             make.height.width.equalTo(heightButton)
         }
          
+    }
+    
+    private func setPasswordView() {
+
     }
     
     // apple, etc ...
@@ -277,11 +272,16 @@ class LogInViewController: UIViewController {
         
         if emailConform(email: id) == false { return }
         
-        // login
-        // 가입된 이메일이 있는지 찾기
-        // 있으면 패스워드 창 보여주고
-        // 없으면 로그인 버튼 "회원가입" 하기로 변경하고 패스워드 입력 창 + 패스워드 컨펌
-        if passwordConform(password: password) == false { return }
+        if mngFirebase.findUser(email: id!, errorHander: setErrorMessage) {
+            loginButton.setTitle("로그인", for: .normal)
+        } else {
+            loginButton.setTitle("회원가입 하기", for: .normal)
+            if passwordConform(password: password) == false { return }
+            
+            mngFirebase.createUser(email: id!, password: password!)
+        }
+        // 패스워드 창 나타내기
+        setPasswordView()
     }
     
     private func emailConform(email:String?)->Bool {
@@ -320,5 +320,9 @@ class LogInViewController: UIViewController {
             self.labelError.text = ""
             return true
         }
+    }
+    
+    func setErrorMessage(str: String) {
+        labelError.text = str
     }
 }
