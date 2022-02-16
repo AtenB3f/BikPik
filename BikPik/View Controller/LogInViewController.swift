@@ -83,22 +83,24 @@ class LogInViewController: UIViewController {
     private let passwordText: UITextField = {
         let text = UITextField()
         let padding = UIView(frame: CGRect(x: 0, y: 0, width: 50 , height: 40))
-        let left:UIButton = {
-            let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 50 , height: 40))
-            btn.setImage(UIImage(systemName: "lock"), for: .normal)
-            return btn
-        }()
         text.placeholder = "Password"
         text.isSecureTextEntry = true
         text.backgroundColor = UIColor.systemBackground
         text.layer.cornerRadius = 15.0
         text.layer.borderWidth = 1.0
         text.leftView = padding
-        text.leftViewMode = UITextField.ViewMode.always
+        text.rightView = padding
+        text.leftViewMode = .always
+        text.rightViewMode = .always
         text.layer.borderColor = UIColor.systemGray5.cgColor
         text.textColor = UIColor(named: "TextLightColor")
-        //text.addSubview(left)
         return text
+    }()
+    private let btnSecure:UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 50 , height: 40))
+        btn.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        btn.addTarget(self, action: #selector(togglePasswordText), for: .touchUpInside)
+        return btn
     }()
     private let labelError: UILabel = {
         let label = UILabel()
@@ -187,8 +189,14 @@ class LogInViewController: UIViewController {
         viewLogin.addSubview(viewPassword)
         viewPassword.snp.makeConstraints { make in
             make.centerX.width.equalToSuperview()
-            make.height.equalTo(0)
+            make.height.equalTo(heightButton)
             make.top.equalTo(idText.snp.bottom).offset(5)
+        }
+        
+        viewPassword.addSubview(passwordText)
+        passwordText.snp.makeConstraints { make in
+            make.centerX.width.equalToSuperview()
+            make.height.equalTo(0)
         }
         
         viewLogin.addSubview(loginButton)
@@ -208,6 +216,7 @@ class LogInViewController: UIViewController {
         labelLinkedLogin.snp.makeConstraints { make in
             make.centerX.bottom.equalToSuperview()
         }
+        
     }
     
     // Set View
@@ -230,7 +239,30 @@ class LogInViewController: UIViewController {
     }
     
     private func setPasswordView() {
-
+        passwordText.snp.remakeConstraints { make in
+            make.height.equalTo(heightButton)
+            make.width.equalToSuperview()
+        }
+        
+        let leftImg:UIButton = {
+            let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 50 , height: 40))
+            btn.setImage(UIImage(systemName: "lock"), for: .normal)
+            return btn
+        }()
+        
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.view.layoutIfNeeded()
+        }, completion: { _ in
+            self.passwordText.addSubview(leftImg)
+            //self.passwordText.rightView = rightImg
+            self.passwordText.addSubview(self.btnSecure)
+            self.btnSecure.snp.makeConstraints({ make in
+                make.right.equalToSuperview().inset(10)
+                make.centerY.equalToSuperview()
+            })
+        })
+        
     }
     
     // apple, etc ...
@@ -276,12 +308,27 @@ class LogInViewController: UIViewController {
             loginButton.setTitle("로그인", for: .normal)
         } else {
             loginButton.setTitle("회원가입 하기", for: .normal)
+        }
+        
+        if password == "" {
+            // 이메일 검사
+            // 패스워드 창 보여주기
+            setPasswordView()
+        } else {
+            // 로그인 혹은 회원가입
             if passwordConform(password: password) == false { return }
             
             mngFirebase.createUser(email: id!, password: password!)
         }
-        // 패스워드 창 나타내기
-        setPasswordView()
+    }
+    
+    @objc func togglePasswordText() {
+        self.passwordText.isSecureTextEntry.toggle()
+        if self.passwordText.isSecureTextEntry {
+            btnSecure.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        } else {
+            btnSecure.setImage(UIImage(systemName: "eye"), for: .normal)
+        }
     }
     
     private func emailConform(email:String?)->Bool {
