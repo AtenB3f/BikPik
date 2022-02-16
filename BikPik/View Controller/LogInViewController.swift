@@ -50,8 +50,8 @@ class LogInViewController: UIViewController {
         view.spacing = 14.0
         return view
     }()
-    private let labelIntro: UILabel = {
-        let label = UILabel()
+    private let textIntro: UITextView = {
+        let label = UITextView()
         label.text = "다른 기기에서도" + "\n" + "할 일을 관리하세요 :)"
         label.textColor = UIColor(named: "TextLightColor")
         label.font = UIFont(name: "GmarketSansTTFLight", size: 24.0)
@@ -108,15 +108,24 @@ class LogInViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 11.0)
         return label
     }()
-    private let loginButton: UIButton = {
+    private let btnLogin: UIButton = {
        let button = UIButton()
-        //button.titleLabel?.font = UIFont(name: "GmarketSansTTFLight", size: 16.0)
         button.setTitle("계속하기", for: .normal)
         button.setTitleColor(UIColor(named: "TextColor"), for: .normal)
         button.backgroundColor = UIColor(named: "BikPik Color")
         button.layer.cornerRadius = 8.0
         button.setTitleColor(UIColor.white, for: .normal)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        return button
+    }()
+    private let btnSignUp: UIButton = {
+       let button = UIButton()
+        button.setTitle("회원가입", for: .normal)
+        button.setTitleColor(UIColor(named: "TextColor"), for: .normal)
+        button.backgroundColor = UIColor(named: "BikPik Color")
+        button.layer.cornerRadius = 8.0
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
         return button
     }()
     private let labelLinkedLogin: UILabel = {
@@ -164,12 +173,11 @@ class LogInViewController: UIViewController {
     }
     
     private func setLoginView() {
-        viewContent.addSubview(labelIntro)
-        labelIntro.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.top.centerX.equalToSuperview()
-            make.height.equalTo(200)
-            make.width.equalTo(300)
+        viewContent.addSubview(textIntro)
+        textIntro.snp.makeConstraints { make in
+            make.width.centerX.leading.equalToSuperview()
+            make.top.equalToSuperview().inset(50)
+            make.height.equalTo(100)
         }
         
         viewContent.addSubview(viewLogin)
@@ -199,17 +207,24 @@ class LogInViewController: UIViewController {
             make.height.equalTo(0)
         }
         
-        viewLogin.addSubview(loginButton)
-        loginButton.snp.makeConstraints { make in
+        viewLogin.addSubview(btnLogin)
+        btnLogin.snp.makeConstraints { make in
             make.centerX.width.equalToSuperview()
             make.height.equalTo(heightButton)
             make.top.equalTo(viewPassword.snp.bottom).offset(40)
         }
         
+        viewLogin.addSubview(btnSignUp)
+        btnSignUp.snp.makeConstraints { make in
+            make.centerX.width.equalToSuperview()
+            make.height.equalTo(0)
+            make.top.equalTo(btnLogin.snp.bottom).offset(10)
+        }
+        
         viewLogin.addSubview(labelError)
         labelError.snp.makeConstraints { make in
             make.right.equalToSuperview()
-            make.bottom.equalTo(loginButton.snp.top).offset(-6)
+            make.bottom.equalTo(btnLogin.snp.top).offset(-6)
         }
         
         viewLogin.addSubview(labelLinkedLogin)
@@ -255,7 +270,6 @@ class LogInViewController: UIViewController {
             self.view.layoutIfNeeded()
         }, completion: { _ in
             self.passwordText.addSubview(leftImg)
-            //self.passwordText.rightView = rightImg
             self.passwordText.addSubview(self.btnSecure)
             self.btnSecure.snp.makeConstraints({ make in
                 make.right.equalToSuperview().inset(10)
@@ -263,6 +277,18 @@ class LogInViewController: UIViewController {
             })
         })
         
+    }
+    
+    func setSignUpView() {
+        btnSignUp.snp.remakeConstraints { make in
+            make.top.equalTo(btnLogin.snp.bottom).offset(10)
+            make.height.equalTo(heightButton)
+            make.width.equalToSuperview()
+        }
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.view.layoutIfNeeded()
+        })
     }
     
     // apple, etc ...
@@ -304,22 +330,29 @@ class LogInViewController: UIViewController {
         
         if emailConform(email: id) == false { return }
         
-        if mngFirebase.findUser(email: id!, errorHander: setErrorMessage) {
-            loginButton.setTitle("로그인", for: .normal)
-        } else {
-            loginButton.setTitle("회원가입 하기", for: .normal)
-        }
-        
         if password == "" {
-            // 이메일 검사
-            // 패스워드 창 보여주기
             setPasswordView()
         } else {
-            // 로그인 혹은 회원가입
-            if passwordConform(password: password) == false { return }
-            
-            mngFirebase.createUser(email: id!, password: password!)
+            if !mngFirebase.loginUser(email: id!, password: password!, errorHander: setErrorMessage(str:)) {
+                // login fail
+                textIntro.text = """
+                로그인하지 못했어요.
+                입력한 정보로
+                회원가입할까요?
+                """
+                btnLogin.setTitle("로그인", for: .normal)
+                setSignUpView()
+            }
         }
+    }
+    
+    @objc func handleSignUp() {
+        let id = self.idText.text
+        let password = self.passwordText.text
+        
+        if emailConform(email: id) == false { return }
+        
+        //mngFirebase.createUser(email: id!, password: password!)
     }
     
     @objc func togglePasswordText() {
