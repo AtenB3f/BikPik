@@ -19,38 +19,40 @@ class Firebase {
     
     let ref: DatabaseReference! = Database.database().reference()
     
-    func createUser(email:String, password:String)->Bool {
-        var ret = false
+    func createUser(email:String, password:String, handleError: @escaping (_ :String) -> ()) {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let err = error as NSError? {
-                print("create user error")
-                ret = false
-            } else {
-                print("success create user : \(email)")
-                ret = true
-            }
-        }
-        // 기존 데이터 동기화
-        return ret
-    }
-    
-    func loginUser(email:String, password:String, errorHander: @escaping (_ :String) -> ()) -> Bool {
-        var ret = false
-        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            if let err = error as NSError? {
                 switch err.code {
-                case AuthErrorCode.wrongPassword.rawValue:
-                    errorHander("이메일 혹은 패스워드가 올바르지 않습니다.")
+                case AuthErrorCode.emailAlreadyInUse.rawValue:
+                    handleError("이메일이 이미 사용중입니다.")
+                case AuthErrorCode.weakPassword.rawValue:
+                    handleError("6자리 이상의 비밀번호를 입력해주세요.")
+                case AuthErrorCode.invalidEmail.rawValue:
+                    handleError("이메일이 존재하지 않습니다.")
                 default:
-                    errorHander("")
+                    handleError("\(err.code)")
                     print(err)
                 }
             } else {
-                print("login no error")
-                ret = true
+                print("success create user : \(email)")
             }
         }
-        return ret
+    }
+    
+    func loginUser(email:String, password:String, handleSignIn: @escaping (_ :String?) -> ()) {
+        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            if let err = error as NSError? {
+                switch err.code {
+                case AuthErrorCode.userNotFound.rawValue:
+                    fallthrough
+                case AuthErrorCode.wrongPassword.rawValue:
+                    handleSignIn("이메일 혹은 패스워드가 올바르지 않습니다.")
+                default:
+                    handleSignIn("\(err.code)")
+                    print(err)
+                }
+            }
+        }
     }
     
     func changePassword() {

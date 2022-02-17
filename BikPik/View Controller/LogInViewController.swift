@@ -106,6 +106,7 @@ class LogInViewController: UIViewController {
         let label = UILabel()
         label.textColor = .red
         label.font = UIFont.systemFont(ofSize: 11.0)
+        label.textAlignment = .right
         return label
     }()
     private let btnLogin: UIButton = {
@@ -115,7 +116,7 @@ class LogInViewController: UIViewController {
         button.backgroundColor = UIColor(named: "BikPik Color")
         button.layer.cornerRadius = 8.0
         button.setTitleColor(UIColor.white, for: .normal)
-        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        button.addTarget(self, action: #selector(actionSignIn), for: .touchUpInside)
         return button
     }()
     private let btnSignUp: UIButton = {
@@ -125,7 +126,7 @@ class LogInViewController: UIViewController {
         button.backgroundColor = UIColor(named: "BikPik Color")
         button.layer.cornerRadius = 8.0
         button.setTitleColor(UIColor.white, for: .normal)
-        button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
+        button.addTarget(self, action: #selector(actionSignUp), for: .touchUpInside)
         return button
     }()
     private let labelLinkedLogin: UILabel = {
@@ -223,7 +224,7 @@ class LogInViewController: UIViewController {
         
         viewLogin.addSubview(labelError)
         labelError.snp.makeConstraints { make in
-            make.right.equalToSuperview()
+            make.right.width.equalToSuperview()
             make.bottom.equalTo(btnLogin.snp.top).offset(-6)
         }
         
@@ -321,10 +322,10 @@ class LogInViewController: UIViewController {
                 self.mngAccount.account.name = user.profile?.name
             }
         }
-        self.presentingViewController?.dismiss(animated: true, completion: nil)
+        closeView()
     }
     
-    @objc func handleLogin() {
+    @objc func actionSignIn() {
         let id = self.idText.text
         let password = self.passwordText.text
         
@@ -333,26 +334,54 @@ class LogInViewController: UIViewController {
         if password == "" {
             setPasswordView()
         } else {
-            if !mngFirebase.loginUser(email: id!, password: password!, errorHander: setErrorMessage(str:)) {
-                // login fail
-                textIntro.text = """
-                로그인하지 못했어요.
-                입력한 정보로
-                회원가입할까요?
-                """
-                btnLogin.setTitle("로그인", for: .normal)
-                setSignUpView()
-            }
+            mngFirebase.loginUser(email: id!, password: password!, handleSignIn: handleSignIn(_:))
         }
     }
     
-    @objc func handleSignUp() {
+    func handleSignIn(_ error: String?) {
+        if error == nil {
+            // sign in success
+            if let user = Auth.auth().currentUser {
+                print("login \(user.email)")
+            }
+            // 데이터 동기화
+            // 뷰 종료
+        } else {
+            // sign in fail
+            textIntro.text = """
+            로그인하지 못했어요.
+            입력한 정보로
+            회원가입할까요?
+            """
+            btnLogin.setTitle("로그인", for: .normal)
+            setErrorMessage(str: error!)
+            setSignUpView()
+        }
+    }
+    
+    @objc func actionSignUp() {
         let id = self.idText.text
         let password = self.passwordText.text
         
         if emailConform(email: id) == false { return }
-        
-        //mngFirebase.createUser(email: id!, password: password!)
+        if passwordConform(password: password) == false { return }
+        mngFirebase.createUser(email: id!, password: password!, handleError: handleSignUp(_:))
+    }
+    
+    func handleSignUp(_ error: String?) {
+        if error == nil {
+            // sucess
+            if let user = Auth.auth().currentUser {
+                let profileVC = self.storyboard?.instantiateViewController(withIdentifier: "SetProfileVC") as! SetProfileViewController
+                profileVC.modalPresentationStyle = .fullScreen
+                profileVC.modalTransitionStyle = .coverVertical
+                self.present(profileVC, animated: true, completion: nil)
+                // 데이터 동기화
+            }
+        } else {
+            // fail
+            setErrorMessage(str: error!)
+        }
     }
     
     @objc func togglePasswordText() {
