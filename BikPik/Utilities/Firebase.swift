@@ -57,26 +57,38 @@ class Firebase {
         }
     }
     
+    // 이메일 인증
     func authEmail() {
         if let user = Auth.auth().currentUser {
             user.sendEmailVerification { error in
                 if error != nil {
-                    print(error?.localizedDescription)
+                    print(error!.localizedDescription)
                 }
             }
         }
     }
     
-    func changePassword() {
-        
+    func changePassword(password: String) {
+        Auth.auth().currentUser?.updatePassword(to: password) { error in
+            if error != nil {
+                if let email = Auth.auth().currentUser?.email{
+                    Auth.auth().sendPasswordReset(withEmail: email) { error in
+                        if error != nil {
+                            print(error!.localizedDescription)
+                        }
+                    }
+                }
+                
+            }
+        }
     }
     
-    func linkedUser(id:String) {
-
-    }
-    
-    func deleteUser(id:String) {
-        
+    func deleteUser() {
+        Auth.auth().currentUser?.delete { error in
+            if error != nil{
+                print(error!.localizedDescription)
+            }
+        }
     }
     
     // Task
