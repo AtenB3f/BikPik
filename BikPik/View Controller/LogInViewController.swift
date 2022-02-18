@@ -28,28 +28,21 @@ class LogInViewController: UIViewController {
     
     // instance
     let heightButton = 40.0
+    let snsBtnLength = 48.0
     
     private let buttonClose: UIButton = {
         let button = UIButton()
         button.setImage(UIImage.init(systemName: "xmark"), for: .normal)
         button.tintColor = UIColor(named: "BikPik Color")
+        button.backgroundColor = UIColor.systemGray6
         button.addTarget(self, action: #selector(closeView), for: .touchUpInside)
         return button
     }()
     private let viewScroll = UIScrollView()
     private let viewContent = UIView()
     private let viewBottom = UIView()
-    
-    private let viewLogin: UIView = {
-        let view = UIView()
-        return view
-    }()
-    private let viewButtons: UIStackView = {
-        let view = UIStackView()
-        view.axis = .vertical
-        view.spacing = 14.0
-        return view
-    }()
+    private let viewLogin = UIView()
+    private let viewButtons = UIView()
     private let textIntro: UITextView = {
         let label = UITextView()
         label.text = "다른 기기에서도" + "\n" + "할 일을 관리하세요 :)"
@@ -242,16 +235,15 @@ class LogInViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.top.equalTo(viewLogin.snp.bottom).offset(20)
             make.width.equalTo(120)
-            make.height.equalTo(50)
+            make.height.equalTo(snsBtnLength)
         }
         
         // Google Button
-        viewButtons.addArrangedSubview(googleButton)
+        viewButtons.addSubview(googleButton)
         googleButton.snp.remakeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.height.width.equalTo(heightButton)
+            //make.top.equalToSuperview()
+            make.height.width.equalTo(snsBtnLength)
         }
-         
     }
     
     private func setPasswordView() {
@@ -341,8 +333,8 @@ class LogInViewController: UIViewController {
     func handleSignIn(_ error: String?) {
         if error == nil {
             // sign in success
-            if let user = Auth.auth().currentUser {
-                print("login \(user.email)")
+            if let email = Auth.auth().currentUser?.email {
+                print("login \(email)")
             }
             // 데이터 동기화
             // 뷰 종료
