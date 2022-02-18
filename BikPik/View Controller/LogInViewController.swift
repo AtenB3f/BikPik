@@ -371,13 +371,11 @@ class LogInViewController: UIViewController {
     func handleSignUp(_ error: String?) {
         if error == nil {
             // sucess
-            if let user = Auth.auth().currentUser {
-                let profileVC = self.storyboard?.instantiateViewController(withIdentifier: "SetProfileVC") as! SetProfileViewController
-                profileVC.modalPresentationStyle = .fullScreen
-                profileVC.modalTransitionStyle = .coverVertical
-                self.present(profileVC, animated: true, completion: nil)
-                // 데이터 동기화
-            }
+            mngFirebase.authEmail()
+            let profileVC = self.storyboard?.instantiateViewController(withIdentifier: "EmailAuthVC") as! EmailAuthViewController
+            profileVC.modalPresentationStyle = .fullScreen
+            profileVC.modalTransitionStyle = .coverVertical
+            self.present(profileVC, animated: true, completion: nil)
         } else {
             // fail
             setErrorMessage(str: error!)

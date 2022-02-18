@@ -19,23 +19,25 @@ class Firebase {
     
     let ref: DatabaseReference! = Database.database().reference()
     
-    func createUser(email:String, password:String, handleError: @escaping (_ :String) -> ()) {
+    func createUser(email:String, password:String, handleError: @escaping (_ :String?) -> ()) {
+        var message:String? = nil
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let err = error as NSError? {
                 switch err.code {
                 case AuthErrorCode.emailAlreadyInUse.rawValue:
-                    handleError("이메일이 이미 사용중입니다.")
+                    message = "이메일이 이미 사용중입니다."
                 case AuthErrorCode.weakPassword.rawValue:
-                    handleError("6자리 이상의 비밀번호를 입력해주세요.")
+                    message = "6자리 이상의 비밀번호를 입력해주세요."
                 case AuthErrorCode.invalidEmail.rawValue:
-                    handleError("이메일이 존재하지 않습니다.")
+                    message = "이메일이 존재하지 않습니다."
                 default:
-                    handleError("\(err.code)")
+                    message = "\(err.code)"
                     print(err)
                 }
             } else {
                 print("success create user : \(email)")
             }
+            handleError(message)
         }
     }
     
@@ -50,6 +52,16 @@ class Firebase {
                 default:
                     handleSignIn("\(err.code)")
                     print(err)
+                }
+            }
+        }
+    }
+    
+    func authEmail() {
+        if let user = Auth.auth().currentUser {
+            user.sendEmailVerification { error in
+                if error != nil {
+                    print(error?.localizedDescription)
                 }
             }
         }

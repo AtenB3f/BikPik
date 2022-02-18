@@ -96,8 +96,9 @@ class SetProfileViewController: UIViewController {
     }
     
     @objc func handleClose() {
-        presentingViewController?.dismiss(animated: false, completion: nil)
-        presentingViewController?.dismiss(animated: true, completion: nil)
+        // move root view
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+        
     }
     @objc func handleSet() {
         guard let name = textName.text == "" ? nil : textName.text else { return }
