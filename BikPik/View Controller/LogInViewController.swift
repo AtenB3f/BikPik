@@ -34,7 +34,6 @@ class LogInViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage.init(systemName: "xmark"), for: .normal)
         button.tintColor = UIColor(named: "BikPik Color")
-        button.backgroundColor = UIColor.systemGray6
         button.addTarget(self, action: #selector(closeView), for: .touchUpInside)
         return button
     }()
@@ -138,22 +137,22 @@ class LogInViewController: UIViewController {
     
     
     private func setContentView() {
-        self.view.addSubview(buttonClose)
+        self.view.addSubview(viewScroll)
+        viewScroll.snp.makeConstraints { make in
+            make.bottom.leading.trailing.top.equalTo(self.view.safeAreaLayoutGuide)
+        }
+        
+        viewScroll.addSubview(buttonClose)
         buttonClose.snp.makeConstraints { make in
             make.width.height.equalTo(heightButton)
             make.left.equalToSuperview().inset(16)
             make.top.equalTo(self.view.safeAreaLayoutGuide).inset(16)
         }
         
-        self.view.addSubview(viewScroll)
-        viewScroll.snp.makeConstraints { make in
-            make.bottom.leading.trailing.top.equalTo(self.view.safeAreaLayoutGuide)
-        }
-        
         viewScroll.addSubview(viewContent)
         viewContent.snp.remakeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().inset(20)
+            make.top.equalTo(buttonClose.snp.bottom)
             make.width.equalTo(300)
             make.height.equalTo(380)
         }
@@ -178,7 +177,8 @@ class LogInViewController: UIViewController {
         viewLogin.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().inset(160)
-            make.height.width.equalTo(300)
+            make.width.equalTo(300)
+            make.height.equalTo(280)
         }
         
         viewLogin.addSubview(idText)
@@ -233,7 +233,7 @@ class LogInViewController: UIViewController {
         viewScroll.addSubview(viewButtons)
         viewButtons.snp.remakeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(viewLogin.snp.bottom).offset(20)
+            make.top.equalTo(viewLogin.snp.bottom).offset(30)
             make.width.equalTo(120)
             make.height.equalTo(snsBtnLength)
         }
