@@ -10,6 +10,7 @@ import Firebase
 
 class EmailAuthViewController: UIViewController {
     let mngFirebase = Firebase.mngFirebase
+    let mngAccount = AccountManager.mngAccount
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,6 +106,8 @@ class EmailAuthViewController: UIViewController {
     }
     
     @objc func handleOkay() {
+        mngFirebase.reloadUser()
+        mngAccount.setEmail(Auth.auth().currentUser?.email)
         let profileVC = self.storyboard?.instantiateViewController(withIdentifier: "SetProfileVC") as! SetProfileViewController
         profileVC.modalPresentationStyle = .fullScreen
         profileVC.modalTransitionStyle = .coverVertical

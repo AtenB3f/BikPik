@@ -103,7 +103,6 @@ class SetProfileViewController: UIViewController {
     @objc func handleSet() {
         guard let name = textName.text == "" ? nil : textName.text else { return }
         mngAccount.setName(name: name)
-        
         handleClose()
     }
 }

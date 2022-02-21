@@ -108,6 +108,24 @@ class Firebase {
         }
     }
     
+    func reloadUser() {
+        if let user = Auth.auth().currentUser {
+            user.reload(completion: { error in
+                if error != nil {
+                    print(error?.localizedDescription)
+                }
+            })
+        }
+    }
+    
+    func isAuthEmailVerified()->Bool {
+        if let user = Auth.auth().currentUser {
+            reloadUser()
+            return user.isEmailVerified
+        }
+        return false
+    }
+    
     func changePassword(password: String) {
         Auth.auth().currentUser?.updatePassword(to: password) { error in
             if error != nil {
@@ -123,13 +141,16 @@ class Firebase {
         }
     }
     
-    func deleteUser() {
-        Auth.auth().currentUser?.delete { error in
-            if error != nil{
-                print(error!.localizedDescription)
-            }
-        }
+    func syncData() {
+        syncTask()
     }
+    
+    func syncTask() {
+        // 서버의 월별 리스트 불러오기(3개월치)
+        // 저장되어있는 월별 태스크 리스트 불러오기
+        // 비교하고 서로 다른 부분 보완하기
+    }
+    
     
     // Task
     

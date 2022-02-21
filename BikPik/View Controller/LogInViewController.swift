@@ -334,10 +334,15 @@ class LogInViewController: UIViewController {
         if error == nil {
             // sign in success
             if let email = Auth.auth().currentUser?.email {
+                // 이메일 설정
                 print("login \(email)")
+                mngAccount.setEmail(email)
             }
             // 데이터 동기화
+            mngFirebase.syncData()
+            
             // 뷰 종료
+            closeView()
         } else {
             // sign in fail
             textIntro.text = """
