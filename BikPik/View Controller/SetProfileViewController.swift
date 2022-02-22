@@ -8,13 +8,16 @@
 import UIKit
 
 class SetProfileViewController: UIViewController {
-    
     let mngAccount = AccountManager.mngAccount
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setLayout()
+        if let name = mngAccount.account.value.name {
+            textName.text = name
+        }
+        textName.becomeFirstResponder()
     }
     
     deinit {
@@ -40,7 +43,7 @@ class SetProfileViewController: UIViewController {
         let text = UITextField()
         let font = UIFont(name: "GmarketSansTTFLight", size: 24.0)
         let padding = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
-        let line = UIView(frame: CGRect(x: 0, y: 7, width: 2, height: 30))
+        let line = UIView(frame: CGRect(x: 0, y: 42, width: 300, height: 2))
         line.backgroundColor = UIColor(named: "BikPik Color")
         text.font = font
         text.placeholder = "이름을 설정해주세요"

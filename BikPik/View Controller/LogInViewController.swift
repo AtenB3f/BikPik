@@ -18,6 +18,9 @@ class LogInViewController: UIViewController {
         super.viewDidLoad()
         
         setLayout()
+        idText.delegate = self
+        passwordText.delegate = self
+        idText.becomeFirstResponder()
     }
     
     private func setLayout() {
@@ -113,7 +116,7 @@ class LogInViewController: UIViewController {
     }()
     private let btnSignUp: UIButton = {
        let button = UIButton()
-        button.setTitle("회원가입", for: .normal)
+        button.setTitle("", for: .normal)
         button.setTitleColor(UIColor(named: "TextColor"), for: .normal)
         button.backgroundColor = UIColor(named: "BikPik Color")
         button.layer.cornerRadius = 8.0
@@ -281,6 +284,8 @@ class LogInViewController: UIViewController {
         
         UIView.animate(withDuration: 0.4, animations: {
             self.view.layoutIfNeeded()
+        },completion: { _ in
+            self.btnSignUp.setTitle("회원가입", for: .normal)
         })
     }
     
@@ -309,9 +314,9 @@ class LogInViewController: UIViewController {
                 if error != nil { return }
             }
             
-            self.mngAccount.account.email = user.profile?.email
-            if self.mngAccount.account.name == nil {
-                self.mngAccount.account.name = user.profile?.name
+            self.mngAccount.account.value.email = user.profile?.email
+            if self.mngAccount.account.value.name == nil {
+                self.mngAccount.account.value.name = user.profile?.name
             }
         }
         closeView()
@@ -324,6 +329,7 @@ class LogInViewController: UIViewController {
         if emailConform(email: id) == false { return }
         
         if password == "" {
+            passwordText.becomeFirstResponder()
             setPasswordView()
         } else {
             mngFirebase.loginUser(email: id!, password: password!, handleSignIn: handleSignIn(_:))
@@ -368,7 +374,6 @@ class LogInViewController: UIViewController {
     func handleSignUp(_ error: String?) {
         if error == nil {
             // sucess
-            mngFirebase.authEmail()
             let profileVC = self.storyboard?.instantiateViewController(withIdentifier: "EmailAuthVC") as! EmailAuthViewController
             profileVC.modalPresentationStyle = .fullScreen
             profileVC.modalTransitionStyle = .coverVertical
@@ -428,5 +433,12 @@ class LogInViewController: UIViewController {
     
     func setErrorMessage(str: String) {
         labelError.text = str
+    }
+}
+
+extension LogInViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        actionSignIn()
+        return true
     }
 }

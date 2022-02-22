@@ -9,9 +9,9 @@ import UIKit
 import SnapKit
 
 class SettingViewController: UIViewController {
-    
     let mngSetting = SettingManager.mngSetting
     let mngFirebase = Firebase.mngFirebase
+    let mngAccount = AccountManager.mngAccount
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -254,17 +254,18 @@ class SettingViewController: UIViewController {
     
     @objc func actionAccount(_ sender: UIButton) {
         // 계정 뷰 컨트롤러 이동
+        var vc: UIViewController? = nil
+        
         if mngFirebase.isAuthEmailVerified() {
-            let accountVC = self.storyboard?.instantiateViewController(withIdentifier: "AccountVC") as! AccountViewController
-            accountVC.modalPresentationStyle = .fullScreen
-            accountVC.modalTransitionStyle = .crossDissolve
-            present(accountVC, animated: true, completion: nil)
+            vc = self.storyboard?.instantiateViewController(withIdentifier: "AccountVC") as! AccountViewController
+        } else if mngAccount.account.value.email != nil {
+            vc = self.storyboard?.instantiateViewController(withIdentifier: "EmailAuthVC") as! EmailAuthViewController
         } else {
-            let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LogInVC") as! LogInViewController
-            loginVC.modalPresentationStyle = .fullScreen
-            loginVC.modalTransitionStyle = .crossDissolve
-            present(loginVC, animated: true, completion: nil)
+            vc = self.storyboard?.instantiateViewController(withIdentifier: "LogInVC") as! LogInViewController
         }
+        vc!.modalPresentationStyle = .fullScreen
+        vc!.modalTransitionStyle = .crossDissolve
+        present(vc!, animated: true, completion: nil)
     }
     
     @objc func actionTheme(_ sender: UIButton) {

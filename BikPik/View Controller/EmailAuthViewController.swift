@@ -15,6 +15,7 @@ class EmailAuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setLayout()
+        mngFirebase.authEmail()
     }
     
     private func setLayout() {
