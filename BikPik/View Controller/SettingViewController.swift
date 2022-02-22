@@ -256,12 +256,12 @@ class SettingViewController: UIViewController {
         // 계정 뷰 컨트롤러 이동
         var vc: UIViewController? = nil
         
-        if mngFirebase.isAuthEmailVerified() {
-            vc = self.storyboard?.instantiateViewController(withIdentifier: "AccountVC") as! AccountViewController
-        } else if mngAccount.account.value.email != nil {
+        if mngAccount.account.value.email == nil {
+            vc = self.storyboard?.instantiateViewController(withIdentifier: "LogInVC") as! LogInViewController
+        } else if !mngFirebase.isAuthEmailVerified() {
             vc = self.storyboard?.instantiateViewController(withIdentifier: "EmailAuthVC") as! EmailAuthViewController
         } else {
-            vc = self.storyboard?.instantiateViewController(withIdentifier: "LogInVC") as! LogInViewController
+            vc = self.storyboard?.instantiateViewController(withIdentifier: "AccountVC") as! AccountViewController
         }
         vc!.modalPresentationStyle = .fullScreen
         vc!.modalTransitionStyle = .crossDissolve
