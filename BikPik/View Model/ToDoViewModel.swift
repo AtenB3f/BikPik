@@ -156,6 +156,10 @@ class ToDoManager {
         
         mngFirebase.uploadTask(uuid: uuid, task: data)
         saveTasks()
+        
+        let index = data.date.index(data.date.startIndex, offsetBy: 5)
+        let ym = String(data.date[data.date.startIndex...index])
+        saveMonthTasks(ym: ym, uuid: uuid)
     }
     
     /**
@@ -176,6 +180,14 @@ class ToDoManager {
                 if let idx = selTaskList.value.firstIndex(of: uuid) {
                     selTaskList.value.remove(at: idx)
                 }
+            }
+            let beforeIdx = before.date.index(before.date.startIndex, offsetBy: 5)
+            let afterIdx = after.date.index(after.date.startIndex, offsetBy: 5)
+            let beforYm = String(before.date[before.date.startIndex...beforeIdx])
+            let afterYm = String(after.date[before.date.startIndex...afterIdx])
+            if beforYm != afterYm {
+                removeMonthTasks(ym: beforYm, uuid: uuid)
+                saveMonthTasks(ym: afterYm, uuid: uuid)
             }
         }
         
@@ -206,6 +218,10 @@ class ToDoManager {
         
         tasks.removeValue(forKey: uuid)
         mngFirebase.removeTask(uuid: uuid)
+        
+        let index = data.date.index(data.date.startIndex, offsetBy: 5)
+        let ym = String(data.date[data.date.startIndex...index])
+        removeMonthTasks(ym: ym, uuid: uuid)
     }
     
     /**
@@ -241,6 +257,27 @@ class ToDoManager {
     
     func setToday() {
         changeSelectDate(date: Date.GetNowDate())
+    }
+    
+    // ym :: year+month (ex. 2022/2/2 => 202202)
+    func saveMonthTasks(ym: String, uuid: String) {
+        var arr = loadMonthTasks(ym:ym)
+        arr.append(uuid)
+        arr.sort()
+        storage.Save(arr, "\(ym).json")
+    }
+    
+    func loadMonthTasks(ym: String) -> [String] {
+        return storage.Search("\(ym).json", as: [String].self) ?? []
+    }
+    
+    func removeMonthTasks(ym:String, uuid: String) {
+        let arr = loadMonthTasks(ym: ym)
+        let filterArr = arr.filter({
+            return $0 == uuid ? false : true
+        })
+        print(filterArr)
+        storage.Save(filterArr, "\(ym).json")
     }
 }
 
