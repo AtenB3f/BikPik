@@ -39,7 +39,7 @@ class AccountViewController: UIViewController {
     }()
     let btnClose: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        button.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         button.tintColor = UIColor(named: "BikPik Color")
         button.addTarget(self, action: #selector(actionClose), for: .touchUpInside)
         return button
@@ -147,13 +147,13 @@ class AccountViewController: UIViewController {
         
         viewContent.addSubview(btnClose)
         btnClose.snp.makeConstraints { make in
-            make.width.height.equalTo(heightContent)
-            make.left.equalToSuperview().inset(16)
+            make.width.height.equalTo(40)
+            make.left.top.equalToSuperview().inset(16)
         }
         
         viewContent.addArrangedSubview(viewName)
         viewName.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(heightContent)
+            make.top.equalToSuperview().inset(60)
             make.width.centerX.equalToSuperview()
             make.height.equalTo(heightContent)
         }
