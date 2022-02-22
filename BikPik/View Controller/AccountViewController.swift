@@ -297,8 +297,7 @@ class AccountViewController: UIViewController {
     @objc private func actionLogout() {
         let alert = UIAlertController(title:mngAccount.account.value.email , message: "로그아웃 합니다.", preferredStyle: .alert)
         let logout = UIAlertAction(title: "로그아웃", style: .destructive, handler: {action in self.presentingViewController?.dismiss(animated: true, completion: {
-            self.mngAccount.logoutEmail()
-            self.mngFirebase.reloadUser()
+            self.mngAccount.loadAccount()
             })
         })
         let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
@@ -329,8 +328,7 @@ class AccountViewController: UIViewController {
     @objc private func actionDeleteUser() {
         let alert = UIAlertController(title:mngAccount.account.value.email , message: "탈퇴를 진행할 경우 서버의 데이터는 삭제됩니다.", preferredStyle: .alert)
         let logout = UIAlertAction(title: "회원탈퇴", style: .destructive, handler: {action in self.presentingViewController?.dismiss(animated: true, completion: {
-            self.mngFirebase.deleteUser()
-            self.mngFirebase.reloadUser()
+            self.mngAccount.deleteAccount()
             })
         })
         let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)

@@ -10,7 +10,6 @@ import GoogleSignIn
 import Firebase
 
 class AccountManager {
-    
     static let mngAccount = AccountManager()
     private init() {
         loadAccount()
@@ -44,6 +43,12 @@ class AccountManager {
         self.account.value.email = nil
     }
     
+    func setAccount(name: String?, email: String?) {
+        self.account.value.name = name
+        self.account.value.email = email
+        saveAccount()
+    }
+    
     func setName(name: String?) {
         self.account.value.name = name
         saveAccount()
@@ -52,5 +57,19 @@ class AccountManager {
     func setEmail(_ email: String?) {
         self.account.value.email = email
         saveAccount()
+    }
+    
+    func deleteAccount() {
+        setAccount(name: nil, email: nil)
+        saveAccount()
+        mngFirebase.deleteUser()
+        mngFirebase.reloadUser()
+    }
+    
+    func logoutAccount() {
+        setAccount(name: nil, email: nil)
+        saveAccount()
+        mngFirebase.logout()
+        mngFirebase.reloadUser()
     }
 }
