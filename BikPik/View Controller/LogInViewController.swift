@@ -10,7 +10,7 @@ import Firebase
 import GoogleSignIn
 
 class LogInViewController: UIViewController {
-    
+    let mngToDo = ToDoManager.mngToDo
     let mngFirebase = Firebase.mngFirebase
     let mngAccount = AccountManager.mngAccount
     
@@ -303,9 +303,7 @@ class LogInViewController: UIViewController {
         
         GIDSignIn.sharedInstance.signIn(with: config, presenting: self) { user, error in
             guard error == nil else { return }
-            guard
-                let authentication = user?.authentication, let idToken = authentication.idToken
-            else { return }
+            guard let authentication = user?.authentication, let idToken = authentication.idToken else { return }
             guard let user = user else { return }
             
             let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
@@ -313,11 +311,7 @@ class LogInViewController: UIViewController {
             Auth.auth().signIn(with: credential) { authResult, error in
                 if error != nil { return }
             }
-            
-            self.mngAccount.account.value.email = user.profile?.email
-            if self.mngAccount.account.value.name == nil {
-                self.mngAccount.account.value.name = user.profile?.name
-            }
+            self.mngAccount.setAccount(name: user.profile?.name, email: user.profile?.email)
         }
         closeView()
     }
@@ -345,7 +339,7 @@ class LogInViewController: UIViewController {
                 mngAccount.setEmail(email)
             }
             // 데이터 동기화
-            mngFirebase.syncData()
+            mngFirebase.syncTask(handleSyncData: mngToDo.handleSyncData(ym:keys:))
             
             // 뷰 종료
             closeView()

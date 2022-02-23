@@ -297,7 +297,7 @@ class AccountViewController: UIViewController {
     @objc private func actionLogout() {
         let alert = UIAlertController(title:mngAccount.account.value.email , message: "로그아웃 합니다.", preferredStyle: .alert)
         let logout = UIAlertAction(title: "로그아웃", style: .destructive, handler: {action in self.presentingViewController?.dismiss(animated: true, completion: {
-            self.mngAccount.loadAccount()
+            self.mngAccount.logoutAccount()
             })
         })
         let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)

@@ -37,11 +37,15 @@ class Firebase {
             } else {
                 print("success create user : \(email)")
                 if let uid = Auth.auth().currentUser?.uid {
-                    self.ref.child("userlist/").setValue(uid)
+                    self.addCurrentUser(uid: uid)
                 }
             }
             handleError(message)
         }
+    }
+    
+    func addCurrentUser(uid: String) {
+        self.ref.child("userlist/").updateChildValues([uid:true])
     }
     
     func loginUser(email:String, password:String, handleSignIn: @escaping (_ :String?) -> ()) {
@@ -63,13 +67,12 @@ class Firebase {
     }
     
     func deleteUser() {
+        if let uid = Auth.auth().currentUser?.uid {
+            self.ref.child("userlist/\(uid)").removeValue()
+        }
         Auth.auth().currentUser?.delete { error in
             if error != nil{
                 print(error!.localizedDescription)
-            } else {
-                if let uid = Auth.auth().currentUser?.uid {
-                    self.ref.child("userlist/\(uid)").removeValue()
-                }
             }
         }
     }
@@ -112,7 +115,7 @@ class Firebase {
         if let user = Auth.auth().currentUser {
             user.reload(completion: { error in
                 if error != nil {
-                    print(error?.localizedDescription)
+                    print(error!.localizedDescription)
                 }
             })
         }
@@ -142,13 +145,32 @@ class Firebase {
     }
     
     func syncData() {
-        syncTask()
+        //syncTask()
     }
     
-    func syncTask() {
-        // 서버의 월별 리스트 불러오기(3개월치)
-        // 저장되어있는 월별 태스크 리스트 불러오기
-        // 비교하고 서로 다른 부분 보완하기
+    func syncTask(handleSyncData : @escaping (String,[String])->()){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let dateFormatter: DateFormatter = {
+            let format = DateFormatter()
+            format.dateFormat = "yyyyMM"
+            return format
+        }()
+        
+        for i in 0..<3 {
+            if let date = Calendar.current.date(byAdding: .month, value: i, to: Date()) {
+                let ym = dateFormatter.string(from: date)
+                self.ref.child("userdata/\(uid)/tasklist/\(ym)").observeSingleEvent(of: .value, with: { snp in
+                    if snp.exists() {
+                        let arr = snp.value as! [String:Bool]
+                        let keys = arr.keys.sorted()
+                        handleSyncData(ym,keys)
+                    } else {
+                        handleSyncData(ym,[])
+                    }
+                })
+            }
+        }
     }
     
     
@@ -183,8 +205,7 @@ class Firebase {
     func removeTask(uuid: String) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let taskRef = self.ref.child("userdata/\(uid)/tasks/\(uuid)")
-        taskRef.removeValue()
+        self.ref.child("userdata/\(uid)/tasks/\(uuid)").removeValue()
     }
     
     func correctTask(uuid: String, task: Task) {
@@ -195,7 +216,21 @@ class Firebase {
         taskRef.updateChildValues(data)
     }
     
+    func downloadTask(uuid: String, handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        self.ref.child("userdata/\(uid)/tasks/\(uuid)").observeSingleEvent(of: .value, with: { [self] snapshot in
+            let uuid = snapshot.key
+            let value = snapshot.value as! [String:Any]
+            
+            handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
+        })
+    }
     
+    /**
+     if data changed in firebase server, syncronazate with JSON file of device storage.
+     - parameter handleSaveTask : for Json File update function
+     */
     func updateTask(handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -205,6 +240,27 @@ class Firebase {
             
             handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
         })
+    }
+    
+    func uploadTaskList(uuid: String, date: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let idx = date.index(date.startIndex, offsetBy: 5)
+        let ym = String(date[date.startIndex...idx])
+        self.ref.child("userdata/\(uid)/tasklist/\(ym)/").updateChildValues([uuid: true])
+    }
+    
+    func removeTaskList(uuid: String, date: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let idx = date.index(date.startIndex, offsetBy: 5)
+        let ym = String(date[date.startIndex...idx])
+        self.ref.child("userdata/\(uid)/tasklist/\(ym)/\(uuid)").removeValue()
+    }
+    
+    func correctTaskList(uuid: String, date: String) {
+        removeTaskList(uuid: uuid, date: date)
+        uploadTaskList(uuid: uuid, date: date)
     }
     
     private func handleUpdateTask(uuid: String, value :[String:Any], handleSaveTask: @escaping(_ uuid: String, _ task: Task) -> ()) {

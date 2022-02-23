@@ -154,6 +154,7 @@ class ToDoManager {
             selTaskList.value.append(uuid)
         }
         
+        mngFirebase.uploadTaskList(uuid: uuid, date: data.date)
         mngFirebase.uploadTask(uuid: uuid, task: data)
         saveTasks()
         
@@ -188,6 +189,7 @@ class ToDoManager {
             if beforYm != afterYm {
                 removeMonthTasks(ym: beforYm, uuid: uuid)
                 saveMonthTasks(ym: afterYm, uuid: uuid)
+                mngFirebase.correctTaskList(uuid: uuid, date: after.date)
             }
         }
         
@@ -218,6 +220,7 @@ class ToDoManager {
         
         tasks.removeValue(forKey: uuid)
         mngFirebase.removeTask(uuid: uuid)
+        mngFirebase.removeTaskList(uuid: uuid, date: data.date)
         
         let index = data.date.index(data.date.startIndex, offsetBy: 5)
         let ym = String(data.date[data.date.startIndex...index])
@@ -278,6 +281,25 @@ class ToDoManager {
         })
         print(filterArr)
         storage.Save(filterArr, "\(ym).json")
+    }
+    
+    func handleSyncData(ym:String, keys:[String]) {
+        let arr = storage.Search("\(ym).json", as: [String].self) ?? []
+        
+        // 업로드
+        let uploadTasks = arr.filter{ return !keys.contains($0)}
+        uploadTasks.forEach({ uuid in
+            if let task = self.tasks[uuid] {
+                mngFirebase.uploadTask(uuid: uuid, task: task)
+            }
+        })
+        
+        // 다운로드
+        let downTasks = keys.filter { return !arr.contains($0)}
+        downTasks.forEach({ uuid in
+            mngFirebase.downloadTask(uuid: uuid, handleSaveTask: saveServerTask)
+        })
+        
     }
 }
 
