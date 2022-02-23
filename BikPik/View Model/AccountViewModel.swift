@@ -10,7 +10,6 @@ import GoogleSignIn
 import Firebase
 
 class AccountManager {
-    
     static let mngAccount = AccountManager()
     private init() {
         loadAccount()
@@ -19,52 +18,58 @@ class AccountManager {
     let mngFirebase = Firebase.mngFirebase
     let storage = Storage.disk
     
-    var account = Account()
+    var account = Observable(Account())
     
     func loadAccount () {
-        account = storage.Search("Account.json", as: Account.self) ?? Account()
+        account.value = storage.Search("Account.json", as: Account.self) ?? Account()
         
         // Google
         if let googleAccount = GIDSignIn.sharedInstance.currentUser?.profile {
             print(googleAccount)
-            account.email = googleAccount.email
-            if account.name == nil {
-                account.name = googleAccount.name
+            account.value.email = googleAccount.email
+            if account.value.name == nil {
+                account.value.name = googleAccount.name
             }
             return
         }
     }
     
-    private func saveName() {
-        storage.Save(account, "Account.json")
+    private func saveAccount() {
+        storage.Save(account.value, "Account.json")
     }
     
     func logoutEmail() {
-        // Firebase Logout
-        let firebaseAuth = Auth.auth()
-        do {
-          try firebaseAuth.signOut()
-        } catch let signOutError as NSError {
-          print("Error signing out: %@", signOutError)
-        }
-         
-        
-        // Google Logout
-        GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
-            if error != nil || user == nil {
-                print("Google Login signed-OUT")
-            } else {
-                print("Google Login signed-IN")
-                GIDSignIn.sharedInstance.signOut()
-                return
-            }
-          }
-        
-        self.account.email = nil
+        mngFirebase.logout()
+        self.account.value.email = nil
+    }
+    
+    func setAccount(name: String?, email: String?) {
+        self.account.value.name = name
+        self.account.value.email = email
+        saveAccount()
     }
     
     func setName(name: String?) {
-        self.account.name = name
-        saveName()
+        self.account.value.name = name
+        saveAccount()
+    }
+    
+    func setEmail(_ email: String?) {
+        self.account.value.email = email
+        saveAccount()
+    }
+    
+    func deleteAccount() {
+        setAccount(name: nil, email: nil)
+        saveAccount()
+        mngFirebase.deleteUser()
+        mngFirebase.reloadUser()
+    }
+    
+    func logoutAccount() {
+        setAccount(name: nil, email: nil)
+        saveAccount()
+        mngFirebase.logout()
+        mngFirebase.reloadUser()
     }
 }

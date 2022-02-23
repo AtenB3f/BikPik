@@ -9,15 +9,169 @@
 import Firebase
 import GoogleSignIn
 import FirebaseDatabase
+import FirebaseAuth
+import UIKit
 
 
 class Firebase {
-    
     static let mngFirebase = Firebase()
     private init() { }
     
-    
     let ref: DatabaseReference! = Database.database().reference()
+    
+    func createUser(email:String, password:String, handleError: @escaping (_ :String?) -> ()) {
+        var message:String? = nil
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            if let err = error as NSError? {
+                switch err.code {
+                case AuthErrorCode.emailAlreadyInUse.rawValue:
+                    message = "이메일이 이미 사용중입니다."
+                case AuthErrorCode.weakPassword.rawValue:
+                    message = "6자리 이상의 비밀번호를 입력해주세요."
+                case AuthErrorCode.invalidEmail.rawValue:
+                    message = "이메일이 존재하지 않습니다."
+                default:
+                    message = "\(err.code)"
+                    print(err)
+                }
+            } else {
+                print("success create user : \(email)")
+                if let uid = Auth.auth().currentUser?.uid {
+                    self.addCurrentUser(uid: uid)
+                }
+            }
+            handleError(message)
+        }
+    }
+    
+    func addCurrentUser(uid: String) {
+        self.ref.child("userlist/").updateChildValues([uid:true])
+    }
+    
+    func loginUser(email:String, password:String, handleSignIn: @escaping (_ :String?) -> ()) {
+        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            if let err = error as NSError? {
+                switch err.code {
+                case AuthErrorCode.userNotFound.rawValue:
+                    fallthrough
+                case AuthErrorCode.wrongPassword.rawValue:
+                    handleSignIn("이메일 혹은 패스워드가 올바르지 않습니다.")
+                default:
+                    handleSignIn("\(err.code)")
+                    print(err)
+                }
+            } else {
+                handleSignIn(nil)
+            }
+        }
+    }
+    
+    func deleteUser() {
+        if let uid = Auth.auth().currentUser?.uid {
+            self.ref.child("userlist/\(uid)").removeValue()
+        }
+        Auth.auth().currentUser?.delete { error in
+            if error != nil{
+                print(error!.localizedDescription)
+            }
+        }
+    }
+    
+    func logout() {
+        // Firebase Logout
+        let firebaseAuth = Auth.auth()
+        do {
+          try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+          print("Error signing out: %@", signOutError)
+        }
+         
+        
+        // Google Logout
+        GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
+            if error != nil || user == nil {
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+            } else {
+                GIDSignIn.sharedInstance.signOut()
+                return
+            }
+        }
+    }
+    
+    // 이메일 인증
+    func authEmail() {
+        if let user = Auth.auth().currentUser {
+            user.sendEmailVerification { error in
+                if error != nil {
+                    print(error!.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func reloadUser() {
+        if let user = Auth.auth().currentUser {
+            user.reload(completion: { error in
+                if error != nil {
+                    print(error!.localizedDescription)
+                }
+            })
+        }
+    }
+    
+    func isAuthEmailVerified()->Bool {
+        if let user = Auth.auth().currentUser {
+            reloadUser()
+            return user.isEmailVerified
+        }
+        return false
+    }
+    
+    func changePassword(password: String) {
+        Auth.auth().currentUser?.updatePassword(to: password) { error in
+            if error != nil {
+                if let email = Auth.auth().currentUser?.email{
+                    Auth.auth().sendPasswordReset(withEmail: email) { error in
+                        if error != nil {
+                            print(error!.localizedDescription)
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    func syncData() {
+        //syncTask()
+    }
+    
+    func syncTask(handleSyncData : @escaping (String,[String])->()){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let dateFormatter: DateFormatter = {
+            let format = DateFormatter()
+            format.dateFormat = "yyyyMM"
+            return format
+        }()
+        
+        for i in 0..<3 {
+            if let date = Calendar.current.date(byAdding: .month, value: i, to: Date()) {
+                let ym = dateFormatter.string(from: date)
+                self.ref.child("userdata/\(uid)/tasklist/\(ym)").observeSingleEvent(of: .value, with: { snp in
+                    if snp.exists() {
+                        let arr = snp.value as! [String:Bool]
+                        let keys = arr.keys.sorted()
+                        handleSyncData(ym,keys)
+                    } else {
+                        handleSyncData(ym,[])
+                    }
+                })
+            }
+        }
+    }
     
     
     // Task
@@ -25,7 +179,7 @@ class Firebase {
     func uploadTask(uuid: String ,task: Task) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let taskRef = self.ref.child("users/\(uid)/tasks/\(uuid)")
+        let taskRef = self.ref.child("userdata/\(uid)/tasks/\(uuid)")
         let data = setTask(task: task)
         taskRef.setValue(data)
     }
@@ -51,28 +205,62 @@ class Firebase {
     func removeTask(uuid: String) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let taskRef = self.ref.child("users/\(uid)/tasks/\(uuid)")
-        taskRef.removeValue()
+        self.ref.child("userdata/\(uid)/tasks/\(uuid)").removeValue()
     }
     
     func correctTask(uuid: String, task: Task) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let taskRef = self.ref.child("users/\(uid)/tasks/\(uuid)")
+        let taskRef = self.ref.child("userdata/\(uid)/tasks/\(uuid)")
         let data = setTask(task: task)
         taskRef.updateChildValues(data)
     }
     
-    
-    func updateTask(handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
+    func downloadTask(uuid: String, handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        self.ref.child("users/\(uid)/tasks/").observe(.childChanged, with: { [self] snapshot in
+        self.ref.child("userdata/\(uid)/tasks/\(uuid)").observeSingleEvent(of: .value, with: { [self] snapshot in
             let uuid = snapshot.key
             let value = snapshot.value as! [String:Any]
             
             handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
         })
+    }
+    
+    /**
+     if data changed in firebase server, syncronazate with JSON file of device storage.
+     - parameter handleSaveTask : for Json File update function
+     */
+    func updateTask(handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        self.ref.child("userdata/\(uid)/tasks/").observe(.childChanged, with: { [self] snapshot in
+            let uuid = snapshot.key
+            let value = snapshot.value as! [String:Any]
+            
+            handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
+        })
+    }
+    
+    func uploadTaskList(uuid: String, date: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let idx = date.index(date.startIndex, offsetBy: 5)
+        let ym = String(date[date.startIndex...idx])
+        self.ref.child("userdata/\(uid)/tasklist/\(ym)/").updateChildValues([uuid: true])
+    }
+    
+    func removeTaskList(uuid: String, date: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let idx = date.index(date.startIndex, offsetBy: 5)
+        let ym = String(date[date.startIndex...idx])
+        self.ref.child("userdata/\(uid)/tasklist/\(ym)/\(uuid)").removeValue()
+    }
+    
+    func correctTaskList(uuid: String, date: String) {
+        removeTaskList(uuid: uuid, date: date)
+        uploadTaskList(uuid: uuid, date: date)
     }
     
     private func handleUpdateTask(uuid: String, value :[String:Any], handleSaveTask: @escaping(_ uuid: String, _ task: Task) -> ()) {
@@ -108,7 +296,7 @@ class Firebase {
     func uploadHabit(uuid: String, habit: Habits) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)")
+        let habitRef = self.ref.child("userdata/\(uid)/haibts/\(uuid)")
         let data = setHabit(habit: habit)
         habitRef.setValue(data)
     }
@@ -135,14 +323,14 @@ class Firebase {
     func removeHabit(uuid: String) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)")
+        let habitRef = self.ref.child("userdata/\(uid)/haibts/\(uuid)")
         habitRef.removeValue()
     }
     
     func correctHabit(uuid:String, habit: Habits) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)")
+        let habitRef = self.ref.child("userdata/\(uid)/haibts/\(uuid)")
         let data = setHabit(habit: habit)
         habitRef.updateChildValues(data)
     }
@@ -150,7 +338,7 @@ class Firebase {
     func updateHabit(handleSaveHabit: @escaping (_ uuid: String, _ habit: Habits) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        self.ref.child("users/\(uid)/haibts/").observe(.childChanged, with: { [self] snapshot in
+        self.ref.child("userdata/\(uid)/haibts/").observe(.childChanged, with: { [self] snapshot in
             let uuid = snapshot.key
             let value = snapshot.value as! [String:Any]
             
@@ -197,7 +385,7 @@ class Firebase {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         guard let isDone = habit.isDone else { return }
         
-        let habitRef = self.ref.child("users/\(uid)/haibts/\(uuid)/isDone/")
+        let habitRef = self.ref.child("userdata/\(uid)/haibts/\(uuid)/isDone/")
         habitRef.updateChildValues(isDone)
     }
 }

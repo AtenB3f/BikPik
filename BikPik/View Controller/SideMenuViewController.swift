@@ -15,8 +15,9 @@ class SideMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateAccount()
-        
+        mngAccount.account.bind(listener: {_ in
+            self.updateAccount()
+        })
     }
     
     @IBOutlet weak var btnSetting: UIButton!
@@ -39,13 +40,13 @@ class SideMenuViewController: UIViewController {
     @IBOutlet weak var labelEmail: UILabel!
     
     func updateAccount() {
-        if let name = mngAccount.account.name {
+        if let name = mngAccount.account.value.name {
             labelName.text = name
         } else {
             labelName.text = "로그인 하기"
         }
         
-        if let email = mngAccount.account.email {
+        if let email = mngAccount.account.value.email {
             labelEmail.text = email
         } else {
             labelEmail.text = "E-mail"
