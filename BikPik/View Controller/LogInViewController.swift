@@ -309,8 +309,11 @@ class LogInViewController: UIViewController {
             
             let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
             
-            Auth.auth().signIn(with: credential) { authResult, error in
+            Auth.auth().signIn(with: credential) { [self] authResult, error in
                 if error != nil { return }
+                
+                self.mngFirebase.syncTask(handleSyncData: mngToDo.handleSyncTask(ym:keys:))
+                self.mngFirebase.syncHabit(handleSyncData: mngHabit.handleSyncHabit(keys:))
             }
             self.mngAccount.setAccount(name: user.profile?.name, email: user.profile?.email)
         }
@@ -371,7 +374,6 @@ class LogInViewController: UIViewController {
     func handleSignUp(_ error: String?) {
         if error == nil {
             // sucess
-            
             // 데이터 동기화
             mngFirebase.syncTask(handleSyncData: mngToDo.handleSyncTask(ym:keys:))
             mngFirebase.syncHabit(handleSyncData: mngHabit.handleSyncHabit(keys:))
