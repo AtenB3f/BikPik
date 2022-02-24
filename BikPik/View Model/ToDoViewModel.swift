@@ -283,7 +283,7 @@ class ToDoManager {
         storage.Save(filterArr, "\(ym).json")
     }
     
-    func handleSyncData(ym:String, keys:[String]) {
+    func handleSyncTask(ym:String, keys:[String]) {
         let arr = storage.Search("\(ym).json", as: [String].self) ?? []
         
         // 업로드
@@ -291,6 +291,7 @@ class ToDoManager {
         uploadTasks.forEach({ uuid in
             if let task = self.tasks[uuid] {
                 mngFirebase.uploadTask(uuid: uuid, task: task)
+                mngFirebase.uploadTaskList(uuid: uuid, date: task.date)
             }
         })
         

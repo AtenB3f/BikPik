@@ -11,6 +11,7 @@ import GoogleSignIn
 
 class LogInViewController: UIViewController {
     let mngToDo = ToDoManager.mngToDo
+    let mngHabit = HabitManager.mngHabit
     let mngFirebase = Firebase.mngFirebase
     let mngAccount = AccountManager.mngAccount
     
@@ -338,8 +339,10 @@ class LogInViewController: UIViewController {
                 print("login \(email)")
                 mngAccount.setEmail(email)
             }
+            
             // 데이터 동기화
-            mngFirebase.syncTask(handleSyncData: mngToDo.handleSyncData(ym:keys:))
+            mngFirebase.syncTask(handleSyncData: mngToDo.handleSyncTask(ym:keys:))
+            mngFirebase.syncHabit(handleSyncData: mngHabit.handleSyncHabit(keys:))
             
             // 뷰 종료
             closeView()
@@ -368,6 +371,11 @@ class LogInViewController: UIViewController {
     func handleSignUp(_ error: String?) {
         if error == nil {
             // sucess
+            
+            // 데이터 동기화
+            mngFirebase.syncTask(handleSyncData: mngToDo.handleSyncTask(ym:keys:))
+            mngFirebase.syncHabit(handleSyncData: mngHabit.handleSyncHabit(keys:))
+            
             let profileVC = self.storyboard?.instantiateViewController(withIdentifier: "EmailAuthVC") as! EmailAuthViewController
             profileVC.modalPresentationStyle = .fullScreen
             profileVC.modalTransitionStyle = .coverVertical

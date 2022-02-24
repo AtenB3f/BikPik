@@ -37,14 +37,14 @@ class Firebase {
             } else {
                 print("success create user : \(email)")
                 if let uid = Auth.auth().currentUser?.uid {
-                    self.addCurrentUser(uid: uid)
+                    self.addUserlist(uid: uid)
                 }
             }
             handleError(message)
         }
     }
     
-    func addCurrentUser(uid: String) {
+    func addUserlist(uid: String) {
         self.ref.child("userlist/").updateChildValues([uid:true])
     }
     
@@ -144,10 +144,6 @@ class Firebase {
         }
     }
     
-    func syncData() {
-        //syncTask()
-    }
-    
     func syncTask(handleSyncData : @escaping (String,[String])->()){
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -171,6 +167,19 @@ class Firebase {
                 })
             }
         }
+    }
+    
+    func syncHabit(handleSyncData : @escaping ([String])->()){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        self.ref.child("userdata/\(uid)/habitlist/").observeSingleEvent(of: .value, with: { snp in
+            if snp.exists() {
+                let arr = snp.value as! [String:Bool]
+                handleSyncData(arr.keys.sorted())
+            } else {
+                handleSyncData([])
+            }
+        })
     }
     
     
@@ -335,6 +344,17 @@ class Firebase {
         habitRef.updateChildValues(data)
     }
     
+    func downloadHabit(uuid: String, handleSaveHabit: @escaping (_ uuid: String, _ task: Habits) -> ()) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        self.ref.child("userdata/\(uid)/habits/\(uuid)").observeSingleEvent(of: .value, with: { [self] snapshot in
+            let uuid = snapshot.key
+            let value = snapshot.value as! [String:Any]
+            
+            self.handleUpdateHabit(uuid: uuid, value: value, handleSaveHabit: handleSaveHabit)
+        })
+    }
+    
     func updateHabit(handleSaveHabit: @escaping (_ uuid: String, _ habit: Habits) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -387,5 +407,17 @@ class Firebase {
         
         let habitRef = self.ref.child("userdata/\(uid)/haibts/\(uuid)/isDone/")
         habitRef.updateChildValues(isDone)
+    }
+    
+    func uploadHabitList(uuid: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        self.ref.child("userdata/\(uid)/habitlist/").updateChildValues([uuid: true])
+    }
+    
+    func removeHabitList(uuid: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        self.ref.child("userdata/\(uid)/habitlist/\(uuid)").removeValue()
     }
 }

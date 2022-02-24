@@ -34,6 +34,7 @@ class HabitManager {
         listHabit.append(uuid)
         
         mngFirebase.uploadHabit(uuid: uuid, habit: data)
+        mngFirebase.uploadHabitList(uuid: uuid)
         saveHabit()
     }
     
@@ -84,6 +85,7 @@ class HabitManager {
             listHabit.remove(at: idx)
         }
         mngFirebase.removeHabit(uuid: uuid)
+        mngFirebase.removeHabitList(uuid: uuid)
         saveHabit()
     }
     
@@ -218,6 +220,26 @@ class HabitManager {
             }
         }
         return total
+    }
+    
+    func handleSyncHabit(keys:[String]) {
+        let arr = habits.keys
+        
+        // 업로드
+        let upload = arr.filter{ return !keys.contains($0)}
+        upload.forEach({ uuid in
+            if let habit = self.habits[uuid] {
+                mngFirebase.uploadHabit(uuid: uuid, habit: habit)
+                mngFirebase.uploadHabitList(uuid: uuid)
+            }
+        })
+        
+        // 다운로드
+        let download = keys.filter { return !arr.contains($0)}
+        download.forEach({ uuid in
+            mngFirebase.downloadHabit(uuid: uuid, handleSaveHabit: saveServerHabit)
+        })
+        
     }
 }
 
