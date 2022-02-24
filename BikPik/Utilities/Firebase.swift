@@ -267,11 +267,6 @@ class Firebase {
         self.ref.child("userdata/\(uid)/tasklist/\(ym)/\(uuid)").removeValue()
     }
     
-    func correctTaskList(uuid: String, date: String) {
-        removeTaskList(uuid: uuid, date: date)
-        uploadTaskList(uuid: uuid, date: date)
-    }
-    
     private func handleUpdateTask(uuid: String, value :[String:Any], handleSaveTask: @escaping(_ uuid: String, _ task: Task) -> ()) {
         var task = Task()
         for v in value.keys {

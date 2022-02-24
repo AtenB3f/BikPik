@@ -182,6 +182,7 @@ class ToDoManager {
                     selTaskList.value.remove(at: idx)
                 }
             }
+            
             let beforeIdx = before.date.index(before.date.startIndex, offsetBy: 5)
             let afterIdx = after.date.index(after.date.startIndex, offsetBy: 5)
             let beforYm = String(before.date[before.date.startIndex...beforeIdx])
@@ -189,7 +190,6 @@ class ToDoManager {
             if beforYm != afterYm {
                 removeMonthTasks(ym: beforYm, uuid: uuid)
                 saveMonthTasks(ym: afterYm, uuid: uuid)
-                mngFirebase.correctTaskList(uuid: uuid, date: after.date)
             }
         }
         
