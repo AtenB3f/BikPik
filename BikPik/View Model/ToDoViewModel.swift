@@ -182,6 +182,7 @@ class ToDoManager {
                     selTaskList.value.remove(at: idx)
                 }
             }
+            
             let beforeIdx = before.date.index(before.date.startIndex, offsetBy: 5)
             let afterIdx = after.date.index(after.date.startIndex, offsetBy: 5)
             let beforYm = String(before.date[before.date.startIndex...beforeIdx])
@@ -189,7 +190,6 @@ class ToDoManager {
             if beforYm != afterYm {
                 removeMonthTasks(ym: beforYm, uuid: uuid)
                 saveMonthTasks(ym: afterYm, uuid: uuid)
-                mngFirebase.correctTaskList(uuid: uuid, date: after.date)
             }
         }
         
@@ -283,7 +283,7 @@ class ToDoManager {
         storage.Save(filterArr, "\(ym).json")
     }
     
-    func handleSyncData(ym:String, keys:[String]) {
+    func handleSyncTask(ym:String, keys:[String]) {
         let arr = storage.Search("\(ym).json", as: [String].self) ?? []
         
         // 업로드
@@ -291,6 +291,7 @@ class ToDoManager {
         uploadTasks.forEach({ uuid in
             if let task = self.tasks[uuid] {
                 mngFirebase.uploadTask(uuid: uuid, task: task)
+                mngFirebase.uploadTaskList(uuid: uuid, date: task.date)
             }
         })
         
