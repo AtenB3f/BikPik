@@ -153,7 +153,7 @@ class Firebase {
             return format
         }()
         
-        for i in 0..<3 {
+        for i in -6..<6 {
             if let date = Calendar.current.date(byAdding: .month, value: i, to: Date()) {
                 let ym = dateFormatter.string(from: date)
                 self.ref.child("userdata/\(uid)/tasklist/\(ym)").observeSingleEvent(of: .value, with: { snp in
