@@ -16,22 +16,29 @@ class ToDoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: notiAddToDo, object: nil)
+        setLayout()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleAddToDoNoti(_:)), name: notiAddToDo, object: nil)
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell))
-        ToDoTable.addGestureRecognizer(longPress)
+        //ToDoTable.addGestureRecognizer(longPress)
+        tableviewToDo.addGestureRecognizer(longPress)
         
-        fldFastAddTask.delegate = self
+        //fldFastAddTask.delegate = self
+        textFastAddTask.delegate = self
         let tabToDoList = UITapGestureRecognizer(target: self, action: #selector(tabPressList))
-        ToDoTable.addGestureRecognizer(tabToDoList)
+        //ToDoTable.addGestureRecognizer(tabToDoList)
+        tableviewToDo.addGestureRecognizer(tabToDoList)
         
         mngToDo.selDate.bind{ [weak self] date in
-            self?.btnDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
+            self?.btnSelectDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
+            
             self?.updateDate()
         }
 
         mngToDo.selTaskList.bind{ [weak self] _ in
-            self?.ToDoTable.reloadData()
+            //self?.ToDoTable.reloadData()
+            self?.tableviewToDo.reloadData()
         }
     }
     
@@ -39,10 +46,137 @@ class ToDoViewController: UIViewController {
         mngToDo.setToday()
     }
     
+    let viewTop:UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(named: "BikPik Color")
+        return view
+    }()
+    let btnSelectDay: UIButton = {
+        let button = UIButton()
+        button.setTitle(Date.GetNowDate(), for: .normal)
+        button.titleLabel?.font = UIFont(name: "GmarketSansTTFLight", size: 24.0)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(setCalendar), for: .touchUpInside)
+        return button
+    }()
+    let calendarWeek: CustomCalendar = {
+        let calendar = CustomCalendar(style: .week, frame: CGRect(x: 0, y: 0, width: 280, height: 100))
+        calendar.firstWeekday = 1
+        return calendar
+    }()
+    let viewFast: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(named: "BikPik Light Color")
+        return view
+    }()
+    let btnFastAddTask: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus.app"), for: .normal)
+        button.tintColor = UIColor(named: "BikPik Dark Color")
+        button.setPreferredSymbolConfiguration(.init(pointSize: 24.0), forImageIn: .normal)
+        button.addTarget(self, action: #selector(actionAddFastTask), for: .touchUpInside)
+        return button
+    }()
+    let textFastAddTask: UITextField = {
+        let text = UITextField()
+        text.placeholder = "Add Task"
+        return text
+    }()
+    let tableviewToDo: UITableView = {
+        let view = UITableView()
+        return view
+    }()
+    let viewBottom: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.systemBackground
+        return view
+    }()
+    let btnAddTask: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
+        button.setPreferredSymbolConfiguration(.init(pointSize: 40), forImageIn: .normal)
+        button.tintColor = UIColor(named: "BikPik Color")
+        button.addTarget(self, action: #selector(actionAddTask), for: .touchUpInside)
+        return button
+    }()
+    
+    
+    private func setLayout() {
+        setLayoutTopView()
+        setLayoutFastView()
+        setLayoutTableView()
+        setLayoutBottomView()
+    }
+    
+    private func setLayoutTopView() {
+        self.view.addSubview(viewTop)
+        viewTop.snp.makeConstraints { make in
+            make.top.right.left.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(150)
+        }
+        
+        viewTop.addSubview(btnSelectDay)
+        btnSelectDay.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+    }
+    
+    private func setLayoutFastView() {
+        self.view.addSubview(viewFast)
+        viewFast.snp.makeConstraints { make in
+            make.top.equalTo(viewTop.snp.bottom)
+            make.centerX.right.left.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(44.0)
+        }
+        
+        viewFast.addSubview(btnFastAddTask)
+        btnFastAddTask.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.left.equalToSuperview().inset(16.0)
+            make.width.height.equalTo(44.0)
+        }
+        
+        viewFast.addSubview(textFastAddTask)
+        textFastAddTask.snp.makeConstraints { make in
+            make.centerY.height.equalToSuperview()
+            make.right.equalToSuperview().inset(16.0)
+            make.left.equalTo(btnFastAddTask.snp.right).offset(4.0)
+        }
+    }
+    private func setLayoutTableView() {
+        tableviewToDo.delegate = self
+        tableviewToDo.dataSource = self
+        tableviewToDo.register(ToDoCell.self, forCellReuseIdentifier: "ToDoCell")
+        tableviewToDo.separatorStyle = .none
+        self.view.addSubview(tableviewToDo)
+        tableviewToDo.snp.makeConstraints { make in
+            make.top.equalTo(viewFast.snp.bottom)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(60.0)
+            make.left.right.equalToSuperview()
+        }
+    }
+    private func setLayoutBottomView() {
+        self.view.addSubview(viewBottom)
+        viewBottom.snp.makeConstraints { make in
+            make.bottom.width.centerX.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(60.0)
+        }
+        
+        viewBottom.addSubview(btnAddTask)
+        btnAddTask.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.height.width.equalTo(44.0)
+            make.right.equalToSuperview().inset(16.0)
+        }
+         
+    }
+    
+    
     // 태스크 추가 후에 테이블 뷰 적용될 수 있게 하는 기능
-    @objc func didDismissPostCommentNotification(_ noti: Notification) {
+    @objc func handleAddToDoNoti(_ noti: Notification) {
         updateDate()
-        ToDoTable.reloadData()
+        //ToDoTable.reloadData()
+        tableviewToDo.reloadData()
     }
     
     /***
@@ -52,42 +186,50 @@ class ToDoViewController: UIViewController {
         // task list update
         mngToDo.updateData()
         // week button update
-        updateWeekDate()
+        //updateWeekDate()
         //ToDoTable.reloadData()
     }
+    
  
+
+    
+    /*
     @IBOutlet weak var topView: UIView!
     
-    var calendar: FSCalendar? = nil
+   
     @IBOutlet weak var btnDay: UIButton!
     @IBAction func btnDay(_ sender: Any) {
+        setCalendar()
+    }
+     */
+    var calendar: FSCalendar? = nil
+    @objc func setCalendar() {
         if calendar == nil {
-            enableCalendar()
+            calendar = {
+                let calendar = CustomCalendar(style: .month, frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+                calendar.allowsMultipleSelection = false
+                calendar.delegate = self
+                calendar.dataSource = self
+                calendar.currentPage = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .date) as! Date
+                return calendar
+            }()
+            view.addSubview(calendar!)
+            calendar?.snp.makeConstraints({ make in
+                make.center.equalToSuperview()
+                make.width.height.equalTo(300)
+            })
         } else {
-            disableCalendar()
-        }
-    }
-    
-    func enableCalendar() {
-        let y = topView.fs_bottom + 60
-        let rect = CGRect(x: (view.fs_width - 300)/2, y: y, width: 300, height: 300)
-        calendar = CustomCalendar(style: .month, frame: rect)
-        calendar?.allowsMultipleSelection = false
-        calendar?.delegate = self
-        calendar?.dataSource = self
-        calendar!.currentPage = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .date) as! Date
-        view.addSubview(calendar!)
-    }
-    
-    func disableCalendar() {
-        for view in self.view.subviews {
-            if view.isEqual(calendar) {
-                view.removeFromSuperview()
-                calendar = nil
+            for view in self.view.subviews {
+                if view.isEqual(calendar) {
+                    view.removeFromSuperview()
+                    calendar = nil
+                }
             }
+
         }
     }
     
+    /*
     @IBOutlet weak var MonDate: UIButton!
     @IBOutlet weak var TueDate: UIButton!
     @IBOutlet weak var WedDate: UIButton!
@@ -110,7 +252,7 @@ class ToDoViewController: UIViewController {
         let cnt = idx - (Date.WeekForm(data: mngToDo.selDate.value, input: .fullDate, output: .intIndex) as! Int) + 1
         mngToDo.changeSelectDate(index: cnt)
     }
-    
+     
     func updateWeekDate(){
         var year: Int = 0
         var month: Int = 0
@@ -126,7 +268,6 @@ class ToDoViewController: UIViewController {
             arrDay[i].isSelected = i == (idx-1) ? true : false
         }
     }
-    
     @IBOutlet weak var btnFastAddTask: UIButton!
     @IBAction func btnFaskAddTask(_ sender: Any) {
         let task = fldFastAddTask.text
@@ -158,6 +299,22 @@ class ToDoViewController: UIViewController {
     }
     
     @IBOutlet weak var ToDoTable: UITableView!
+     */
+    @objc func actionAddFastTask() {
+        let task = textFastAddTask.text
+        if task != "" && task != nil {
+            var data:Task = Task(name: task!, date: Date.GetNowDate(), inToday: true)
+            data.date = mngToDo.selDate.value
+            mngToDo.createTask(data: data)
+            textFastAddTask.text = ""
+        }
+    }
+    @objc func actionAddTask() {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddToDoVC") as! AddToDoViewController
+        vc.modalTransitionStyle = .coverVertical
+        vc.data.date = mngToDo.selDate.value
+        self.present(vc, animated: true, completion: nil)
+    }
 }
 
 extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
@@ -167,10 +324,12 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? ToDoCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath) as? ToDoCell {
             cell.updateCell(indexPathRow: indexPath.row)
-            cell.isDone.addTarget(self, action: #selector(clickIsDone(_:)), for: .touchUpInside)
-            cell.setting.addTarget(self, action: #selector(clickSetting(_:)), for: .touchUpInside)
+//            cell.isDone.addTarget(self, action: #selector(clickIsDone(_:)), for: .touchUpInside)
+//            cell.setting.addTarget(self, action: #selector(clickSetting(_:)), for: .touchUpInside)
+            cell.btnDone.addTarget(self, action: #selector(clickIsDone(_:)), for: .touchUpInside)
+            cell.btnSetting.addTarget(self, action: #selector(clickSetting(_:)), for: .touchUpInside)
             
             return cell
         }else {
@@ -210,9 +369,11 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     
     @objc func longPressCell (_ sender: UIGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.began {
-            let touchPoint = sender.location(in: ToDoTable)
+            //let touchPoint = sender.location(in: ToDoTable)
+            let touchPoint = sender.location(in: tableviewToDo)
             
-            if let row = ToDoTable.indexPathForRow(at: touchPoint) {
+            //if let row = ToDoTable.indexPathForRow(at: touchPoint) {
+            if let row = tableviewToDo.indexPathForRow(at: touchPoint) {
                 let idx = row[1]
                 
                 let uuid = mngToDo.selTaskList.value[idx]
@@ -287,6 +448,32 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
 class ToDoCell: UITableViewCell {
     let mngToDo = ToDoManager.mngToDo
     let mngHabit = HabitManager.mngHabit
+    
+    let btnDone:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "CheckBox.png"), for: .normal)
+        button.tintColor = UIColor(named: "TextLightColor")
+        return button
+    }()
+    let labelTime: UILabel = {
+        let label = UILabel()
+        label.text = "00:00"
+        label.textColor = UIColor(named: "TextLightColor")
+        return label
+    }()
+    let labelTask: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.textColor = UIColor(named: "TextLightColor")
+        return label
+    }()
+    let btnSetting: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
+        button.tintColor = UIColor(named: "TextLightColor")
+        return button
+    }()
+    /*
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var isDone: UIButton!
     @IBOutlet weak var task: UILabel!
@@ -300,26 +487,39 @@ class ToDoCell: UITableViewCell {
         isDone.isSelected.toggle()
         displayDone(done: isDone.isSelected)
     }
-    
+    */
     func displayDone(done: Bool) {
-        isDone.isSelected = done
-        task.textColor = UIColor(named: "TextLightColor") ?? .lightText
-        time.textColor = UIColor(named: "TextLightColor") ?? .lightText
+//        isDone.isSelected = done
+//        task.textColor = UIColor(named: "TextLightColor") ?? .lightText
+//        time.textColor = UIColor(named: "TextLightColor") ?? .lightText
+        btnDone.isSelected = done
         if done {
-            let col: UIColor = UIColor.init(named: "BikPik Dark Color") ?? .cyan
-            let img = UIImage(named: "CheckBox_fill.png")?.withRenderingMode(.alwaysTemplate)
-            isDone.setImage(img, for: .normal)
-            isDone.tintColor = col
-            task.attributedText = NSAttributedString(
-                                    string: self.task.text ?? ""  ,
+//            let col: UIColor = UIColor.init(named: "BikPik Dark Color") ?? .cyan
+//            let img = UIImage(named: "CheckBox_fill.png")?.withRenderingMode(.alwaysTemplate)
+//            isDone.setImage(img, for: .normal)
+//            isDone.tintColor = col
+//            task.attributedText = NSAttributedString(
+//                                    string: self.task.text ?? ""  ,
+//                                    attributes: [NSAttributedString.Key.strikethroughStyle : NSUnderlineStyle.single.rawValue])
+            btnDone.setImage(UIImage(named: "CheckBox_fill.png"), for: .normal)
+            btnDone.tintColor = UIColor(named: "BikPik Dark Color")
+
+            labelTask.attributedText = NSAttributedString(
+                                    string: self.labelTask.text ?? ""  ,
                                     attributes: [NSAttributedString.Key.strikethroughStyle : NSUnderlineStyle.single.rawValue])
         } else {
-            let col: UIColor = UIColor(named: "TextLightColor") ?? .lightText
-            let img = UIImage(named: "CheckBox.png")?.withRenderingMode(.alwaysTemplate)
-            isDone.setImage(img, for: .normal)
-            isDone.tintColor = col
-            task.attributedText = NSAttributedString(
-                                    string: self.task.text ?? "" ,
+//            let col: UIColor = UIColor(named: "TextLightColor") ?? .lightText
+//            let img = UIImage(named: "CheckBox.png")?.withRenderingMode(.alwaysTemplate)
+//            isDone.setImage(img, for: .normal)
+//            isDone.tintColor = col
+//            task.attributedText = NSAttributedString(
+//                                    string: self.task.text ?? "" ,
+//                                    attributes: [NSAttributedString.Key.strikethroughStyle:NSUnderlineStyle.byWord])
+            btnDone.setImage(UIImage(named: "CheckBox.png"), for: .normal)
+            btnDone.tintColor = UIColor(named: "TextLightColor")
+
+            labelTask.attributedText = NSAttributedString(
+                                    string: self.labelTask.text ?? "" ,
                                     attributes: [NSAttributedString.Key.strikethroughStyle:NSUnderlineStyle.byWord])
         }
     }
@@ -348,6 +548,7 @@ class ToDoCell: UITableViewCell {
     }
     
     func updateCell(indexPathRow row: Int) {
+        /*
         if row >= mngToDo.selTaskList.value.count{
             return
         }
@@ -367,6 +568,7 @@ class ToDoCell: UITableViewCell {
         
         isDone.tag = row
         setting.tag = row
+        */
     }
 }
 
@@ -397,6 +599,6 @@ extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         mngToDo.changeSelectDate(date: Date.DateForm(data: date, input: .date, output: .fullDate) as! String)
-        disableCalendar()
+        //disableCalendar()
     }
 }
