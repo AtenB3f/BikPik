@@ -226,6 +226,9 @@
                                                 <state key="normal" title="M">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Z2-5t-c0J"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PQw-UE-nuJ" userLabel="Tue">
                                                 <rect key="frame" x="41.5" y="0.0" width="30" height="30"/>
@@ -233,6 +236,9 @@
                                                 <state key="normal" title="T">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="S6Z-OY-Tnn"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDR-2L-pt4" userLabel="Wed">
                                                 <rect key="frame" x="83.5" y="0.0" width="30" height="30"/>
@@ -240,6 +246,9 @@
                                                 <state key="normal" title="W">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PJt-9g-qyI"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zNN-Jr-kUV" userLabel="Thu">
                                                 <rect key="frame" x="125" y="0.0" width="30" height="30"/>
@@ -247,13 +256,19 @@
                                                 <state key="normal" title="T">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Guj-dm-w9J"/>
+                                                </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rOX-NT-PQg" userLabel="Fei">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rOX-NT-PQg" userLabel="Fri">
                                                 <rect key="frame" x="166.5" y="0.0" width="30" height="30"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <state key="normal" title="F">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iTp-na-fDT"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PC6-2a-UUH" userLabel="Sat">
                                                 <rect key="frame" x="208.5" y="0.0" width="30" height="30"/>
@@ -261,6 +276,9 @@
                                                 <state key="normal" title="S">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="a2f-oO-grf"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y1E-KH-0Zn" userLabel="Sun">
                                                 <rect key="frame" x="250" y="0.0" width="30" height="30"/>
@@ -268,6 +286,9 @@
                                                 <state key="normal" title="S">
                                                     <color key="titleColor" systemColor="systemRedColor"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="btnWeekDate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pgb-9N-uhA"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -535,13 +556,20 @@
                     </view>
                     <connections>
                         <outlet property="FriDate" destination="EUO-4Q-bje" id="2n8-M3-yLV"/>
+                        <outlet property="Friday" destination="rOX-NT-PQg" id="pR8-ZL-3FY"/>
                         <outlet property="MonDate" destination="DsM-hC-0l6" id="uhE-AP-6hn"/>
+                        <outlet property="Monday" destination="yZQ-ZS-NRx" id="NZg-lY-tlG"/>
                         <outlet property="SatDate" destination="nkX-Nb-w5n" id="S1M-OM-igZ"/>
+                        <outlet property="Saturday" destination="PC6-2a-UUH" id="VqC-xa-STe"/>
                         <outlet property="SunDate" destination="gIM-a6-ZVS" id="Y7L-Fj-52p"/>
+                        <outlet property="Sunday" destination="Y1E-KH-0Zn" id="ovg-In-93k"/>
                         <outlet property="ThuDate" destination="jNl-gR-VoD" id="fwb-2J-6BE"/>
+                        <outlet property="Thursday" destination="zNN-Jr-kUV" id="gNo-jd-8pP"/>
                         <outlet property="ToDoTable" destination="mup-g4-2J8" id="dhq-Vc-QzS"/>
                         <outlet property="TueDate" destination="WYd-dF-hp6" id="WDY-ZO-9RD"/>
+                        <outlet property="Tuesday" destination="PQw-UE-nuJ" id="fII-FL-Epy"/>
                         <outlet property="WedDate" destination="wHA-ag-Vqb" id="mEF-aC-dvP"/>
+                        <outlet property="Wednesday" destination="TDR-2L-pt4" id="WnI-d9-WIP"/>
                         <outlet property="btnAddTask" destination="J8R-Nf-4zg" id="3Lc-wg-Vfh"/>
                         <outlet property="btnDay" destination="1nV-a0-5ee" id="p0p-y1-i3L"/>
                         <outlet property="btnFastAddTask" destination="WKj-gG-Yzp" id="c4Y-QY-B5D"/>

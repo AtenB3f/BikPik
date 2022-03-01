@@ -88,6 +88,13 @@ class ToDoViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var Monday: UIButton!
+    @IBOutlet weak var Tuesday: UIButton!
+    @IBOutlet weak var Wednesday: UIButton!
+    @IBOutlet weak var Thursday: UIButton!
+    @IBOutlet weak var Friday: UIButton!
+    @IBOutlet weak var Saturday: UIButton!
+    @IBOutlet weak var Sunday: UIButton!
     @IBOutlet weak var MonDate: UIButton!
     @IBOutlet weak var TueDate: UIButton!
     @IBOutlet weak var WedDate: UIButton!
@@ -97,14 +104,16 @@ class ToDoViewController: UIViewController {
     @IBOutlet weak var SunDate: UIButton!
     
     @IBAction func btnWeekDate(_ sender: UIButton) {
-        let arrBtn: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
+        let arrDate: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
+        let arrDay: [UIButton] = [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
         var idx = 0
-        for (i, val) in arrBtn.enumerated() {
-            if sender == val {
-                sender.isSelected = true
+        
+        for i in 0..<arrDate.count {
+            if sender == arrDate[i] || sender == arrDay[i]{
+                arrDate[i].isSelected = true
                 idx = i
             } else {
-                val.isSelected = false
+                arrDate[i].isSelected = false
             }
         }
         let cnt = idx - (Date.WeekForm(data: mngToDo.selDate.value, input: .fullDate, output: .intIndex) as! Int) + 1
