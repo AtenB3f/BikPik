@@ -9,7 +9,7 @@ import UIKit
 import SideMenu
 
 class SideMenuViewController: UIViewController {
-
+    let mngFirebase = Firebase.mngFirebase
     let mngAccount = AccountManager.mngAccount
     
     override func viewDidLoad() {
@@ -18,6 +18,8 @@ class SideMenuViewController: UIViewController {
         mngAccount.account.bind(listener: {_ in
             self.updateAccount()
         })
+        
+        BtnName.titleLabel?.font = UIFont(name: "GmarketSansTTFLight", size: 30.0)
     }
     
     @IBOutlet weak var btnSetting: UIButton!
@@ -36,20 +38,34 @@ class SideMenuViewController: UIViewController {
         present(vc, animated: true, completion: nil)
     }
     
-    @IBOutlet weak var labelName: UILabel!
-    @IBOutlet weak var labelEmail: UILabel!
+    @IBOutlet weak var BtnName: UIButton!
+    @IBOutlet weak var BtnEmail: UIButton!
+    
+    @IBAction func tapButton(_ sender: Any) {
+        var vc: UIViewController? = nil
+        if mngAccount.account.value.email == nil {
+            vc = self.storyboard?.instantiateViewController(withIdentifier: "LogInVC") as! LogInViewController
+        } else if !mngFirebase.isAuthEmailVerified() {
+            vc = self.storyboard?.instantiateViewController(withIdentifier: "EmailAuthVC") as! EmailAuthViewController
+        } else {
+            vc = self.storyboard?.instantiateViewController(withIdentifier: "AccountVC") as! AccountViewController
+        }
+        vc!.modalPresentationStyle = .fullScreen
+        vc!.modalTransitionStyle = .crossDissolve
+        present(vc!, animated: true, completion: nil)
+    }
     
     func updateAccount() {
         if let name = mngAccount.account.value.name {
-            labelName.text = name
+            BtnName.setTitle(name, for: .normal)
         } else {
-            labelName.text = "로그인 하기"
+            BtnName.setTitle("로그인 하기", for: .normal)
         }
         
         if let email = mngAccount.account.value.email {
-            labelEmail.text = email
+            BtnEmail.setTitle(email, for: .normal)
         } else {
-            labelEmail.text = "E-mail"
+            BtnEmail.setTitle("Email", for: .normal)
         }
         
     }
