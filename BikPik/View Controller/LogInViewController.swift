@@ -238,8 +238,8 @@ class LogInViewController: UIViewController {
         viewButtons.snp.remakeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(viewLogin.snp.bottom).offset(30)
-            make.width.equalTo(120)
-            make.height.equalTo(snsBtnLength)
+            //make.width.equalTo(120)
+            make.height.width.equalTo(snsBtnLength)
         }
         
         // Google Button
