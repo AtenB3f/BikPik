@@ -15,7 +15,11 @@ import UIKit
 
 class Firebase {
     static let mngFirebase = Firebase()
-    private init() { }
+    private init() {
+        if let uid = Auth.auth().currentUser?.uid {
+            ref.child("userlist/\(uid)").keepSynced(true)
+        }
+    }
     
     let ref: DatabaseReference! = Database.database().reference()
     
@@ -225,10 +229,10 @@ class Firebase {
         taskRef.updateChildValues(data)
     }
     
-    func downloadTask(uuid: String, handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
+    func downloadTask(uuid: String, handleSaveTask: @escaping (_ uuid: String, _ task: Task?) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        self.ref.child("userdata/\(uid)/tasks/\(uuid)").observeSingleEvent(of: .value, with: { [self] snapshot in
+        self.ref.child("userdata/\(uid)/tasks/\(uuid)").observe(.value, with: { [self] snapshot in
             let uuid = snapshot.key
             if let value = snapshot.value as? [String:Any] {
                 handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
@@ -240,14 +244,19 @@ class Firebase {
      if data changed in firebase server, syncronazate with JSON file of device storage.
      - parameter handleSaveTask : for Json File update function
      */
-    func updateTask(handleSaveTask: @escaping (_ uuid: String, _ task: Task) -> ()) {
+    func updateTask(handleSaveTask: @escaping (_ uuid: String, _ task: Task?) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        self.ref.child("userdata/\(uid)/tasks/").observe(.childChanged, with: { [self] snapshot in
+        self.ref.child("userdata/\(uid)/tasks/").observe(.childAdded, with: { [self] snapshot in
             let uuid = snapshot.key
             let value = snapshot.value as! [String:Any]
             
             handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
+        })
+        self.ref.child("userdata/\(uid)/tasks/").observe(.childRemoved, with: { [self] snapshot in
+            let uuid = snapshot.key
+            
+            handleUpdateTask(uuid: uuid, value: nil, handleSaveTask: handleSaveTask)
         })
     }
     
@@ -267,26 +276,30 @@ class Firebase {
         self.ref.child("userdata/\(uid)/tasklist/\(ym)/\(uuid)").removeValue()
     }
     
-    private func handleUpdateTask(uuid: String, value :[String:Any], handleSaveTask: @escaping(_ uuid: String, _ task: Task) -> ()) {
+    private func handleUpdateTask(uuid: String, value :[String:Any]?, handleSaveTask: @escaping(_ uuid: String, _ task: Task?) -> ()) {
+        if value == nil {
+            handleSaveTask(uuid, nil)
+            return
+        }
         var task = Task()
-        for v in value.keys {
+        for v in value!.keys {
             switch v {
             case "name":
-                task.name = value[v] as! String
+                task.name = value![v] as! String
             case "alram":
-                task.alram = value[v] as! Bool
+                task.alram = value![v] as! Bool
             case "date":
-                task.date = value[v] as! String
+                task.date = value![v] as! String
             case "inToday":
-                task.inToday = value[v] as! Bool
+                task.inToday = value![v] as! Bool
             case "isDone":
-                task.isDone = value[v] as! Bool
+                task.isDone = value![v] as! Bool
             case "time":
-                task.time = value[v] as! String
+                task.time = value![v] as! String
             case "tag":
-                task.tag = value[v] as? String
+                task.tag = value![v] as? String
             case "color":
-                task.color = value[v] as? String
+                task.color = value![v] as? String
             default:
                 print("Error :: handleUpdateTask() ")
             }
@@ -342,7 +355,7 @@ class Firebase {
     func downloadHabit(uuid: String, handleSaveHabit: @escaping (_ uuid: String, _ task: Habits) -> ()) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        self.ref.child("userdata/\(uid)/habits/\(uuid)").observeSingleEvent(of: .value, with: { [self] snapshot in
+        self.ref.child("userdata/\(uid)/habits/\(uuid)").observe(.value, with: { [self] snapshot in
             let uuid = snapshot.key
             if let value = snapshot.value as? [String:Any] {
                 self.handleUpdateHabit(uuid: uuid, value: value, handleSaveHabit: handleSaveHabit)
