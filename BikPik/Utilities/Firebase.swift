@@ -230,9 +230,9 @@ class Firebase {
         
         self.ref.child("userdata/\(uid)/tasks/\(uuid)").observeSingleEvent(of: .value, with: { [self] snapshot in
             let uuid = snapshot.key
-            let value = snapshot.value as! [String:Any]
-            
-            handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
+            if let value = snapshot.value as? [String:Any] {
+                handleUpdateTask(uuid: uuid, value: value, handleSaveTask: handleSaveTask)
+            }
         })
     }
     
@@ -344,9 +344,9 @@ class Firebase {
         
         self.ref.child("userdata/\(uid)/habits/\(uuid)").observeSingleEvent(of: .value, with: { [self] snapshot in
             let uuid = snapshot.key
-            let value = snapshot.value as! [String:Any]
-            
-            self.handleUpdateHabit(uuid: uuid, value: value, handleSaveHabit: handleSaveHabit)
+            if let value = snapshot.value as? [String:Any] {
+                self.handleUpdateHabit(uuid: uuid, value: value, handleSaveHabit: handleSaveHabit)
+            }
         })
     }
     
