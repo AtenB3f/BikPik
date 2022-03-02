@@ -210,10 +210,11 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     @objc func clickSetting (_ sender: UIButton) {
         let id = sender.tag
         let uuid = mngToDo.selTaskList.value[id]
-        let name = mngToDo.tasks[uuid]!.name
+        
         if mngToDo.tasks[uuid] != nil {
             mngToDo.deleteTask(uuid: uuid)
-        } else if mngHabit.habits[uuid] != nil {
+        } else if let habit = mngHabit.habits[uuid] {
+            let name = habit.task.name
             presentHabitAlert(name: name, uuid: uuid)
         }
     }
