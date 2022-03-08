@@ -56,14 +56,17 @@ class ToDoManager {
         sortTimeline()
     }
     
-    func saveServerTask(uuid: String, task: Task) {
-        if tasks[uuid] == nil {
+    func saveServerTask(uuid: String, task: Task?) {
+        if task == nil {
+            // remove
+            self.deleteTask(uuid: uuid)
+        } else if tasks[uuid] == nil {
             // create
             self.tasks[uuid] = task
             self.saveTasks()
         } else {
             // correct
-            self.correctTask(uuid: uuid, after: task)
+            self.correctTask(uuid: uuid, after: task!)
         }
         
         self.updateData()

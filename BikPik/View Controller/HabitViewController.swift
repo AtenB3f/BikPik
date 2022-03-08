@@ -9,7 +9,7 @@ import UIKit
 import SideMenu
 
 class HabitViewController: UIViewController {
-    
+    let mngFirebase = Firebase.mngFirebase
     let mngHabit = HabitManager.mngHabit
     let mngToDo = ToDoManager.mngToDo
     let mngNoti = Notifications.mngNotification
@@ -58,6 +58,8 @@ class HabitViewController: UIViewController {
     
     
     func updateData() {
+        mngFirebase.updateHabit(handleSaveHabit: mngHabit.saveServerHabit(uuid:habit:))
+        
         habitCollection?.indexPathsForVisibleItems.forEach { idx in
             let cell = habitCollection?.cellForItem(at: idx) as! HabitCollectCell
             let id = idx.row
