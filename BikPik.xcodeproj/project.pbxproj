@@ -38,6 +38,7 @@
 		319DEF65267782A200299580 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319DEF64267782A200299580 /* Storage.swift */; };
 		31A132F42716B88D004C6ACC /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A132F32716B88D004C6ACC /* SideMenuViewController.swift */; };
 		31B4E2A727773D3200445331 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B4E2A627773D3200445331 /* Observable.swift */; };
+		31B76C7B27D71A6F0073FFBB /* ToDoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B76C7A27D71A6F0073FFBB /* ToDoCell.swift */; };
 		31B7D8F227BF5F6300E2EC15 /* EmailAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B7D8F127BF5F6300E2EC15 /* EmailAuthViewController.swift */; };
 		31B9453F27BE4055007FA566 /* SetProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B9453E27BE4055007FA566 /* SetProfileViewController.swift */; };
 		31C37CFE278FAD3200D8FBB8 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C37CFD278FAD3200D8FBB8 /* Firebase.swift */; };
@@ -82,6 +83,7 @@
 		319DEF64267782A200299580 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		31A132F32716B88D004C6ACC /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		31B4E2A627773D3200445331 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		31B76C7A27D71A6F0073FFBB /* ToDoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoCell.swift; sourceTree = "<group>"; };
 		31B7D8F127BF5F6300E2EC15 /* EmailAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAuthViewController.swift; sourceTree = "<group>"; };
 		31B9453E27BE4055007FA566 /* SetProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileViewController.swift; sourceTree = "<group>"; };
 		31C37CFD278FAD3200D8FBB8 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				31806386273AA53B0058C886 /* CustomCalendar.swift */,
+				31B76C7A27D71A6F0073FFBB /* ToDoCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				3124057E2716EEE20056C1F6 /* CustomSideMenuViewController.swift in Sources */,
 				31795344271D96BF00EA6034 /* OpenSourceViewController.swift in Sources */,
 				3146790C266B6118008AEC4D /* SceneDelegate.swift in Sources */,
+				31B76C7B27D71A6F0073FFBB /* ToDoCell.swift in Sources */,
 				31806387273AA53B0058C886 /* CustomCalendar.swift in Sources */,
 				3199943826DF606000F4DD5D /* HabitViewController.swift in Sources */,
 				3189A0152792ACB2007B24B6 /* AccountViewModel.swift in Sources */,
