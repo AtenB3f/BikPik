@@ -54,9 +54,9 @@ class CustomCalendar: FSCalendar{
         super.contentView.backgroundColor = UIColor(named: "BikPik Color")
         super.headerHeight = 0
         super.appearance.selectionColor = UIColor(named: "BikPik Dark Color")
-        super.appearance.todayColor = UIColor(named: "BikPik Color")
         super.appearance.borderSelectionColor = UIColor(named: "BikPik Dark Color")
-        super.appearance.titleTodayColor = UIColor.white
+        super.appearance.todayColor = UIColor(named: "BikPik Light Color")
+        super.appearance.titleTodayColor = UIColor(named: "BikPik Dark Color")
         super.appearance.weekdayFont = UIFont.systemFont(ofSize: 16.0, weight: .bold)
         super.appearance.weekdayTextColor = UIColor.white
         super.appearance.titleFont = UIFont.systemFont(ofSize: 16)
@@ -64,7 +64,6 @@ class CustomCalendar: FSCalendar{
         super.appearance.headerMinimumDissolvedAlpha = 0.0
         super.appearance.caseOptions = .weekdayUsesSingleUpperCase
         super.locale = Locale(identifier: "en_USA")
-
     }
     
     func setMonthLayout() {

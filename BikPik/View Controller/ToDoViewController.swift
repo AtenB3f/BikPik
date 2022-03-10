@@ -25,6 +25,10 @@ class ToDoViewController: UIViewController {
         
         setLayout()
         
+        calendarWeek.delegate = self
+        calendarWeek.dataSource = self
+        calendarWeek.currentPage = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .date) as! Date
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleAddToDoNoti(_:)), name: notiAddToDo, object: nil)
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell))
@@ -34,6 +38,7 @@ class ToDoViewController: UIViewController {
         
         mngToDo.selDate.bind{ [weak self] date in
             self?.btnSelectDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
+            self?.calendarWeek.currentPage = Date.DateForm(data: date, input: .fullDate, output: .date) as! Date
             self?.updateDate()
         }
         
@@ -41,6 +46,7 @@ class ToDoViewController: UIViewController {
             self?.tableviewToDo.reloadData()
         }
     }
+    /*
     lazy var scopeGesture: UIPanGestureRecognizer = {
         let panGesture = UIPanGestureRecognizer(target: self.calendarWeek, action: #selector(self.calendarWeek.handleScopeGesture(_:)))
         panGesture.delegate = self
@@ -48,7 +54,7 @@ class ToDoViewController: UIViewController {
         panGesture.maximumNumberOfTouches = 2
         return panGesture
     }()
-    
+    */
     override func viewWillAppear(_ animated: Bool) {
         mngToDo.setToday()
         calendarWeek.setLayout()
@@ -78,7 +84,6 @@ class ToDoViewController: UIViewController {
     }()
     let calendarWeek: CustomCalendar = {
         let calendar = CustomCalendar(style: .week, frame: CGRect(x: 0, y: 0, width: 280, height: 100))
-        calendar.scope = .week
         return calendar
     }()
     let viewFast: UIView = {
@@ -142,7 +147,7 @@ class ToDoViewController: UIViewController {
         viewTop.addSubview(btnSelectDay)
         btnSelectDay.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().inset(16.0)
+            make.centerY.equalTo(btnMenu.snp.centerY)
         }
     }
     
@@ -176,21 +181,21 @@ class ToDoViewController: UIViewController {
         viewFast.snp.makeConstraints { make in
             //make.top.equalTo(viewTop.snp.bottom)
             make.top.equalTo(calendarWeek.snp.bottom)
-            make.centerX.right.left.equalTo(self.view.safeAreaLayoutGuide)
+            make.centerX.right.left.equalToSuperview()
             make.height.equalTo(40.0)
         }
         
         viewFast.addSubview(btnFastAddTask)
         btnFastAddTask.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().inset(16.0)
+            make.left.equalTo(self.view.safeAreaLayoutGuide).inset(16.0)
             make.width.height.equalTo(40.0)
         }
         
         viewFast.addSubview(textFastAddTask)
         textFastAddTask.snp.makeConstraints { make in
             make.centerY.height.equalToSuperview()
-            make.right.equalToSuperview().inset(16.0)
+            make.right.equalTo(self.view.safeAreaLayoutGuide).inset(16.0)
             make.left.equalTo(btnFastAddTask.snp.right).offset(4.0)
         }
     }
@@ -203,13 +208,15 @@ class ToDoViewController: UIViewController {
         tableviewToDo.snp.makeConstraints { make in
             make.top.equalTo(viewFast.snp.bottom)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(60.0)
-            make.left.right.equalToSuperview()
+            make.left.right.equalToSuperview()//equalTo(self.view.safeAreaLayoutGuide)
         }
+        tableviewToDo.insetsContentViewsToSafeArea = true
     }
     private func setLayoutBottomView() {
         self.view.addSubview(viewBottom)
         viewBottom.snp.makeConstraints { make in
-            make.bottom.width.centerX.equalTo(self.view.safeAreaLayoutGuide)
+            make.width.centerX.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
             make.height.equalTo(60.0)
         }
         
@@ -217,7 +224,7 @@ class ToDoViewController: UIViewController {
         btnAddTask.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.height.width.equalTo(44.0)
-            make.right.equalToSuperview().inset(16.0)
+            make.right.equalTo(self.view.safeAreaLayoutGuide).inset(16.0)
         }
          
     }
@@ -288,7 +295,7 @@ class ToDoViewController: UIViewController {
         self.present(vc, animated: true, completion: nil)
     }
 }
-
+/*
 extension ToDoViewController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
             let shouldBegin = self.tableviewToDo.contentOffset.y <= -self.tableviewToDo.contentInset.top
@@ -306,7 +313,7 @@ extension ToDoViewController: UIGestureRecognizerDelegate {
             return shouldBegin
         }
 }
-
+*/
 extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -471,13 +478,14 @@ extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        if calendar == self.calendar {
+            setCalendar()
+        }
         mngToDo.changeSelectDate(date: Date.DateForm(data: date, input: .date, output: .fullDate) as! String)
-        //disableCalendar()
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
         //self.calendarHeightConstraint.constant = bounds.height
-        toggleCalendar()
         self.view.layoutIfNeeded()
     }
     /*

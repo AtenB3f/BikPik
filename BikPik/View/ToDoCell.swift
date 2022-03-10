@@ -53,7 +53,7 @@ class ToDoCell: UITableViewCell {
     func setLayout() {
         contentView.snp.makeConstraints { make in
             make.height.equalTo(40.0)
-            make.left.right.equalToSuperview()
+            make.left.right.equalTo(safeAreaInsets)
         }
         
         contentView.addSubview(btnDone)
