@@ -329,9 +329,11 @@ class ToDoCell: UITableViewCell {
             let img = UIImage(named: "CheckBox.png")?.withRenderingMode(.alwaysTemplate)
             isDone.setImage(img, for: .normal)
             isDone.tintColor = col
+            
             task.attributedText = NSAttributedString(
-                                    string: self.task.text ?? "" ,
-                                    attributes: [NSAttributedString.Key.strikethroughStyle:NSUnderlineStyle.byWord])
+                                    string: self.task.text ?? "test" ,
+                                    attributes: [NSAttributedString.Key.strikethroughStyle:NSUnderlineStyle.byWord.rawValue])
+             
         }
     }
     
