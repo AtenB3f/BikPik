@@ -13,36 +13,226 @@ class ToDoViewController: UIViewController {
     let mngToDo = ToDoManager.mngToDo
     let mngHabit = HabitManager.mngHabit
     let mngFirebase = Firebase.mngFirebase
+    var onCalendar = false
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: notiAddToDo, object: nil)
+        //self.view.addGestureRecognizer(scopeGesture)
+        //self.tableviewToDo.panGestureRecognizer.require(toFail: scopeGesture)
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell))
-        ToDoTable.addGestureRecognizer(longPress)
+        setLayout()
         
-        fldFastAddTask.delegate = self
-        let tabToDoList = UITapGestureRecognizer(target: self, action: #selector(tabPressList))
-        ToDoTable.addGestureRecognizer(tabToDoList)
+        tableviewToDo.register(ToDoCell.self, forCellReuseIdentifier: "ToDoCell")
+        tableviewToDo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tabPressList)))
+        tableviewToDo.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressCell)))
+        
+        calendarWeek.delegate = self
+        calendarWeek.dataSource = self
+        calendarWeek.currentPage = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .date) as! Date
+        
+        textFastAddTask.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleAddToDoNoti(_:)), name: notiAddToDo, object: nil)
         
         mngToDo.selDate.bind{ [weak self] date in
-            self?.btnDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
+            self?.btnSelectDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
+            self?.calendarWeek.currentPage = Date.DateForm(data: date, input: .fullDate, output: .date) as! Date
             self?.updateDate()
         }
-
+        
         mngToDo.selTaskList.bind{ [weak self] _ in
-            self?.ToDoTable.reloadData()
+            self?.tableviewToDo.reloadData()
+        }
+    }
+    /*
+    lazy var scopeGesture: UIPanGestureRecognizer = {
+        let panGesture = UIPanGestureRecognizer(target: self.calendarWeek, action: #selector(self.calendarWeek.handleScopeGesture(_:)))
+        panGesture.delegate = self
+        panGesture.minimumNumberOfTouches = 1
+        panGesture.maximumNumberOfTouches = 2
+        return panGesture
+    }()
+    */
+    override func viewWillAppear(_ animated: Bool) {
+        mngToDo.setToday()
+        calendarWeek.setLayout()
+        calendarWeek.layoutIfNeeded()
+    }
+    
+    let viewTop:UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(named: "BikPik Color")
+        return view
+    }()
+    let btnMenu:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage.init(systemName: "square.grid.2x2.fill"), for: .normal)
+        button.tintColor = .white
+        button.setPreferredSymbolConfiguration(.init(pointSize: 24.0), forImageIn: .normal)
+        button.addTarget(self, action: #selector(actionMenu), for: .touchUpInside)
+        return button
+    }()
+    let btnSelectDay: UIButton = {
+        let button = UIButton()
+        button.setTitle(Date.GetNowDate(), for: .normal)
+        button.titleLabel?.font = UIFont(name: "GmarketSansTTFMedium", size: 24.0)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(setCalendar), for: .touchUpInside)
+        return button
+    }()
+    let calendarWeek: CustomCalendar = {
+        let calendar = CustomCalendar(style: .week, frame: CGRect(x: 0, y: 0, width: 280, height: 100))
+        return calendar
+    }()
+    let viewFast: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(named: "BikPik Light Color")
+        return view
+    }()
+    let btnFastAddTask: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus.app"), for: .normal)
+        button.tintColor = UIColor(named: "BikPik Dark Color")
+        button.setPreferredSymbolConfiguration(.init(pointSize: 20.0), forImageIn: .normal)
+        button.addTarget(self, action: #selector(actionAddFastTask), for: .touchUpInside)
+        return button
+    }()
+    let textFastAddTask: UITextField = {
+        let text = UITextField()
+        text.placeholder = "Add Task"
+        return text
+    }()
+    let tableviewToDo: UITableView = {
+        let view = UITableView()
+        return view
+    }()
+    let viewBottom: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.systemBackground
+        return view
+    }()
+    let btnAddTask: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
+        button.setPreferredSymbolConfiguration(.init(pointSize: 40), forImageIn: .normal)
+        button.tintColor = UIColor(named: "BikPik Color")
+        button.addTarget(self, action: #selector(actionAddTask), for: .touchUpInside)
+        return button
+    }()
+    
+    
+    private func setLayout() {
+        setLayoutTopView()
+        setLayoutCalendar()
+        setLayoutFastView()
+        setLayoutTableView()
+        setLayoutBottomView()
+    }
+    
+    private func setLayoutTopView() {
+        self.view.addSubview(viewTop)
+        viewTop.snp.makeConstraints { make in
+            make.top.right.left.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(80)
+        }
+        
+        viewTop.addSubview(btnMenu)
+        btnMenu.snp.makeConstraints { make in
+            make.right.top.equalToSuperview().inset(16)
+            make.width.height.equalTo(44.0)
+        }
+        
+        viewTop.addSubview(btnSelectDay)
+        btnSelectDay.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(btnMenu.snp.centerY)
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        mngToDo.setToday()
+    private func setLayoutCalendar(){
+        self.view.addSubview(calendarWeek)
+        calendarWeek.snp.makeConstraints { make in
+            make.width.equalTo(280)
+            make.height.equalTo(80)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(viewTop.snp.bottom)
+        }
+        
+        calendarWeek.calendarWeekdayView.snp.makeConstraints { make in
+            make.centerX.width.equalToSuperview()
+            make.top.equalToSuperview()
+            make.height.equalTo(28)
+        }
+        calendarWeek.daysContainer.snp.makeConstraints { make in
+            make.width.centerX.equalToSuperview()
+            make.height.equalTo(40)
+            make.top.equalTo(calendarWeek.calendarWeekdayView.snp.bottom).offset(-5)
+        }
+        calendarWeek.collectionView.snp.makeConstraints { make in
+            make.centerX.width.top.equalToSuperview()
+            make.height.equalTo(40)
+        }
     }
     
+    private func setLayoutFastView() {
+        self.view.addSubview(viewFast)
+        viewFast.snp.makeConstraints { make in
+            //make.top.equalTo(viewTop.snp.bottom)
+            make.top.equalTo(calendarWeek.snp.bottom)
+            make.centerX.right.left.equalToSuperview()
+            make.height.equalTo(40.0)
+        }
+        
+        viewFast.addSubview(btnFastAddTask)
+        btnFastAddTask.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.left.equalTo(self.view.safeAreaLayoutGuide).inset(16.0)
+            make.width.height.equalTo(40.0)
+        }
+        
+        viewFast.addSubview(textFastAddTask)
+        textFastAddTask.snp.makeConstraints { make in
+            make.centerY.height.equalToSuperview()
+            make.right.equalTo(self.view.safeAreaLayoutGuide).inset(16.0)
+            make.left.equalTo(btnFastAddTask.snp.right).offset(4.0)
+        }
+    }
+    private func setLayoutTableView() {
+        tableviewToDo.delegate = self
+        tableviewToDo.dataSource = self
+        tableviewToDo.register(ToDoCell.self, forCellReuseIdentifier: "ToDoCell")
+        tableviewToDo.separatorStyle = .none
+        self.view.addSubview(tableviewToDo)
+        tableviewToDo.snp.makeConstraints { make in
+            make.top.equalTo(viewFast.snp.bottom)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(60.0)
+            make.left.right.equalToSuperview()//equalTo(self.view.safeAreaLayoutGuide)
+        }
+        tableviewToDo.insetsContentViewsToSafeArea = true
+    }
+    private func setLayoutBottomView() {
+        self.view.addSubview(viewBottom)
+        viewBottom.snp.makeConstraints { make in
+            make.width.centerX.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(60.0)
+        }
+        
+        viewBottom.addSubview(btnAddTask)
+        btnAddTask.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.height.width.equalTo(44.0)
+            make.right.equalTo(self.view.safeAreaLayoutGuide).inset(16.0)
+        }
+         
+    }
+    
+    
     // 태스크 추가 후에 테이블 뷰 적용될 수 있게 하는 기능
-    @objc func didDismissPostCommentNotification(_ noti: Notification) {
+    @objc func handleAddToDoNoti(_ noti: Notification) {
         updateDate()
-        ToDoTable.reloadData()
+        //ToDoTable.reloadData()
+        tableviewToDo.reloadData()
     }
     
     /***
@@ -53,123 +243,75 @@ class ToDoViewController: UIViewController {
         // task list update
         mngToDo.updateData()
         // week button update
-        updateWeekDate()
+        //updateWeekDate()
         //ToDoTable.reloadData()
     }
- 
-    @IBOutlet weak var topView: UIView!
-    
     var calendar: FSCalendar? = nil
-    @IBOutlet weak var btnDay: UIButton!
-    @IBAction func btnDay(_ sender: Any) {
+    @objc func setCalendar() {
         if calendar == nil {
-            enableCalendar()
+            calendar = {
+                let calendar = CustomCalendar(style: .month, frame: CGRect(x: 0, y: 0, width: 300, height: 300))
+                calendar.allowsMultipleSelection = false
+                calendar.delegate = self
+                calendar.dataSource = self
+                calendar.currentPage = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .date) as! Date
+                return calendar
+            }()
+            view.addSubview(calendar!)
+            calendar?.snp.makeConstraints({ make in
+                make.center.equalToSuperview()
+                make.width.height.equalTo(300)
+            })
         } else {
-            disableCalendar()
-        }
-    }
-    
-    func enableCalendar() {
-        let y = topView.fs_bottom + 60
-        let rect = CGRect(x: (view.fs_width - 300)/2, y: y, width: 300, height: 300)
-        calendar = CustomCalendar(style: .month, frame: rect)
-        calendar?.allowsMultipleSelection = false
-        calendar?.delegate = self
-        calendar?.dataSource = self
-        calendar!.currentPage = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .date) as! Date
-        view.addSubview(calendar!)
-    }
-    
-    func disableCalendar() {
-        for view in self.view.subviews {
-            if view.isEqual(calendar) {
-                view.removeFromSuperview()
-                calendar = nil
+            for view in self.view.subviews {
+                if view.isEqual(calendar) {
+                    view.removeFromSuperview()
+                    calendar = nil
+                }
             }
         }
     }
-    
-    @IBOutlet weak var Monday: UIButton!
-    @IBOutlet weak var Tuesday: UIButton!
-    @IBOutlet weak var Wednesday: UIButton!
-    @IBOutlet weak var Thursday: UIButton!
-    @IBOutlet weak var Friday: UIButton!
-    @IBOutlet weak var Saturday: UIButton!
-    @IBOutlet weak var Sunday: UIButton!
-    @IBOutlet weak var MonDate: UIButton!
-    @IBOutlet weak var TueDate: UIButton!
-    @IBOutlet weak var WedDate: UIButton!
-    @IBOutlet weak var ThuDate: UIButton!
-    @IBOutlet weak var FriDate: UIButton!
-    @IBOutlet weak var SatDate: UIButton!
-    @IBOutlet weak var SunDate: UIButton!
-    
-    @IBAction func btnWeekDate(_ sender: UIButton) {
-        let arrDate: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
-        let arrDay: [UIButton] = [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
-        var idx = 0
-        
-        for i in 0..<arrDate.count {
-            if sender == arrDate[i] || sender == arrDay[i]{
-                arrDate[i].isSelected = true
-                idx = i
-            } else {
-                arrDate[i].isSelected = false
-            }
-        }
-        let cnt = idx - (Date.WeekForm(data: mngToDo.selDate.value, input: .fullDate, output: .intIndex) as! Int) + 1
-        mngToDo.changeSelectDate(index: cnt)
+
+    @objc func actionMenu() {
+        let sideMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "SideMenuVC") as! SideMenuViewController
+        let menu = CustomSideMenuViewController(rootViewController: sideMenuViewController)
+        self.present(menu, animated: true, completion: nil)
     }
-    
-    func updateWeekDate(){
-        var year: Int = 0
-        var month: Int = 0
-        var day: Int = 0
-        
-        let arrDay: [UIButton] = [MonDate, TueDate, WedDate, ThuDate, FriDate, SatDate, SunDate]
-        let idx = Date.WeekForm(data: mngToDo.selDate.value, input: .fullDate, output: .intIndex) as! Int
-        
-        for i in 0...6 {
-            let strDate = Date.GetNextDay(date: mngToDo.selDate.value,fewDays: i-idx+1)
-            Date.GetIntDate(date: strDate, year: &year, month: &month, day: &day)
-            arrDay[i].setTitle(String(day), for: .normal)
-            arrDay[i].isSelected = i == (idx-1) ? true : false
-        }
-    }
-    
-    @IBOutlet weak var btnFastAddTask: UIButton!
-    @IBAction func btnFaskAddTask(_ sender: Any) {
-        let task = fldFastAddTask.text
+    @objc func actionAddFastTask() {
+        let task = textFastAddTask.text
         if task != "" && task != nil {
             var data:Task = Task(name: task!, date: Date.GetNowDate(), inToday: true)
             data.date = mngToDo.selDate.value
             mngToDo.createTask(data: data)
-            fldFastAddTask.text = ""
+            textFastAddTask.text = ""
         }
     }
-    
-    @IBOutlet weak var fldFastAddTask: UITextField!
-    
-    @IBAction func btnMenu(_ sender: Any) {
-        let sideMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "SideMenuVC") as! SideMenuViewController
-        let menu = CustomSideMenuViewController(rootViewController: sideMenuViewController)
-        
-        
-        present(menu, animated: true, completion: nil)
-    }
-    
-    @IBOutlet weak var btnAddTask: UIButton!
-    @IBAction func btnAddTask(_ sender: Any) {
-        // Present Add To Do VC
+    @objc func actionAddTask() {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "AddToDoVC") as! AddToDoViewController
         vc.modalTransitionStyle = .coverVertical
         vc.data.date = mngToDo.selDate.value
         self.present(vc, animated: true, completion: nil)
     }
-    
-    @IBOutlet weak var ToDoTable: UITableView!
 }
-
+/*
+extension ToDoViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            let shouldBegin = self.tableviewToDo.contentOffset.y <= -self.tableviewToDo.contentInset.top
+            if shouldBegin {
+                let velocity = self.scopeGesture.velocity(in: self.view)
+                switch self.calendarWeek.scope {
+                case .month:
+                    return velocity.y < 0
+                case .week:
+                    return velocity.y > 0
+                @unknown default:
+                    print("calendar guesture err")
+                }
+            }
+            return shouldBegin
+        }
+}
+*/
 extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -177,10 +319,15 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? ToDoCell {
-            cell.updateCell(indexPathRow: indexPath.row)
-            cell.isDone.addTarget(self, action: #selector(clickIsDone(_:)), for: .touchUpInside)
-            cell.setting.addTarget(self, action: #selector(clickSetting(_:)), for: .touchUpInside)
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath) as? ToDoCell {
+            let uuid = mngToDo.selTaskList.value[indexPath.row]
+            if let task = mngToDo.tasks[uuid]{
+                cell.updateCell(indexPathRow: indexPath.row, name: task.name, done: task.isDone, time: task.inToday ? "Today" : task.time, type: .ToDo)
+            } else if let habit = mngHabit.habits[uuid] {
+                cell.updateCell(indexPathRow: indexPath.row, name: habit.task.name, done: mngHabit.isDoneCheck(habit: habit, date: mngToDo.selDate.value), time: habit.task.time, type: .Habit)
+            }
+            cell.btnDone.addTarget(self, action: #selector(clickIsDone(_:)), for: .touchUpInside)
+            cell.btnSetting.addTarget(self, action: #selector(clickSetting(_:)), for: .touchUpInside)
             
             return cell
         }else {
@@ -210,20 +357,20 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     @objc func clickSetting (_ sender: UIButton) {
         let id = sender.tag
         let uuid = mngToDo.selTaskList.value[id]
-        
         if mngToDo.tasks[uuid] != nil {
             mngToDo.deleteTask(uuid: uuid)
-        } else if let habit = mngHabit.habits[uuid] {
-            let name = habit.task.name
-            presentHabitAlert(name: name, uuid: uuid)
+        } else if mngHabit.habits[uuid] != nil {
+            actionReviseHabit(uuid: uuid)
         }
     }
     
     @objc func longPressCell (_ sender: UIGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.began {
-            let touchPoint = sender.location(in: ToDoTable)
+            //let touchPoint = sender.location(in: ToDoTable)
+            let touchPoint = sender.location(in: tableviewToDo)
             
-            if let row = ToDoTable.indexPathForRow(at: touchPoint) {
+            //if let row = ToDoTable.indexPathForRow(at: touchPoint) {
+            if let row = tableviewToDo.indexPathForRow(at: touchPoint) {
                 let idx = row[1]
                 
                 let uuid = mngToDo.selTaskList.value[idx]
@@ -258,7 +405,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func presentHabitAlert(name: String, uuid: String) {
         let alert = UIAlertController(title: name, message: "Habit", preferredStyle: .alert)
-        let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.alertReviseHabit(uuid: uuid)})
+        let revise = UIAlertAction(title: "수정", style: .default, handler: {UIAlertAction in self.actionReviseHabit(uuid: uuid)})
         let cancle = UIAlertAction(title: "취소", style: .default, handler: nil)
         alert.addAction(revise)
         alert.addAction(cancle)
@@ -285,101 +432,13 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         mngToDo.deleteTask(uuid: uuid)
     }
     
-    func alertReviseHabit (uuid : String) {
+    func actionReviseHabit (uuid : String) {
         let vc = storyboard.self?.instantiateViewController(withIdentifier: "AddHabitVC") as! AddHabitViewController
         vc.modalTransitionStyle = .coverVertical
         guard let habit = mngHabit.habits[uuid] else { return }
         vc.data = habit
         vc.uuid = uuid
         self.present(vc, animated: true, completion: nil)
-    }
-}
-
-class ToDoCell: UITableViewCell {
-    let mngToDo = ToDoManager.mngToDo
-    let mngHabit = HabitManager.mngHabit
-    @IBOutlet weak var time: UILabel!
-    @IBOutlet weak var isDone: UIButton!
-    @IBOutlet weak var task: UILabel!
-    @IBOutlet weak var setting: UIButton!
-    
-    /*
-     [isDone]
-    버튼 선택(완료/미완료)에 따라 아이콘과 텍스트 스타일 변경하는 메소드
-     */
-    @IBAction func isDone(_ sender: Any) {
-        isDone.isSelected.toggle()
-        displayDone(done: isDone.isSelected)
-    }
-    
-    func displayDone(done: Bool) {
-        isDone.isSelected = done
-        task.textColor = UIColor(named: "TextLightColor") ?? .lightText
-        time.textColor = UIColor(named: "TextLightColor") ?? .lightText
-        if done {
-            let col: UIColor = UIColor.init(named: "BikPik Dark Color") ?? .cyan
-            let img = UIImage(named: "CheckBox_fill.png")?.withRenderingMode(.alwaysTemplate)
-            isDone.setImage(img, for: .normal)
-            isDone.tintColor = col
-            task.attributedText = NSAttributedString(
-                                    string: self.task.text ?? ""  ,
-                                    attributes: [NSAttributedString.Key.strikethroughStyle : NSUnderlineStyle.single.rawValue])
-        } else {
-            let col: UIColor = UIColor(named: "TextLightColor") ?? .lightText
-            let img = UIImage(named: "CheckBox.png")?.withRenderingMode(.alwaysTemplate)
-            isDone.setImage(img, for: .normal)
-            isDone.tintColor = col
-            
-            task.attributedText = NSAttributedString(
-                                    string: self.task.text ?? "test" ,
-                                    attributes: [NSAttributedString.Key.strikethroughStyle:NSUnderlineStyle.byWord.rawValue])
-             
-        }
-    }
-    
-    func displayTime(uuid: String) -> String{
-        var time: String?
-        
-        if mngToDo.tasks[uuid] != nil {
-            if mngToDo.tasks[uuid]?.inToday == true {
-                time = "Today"
-            } else {
-                time = mngToDo.tasks[uuid]?.time
-            }
-        } else if let habit = mngHabit.habits[uuid] {
-            if habit.task.inToday == true {
-                time = "Today"
-            } else {
-                time = habit.task.time
-            }
-            
-        } else {
-            time = "Today"
-        }
-        
-        return time!
-    }
-    
-    func updateCell(indexPathRow row: Int) {
-        if row >= mngToDo.selTaskList.value.count{
-            return
-        }
-        let uuid = mngToDo.selTaskList.value[row]
-        if let data = mngToDo.tasks[uuid] {
-            displayDone(done: data.isDone)
-            setting.setImage(UIImage(systemName: "x.circle"), for: .normal)
-            self.task.text = data.name
-        } else if let habit = mngHabit.habits[uuid] {
-            let done = mngHabit.isDoneCheck(habit: habit, date: mngToDo.selDate.value)
-            displayDone(done: done)
-            setting.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
-            self.task.text = habit.task.name
-        }
-        
-        time.text = displayTime(uuid: uuid)
-        
-        isDone.tag = row
-        setting.tag = row
     }
 }
 
@@ -407,9 +466,37 @@ extension ToDoViewController: UITextFieldDelegate{
 }
 
 extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
+    @objc func toggleCalendar() {
+        if self.calendarWeek.scope == .month {
+            self.calendarWeek.setScope(.week, animated: self.onCalendar)
+        } else {
+            self.calendarWeek.setScope(.month, animated: self.onCalendar)
+        }
+        self.onCalendar.toggle()
+    }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        if calendar == self.calendar {
+            setCalendar()
+        }
         mngToDo.changeSelectDate(date: Date.DateForm(data: date, input: .date, output: .fullDate) as! String)
-        disableCalendar()
+    }
+    
+    func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
+        //self.calendarHeightConstraint.constant = bounds.height
+        self.view.layoutIfNeeded()
+    }
+    /*
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        //print("did select date \(self.dateFormatter.string(from: date))")
+       // let selectedDates = calendar.selectedDates.map({self.dateFormatter.string(from: $0)})
+        //print("selected dates is \(selectedDates)")
+        if monthPosition == .next || monthPosition == .previous {
+            calendar.setCurrentPage(date, animated: true)
+        }
+    }
+*/
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        //print("\(self.dateFormatter.string(from: calendar.currentPage))")
     }
 }

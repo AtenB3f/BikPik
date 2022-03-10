@@ -14,14 +14,14 @@ class HabitViewController: UIViewController {
     let mngToDo = ToDoManager.mngToDo
     let mngNoti = Notifications.mngNotification
     
-    var widthCell : CGFloat = 250
     var cellSize = CGSize()
-    var sectionInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
+    var cellInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didDismissPostCommentNotification(_:)), name: notiAddHabit  , object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.calCellSize), name: NSNotification.Name("DeviceRotateNoti"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleAddHabitNoti(_:)), name: NSNotification.Name("AddHabitNoti")  , object: nil)
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell(_:)))
         habitCollection.addGestureRecognizer(longPress)
@@ -34,7 +34,7 @@ class HabitViewController: UIViewController {
         updateData()
     }
     
-    @objc func didDismissPostCommentNotification(_ sender: Any) {
+    @objc func handleAddHabitNoti(_ sender: Any) {
         mngHabit.loadHabit()
         habitCollection.reloadData()
     }
@@ -75,24 +75,22 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
         return mngHabit.habits.count
     }
     
-    func calCellSize() -> CGSize {
-        let edge = 15.0
-        let viewW = habitCollection.frame.width
-        let col : CGFloat = round(viewW / 300.0)
-        let widthFrame : CGFloat = (viewW) / col
-        
-        widthCell = widthFrame - (edge*((col-1.0) + 2.0))
-        sectionInsets.right = edge
-        sectionInsets.left = edge
-        let size = CGSize(width: widthCell , height: 128)
-        
-        return size
+    @objc func calCellSize() -> CGSize {
+        var widthCell : CGFloat = 250
+        if UITraitCollection.current.userInterfaceIdiom == .pad {
+            // pad
+            widthCell = (habitCollection.frame.width - 46)/2
+        } else {
+            // phone
+            widthCell = habitCollection.frame.width - 30
+        }
+        return CGSize(width: widthCell , height: 128)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HabitCell", for: indexPath) as? HabitCollectCell {
-            let size = calCellSize()//CGSize(width: 330.0, height: 128.0)
+            let size = calCellSize()
             let id = indexPath.row
             if let habit = mngHabit.habits[mngHabit.listHabit[id]] {
                 cell.update(data: habit)
@@ -113,11 +111,11 @@ extension HabitViewController : UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInsets
+        return cellInsets
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return sectionInsets.left
+        return cellInsets.left
     }
     
     

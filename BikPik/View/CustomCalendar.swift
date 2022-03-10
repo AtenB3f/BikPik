@@ -7,6 +7,7 @@
 
 //import UIKit
 import FSCalendar
+import UIKit
 
 enum CalendarStyle{
     case month
@@ -41,13 +42,28 @@ class CustomCalendar: FSCalendar{
     func setLayout() {
         if mngSetting.data.startSun {
             super.firstWeekday = 1
+            super.calendarWeekdayView.weekdayLabels[0].textColor = UIColor.red
         } else {
             super.firstWeekday = 2
+            super.calendarWeekdayView.weekdayLabels[6].textColor = UIColor.red
         }
     }
     
     func setWeekLayout() {
+        super.scope = .week
+        super.contentView.backgroundColor = UIColor(named: "BikPik Color")
+        super.headerHeight = 0
+        super.appearance.selectionColor = UIColor(named: "BikPik Dark Color")
+        super.appearance.borderSelectionColor = UIColor(named: "BikPik Dark Color")
+        super.appearance.todayColor = UIColor(named: "BikPik Light Color")
+        super.appearance.titleTodayColor = UIColor(named: "BikPik Dark Color")
+        super.appearance.weekdayFont = UIFont.systemFont(ofSize: 16.0, weight: .bold)
+        super.appearance.weekdayTextColor = UIColor.white
+        super.appearance.titleFont = UIFont.systemFont(ofSize: 16)
+        super.appearance.titleDefaultColor = UIColor.white
         super.appearance.headerMinimumDissolvedAlpha = 0.0
+        super.appearance.caseOptions = .weekdayUsesSingleUpperCase
+        super.locale = Locale(identifier: "en_USA")
     }
     
     func setMonthLayout() {
@@ -84,9 +100,6 @@ class CustomCalendar: FSCalendar{
         super.appearance.caseOptions = .weekdayUsesSingleUpperCase
     }
     
-    func setLayoutMutiSelected(start: Date, end: Date, date: Date) {
-        
-    }
 }
 
  
@@ -125,7 +138,7 @@ class CustomCalendarCell: FSCalendarCell {
         selectionType = .none
     }
     
-    func setLayout() {
+    private func setLayout() {
         let selectionLayer = CAShapeLayer()
         selectionLayer.fillColor = UIColor(named: "BikPik Color")?.cgColor
         self.selectionLayer = selectionLayer

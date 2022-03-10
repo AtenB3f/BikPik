@@ -9,8 +9,6 @@ import UIKit
 import FSCalendar
 import SnapKit
 
-let notiAddHabit: Notification.Name = Notification.Name("notiAddHabit")
-
 class AddHabitViewController: UIViewController {
     
     let mngHabit = HabitManager.mngHabit
@@ -92,7 +90,7 @@ class AddHabitViewController: UIViewController {
         
         self.presentingViewController?.dismiss(animated: true)
         
-        NotificationCenter.default.post(name: notiAddHabit, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: NSNotification.Name("AddHabitNoti"), object: nil, userInfo: nil)
     }
     
     @IBAction func btnCancle(_ sender: Any) {
