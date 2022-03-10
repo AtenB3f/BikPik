@@ -20,21 +20,19 @@ class ToDoViewController: UIViewController {
         //self.view.addGestureRecognizer(scopeGesture)
         //self.tableviewToDo.panGestureRecognizer.require(toFail: scopeGesture)
         
+        setLayout()
+        
         tableviewToDo.register(ToDoCell.self, forCellReuseIdentifier: "ToDoCell")
         tableviewToDo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tabPressList)))
-        
-        setLayout()
+        tableviewToDo.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressCell)))
         
         calendarWeek.delegate = self
         calendarWeek.dataSource = self
         calendarWeek.currentPage = Date.DateForm(data: mngToDo.selDate.value, input: .fullDate, output: .date) as! Date
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.handleAddToDoNoti(_:)), name: notiAddToDo, object: nil)
-        
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell))
-        tableviewToDo.addGestureRecognizer(longPress)
-        
         textFastAddTask.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleAddToDoNoti(_:)), name: notiAddToDo, object: nil)
         
         mngToDo.selDate.bind{ [weak self] date in
             self?.btnSelectDay.setTitle(Date.DateForm(data: date, input: .fullDate, output: .userDate) as? String, for: .normal)
