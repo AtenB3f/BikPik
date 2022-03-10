@@ -20,10 +20,6 @@ class SetProfileViewController: UIViewController {
         textName.becomeFirstResponder()
     }
     
-    deinit {
-        print("SetProfileViewController deinit")
-    }
-    
     let heightBtn = 44.0
 
     let viewContent = UIView()

@@ -239,6 +239,7 @@ class ToDoViewController: UIViewController {
      sorting the tasks of seleted date.
      */
     func updateDate() {
+        mngFirebase.updateTask(handleSaveTask: self.mngToDo.saveServerTask(uuid:task:))
         // task list update
         mngToDo.updateData()
         // week button update
@@ -268,7 +269,6 @@ class ToDoViewController: UIViewController {
                     calendar = nil
                 }
             }
-
         }
     }
 
