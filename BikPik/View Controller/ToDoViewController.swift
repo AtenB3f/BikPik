@@ -51,6 +51,8 @@ class ToDoViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         mngToDo.setToday()
+        calendarWeek.setLayout()
+        calendarWeek.layoutIfNeeded()
     }
     
     let viewTop:UIView = {
@@ -69,16 +71,14 @@ class ToDoViewController: UIViewController {
     let btnSelectDay: UIButton = {
         let button = UIButton()
         button.setTitle(Date.GetNowDate(), for: .normal)
-        button.titleLabel?.font = UIFont(name: "GmarketSansTTFLight", size: 28.0)
+        button.titleLabel?.font = UIFont(name: "GmarketSansTTFMedium", size: 24.0)
         button.setTitleColor(UIColor.white, for: .normal)
         button.addTarget(self, action: #selector(setCalendar), for: .touchUpInside)
         return button
     }()
     let calendarWeek: CustomCalendar = {
         let calendar = CustomCalendar(style: .week, frame: CGRect(x: 0, y: 0, width: 280, height: 100))
-        calendar.firstWeekday = 2
         calendar.scope = .week
-        calendar.appearance.caseOptions = [.headerUsesCapitalized,.weekdayUsesSingleUpperCase]
         return calendar
     }()
     let viewFast: UIView = {
@@ -120,6 +120,7 @@ class ToDoViewController: UIViewController {
     
     private func setLayout() {
         setLayoutTopView()
+        setLayoutCalendar()
         setLayoutFastView()
         setLayoutTableView()
         setLayoutBottomView()
@@ -141,21 +142,36 @@ class ToDoViewController: UIViewController {
         viewTop.addSubview(btnSelectDay)
         btnSelectDay.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().inset(20.0)
+            make.top.equalToSuperview().inset(16.0)
         }
-        
-        
     }
     
-    private func setLayoutFastView() {
+    private func setLayoutCalendar(){
         self.view.addSubview(calendarWeek)
         calendarWeek.snp.makeConstraints { make in
             make.width.equalTo(280)
-            make.height.equalTo(100)
+            make.height.equalTo(80)
             make.centerX.equalToSuperview()
             make.top.equalTo(viewTop.snp.bottom)
         }
         
+        calendarWeek.calendarWeekdayView.snp.makeConstraints { make in
+            make.centerX.width.equalToSuperview()
+            make.top.equalToSuperview()
+            make.height.equalTo(28)
+        }
+        calendarWeek.daysContainer.snp.makeConstraints { make in
+            make.width.centerX.equalToSuperview()
+            make.height.equalTo(40)
+            make.top.equalTo(calendarWeek.calendarWeekdayView.snp.bottom).offset(-5)
+        }
+        calendarWeek.collectionView.snp.makeConstraints { make in
+            make.centerX.width.top.equalToSuperview()
+            make.height.equalTo(40)
+        }
+    }
+    
+    private func setLayoutFastView() {
         self.view.addSubview(viewFast)
         viewFast.snp.makeConstraints { make in
             //make.top.equalTo(viewTop.snp.bottom)
