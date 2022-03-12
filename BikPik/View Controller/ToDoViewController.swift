@@ -57,6 +57,7 @@ class ToDoViewController: UIViewController {
         mngToDo.setToday()
         calendarWeek.setLayout()
         calendarWeek.layoutIfNeeded()
+        tableviewToDo.reloadData()
     }
     
     let viewTop:UIView = {
@@ -184,7 +185,7 @@ class ToDoViewController: UIViewController {
         tableviewToDo.snp.makeConstraints { make in
             make.top.equalTo(viewFast.snp.bottom)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(60.0)
-            make.left.right.equalToSuperview()//equalTo(self.view.safeAreaLayoutGuide)
+            make.left.right.equalToSuperview()
         }
         tableviewToDo.insetsContentViewsToSafeArea = true
     }
@@ -222,7 +223,7 @@ class ToDoViewController: UIViewController {
         mngToDo.updateData()
         // week button update
         //updateWeekDate()
-        //ToDoTable.reloadData()
+        tableviewToDo.reloadData()
     }
     var calendar: FSCalendar? = nil
     @objc func setCalendar() {
@@ -313,6 +314,10 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40.0
+    }
+    
     /*
      [clickIsDone]
      테이블 뷰의 셀의 버튼을 클릭했을 때 버튼의 상태(완성/미완성)을 태스크 리스트에 적용하고 데이터를 저장하는 메소드
@@ -321,6 +326,8 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
     @objc func clickIsDone (_ sender: UIButton) {
         let id = sender.tag
         let uuid: String = mngToDo.selTaskList.value[id]
+        
+        sender.isSelected.toggle()
         if mngToDo.tasks[uuid] != nil {
             mngToDo.tasks[uuid]?.isDone = sender.isSelected
             mngToDo.saveTask(data: mngToDo.tasks)
@@ -330,6 +337,7 @@ extension ToDoViewController: UITableViewDataSource, UITableViewDelegate {
             mngHabit.saveHabit()
             mngFirebase.uploadHabitDone(uuid: uuid, habit: mngHabit.habits[uuid]!)
         }
+        self.tableviewToDo.reloadData()
     }
     
     @objc func clickSetting (_ sender: UIButton) {

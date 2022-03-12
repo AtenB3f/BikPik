@@ -51,11 +51,6 @@ class ToDoCell: UITableViewCell {
     }()
     
     func setLayout() {
-        contentView.snp.makeConstraints { make in
-            make.height.equalTo(40.0)
-            make.left.right.equalTo(safeAreaInsets)
-        }
-        
         contentView.addSubview(btnDone)
         btnDone.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -86,9 +81,9 @@ class ToDoCell: UITableViewCell {
     }
     
     @objc func actionDone() {
-        btnDone.isSelected.toggle()
         displayDone(done: btnDone.isSelected)
     }
+    
     func displayDone(done: Bool) {
         btnDone.isSelected = done
         labelTask.textColor = UIColor(named: "TextLightColor") ?? .lightText
@@ -105,7 +100,7 @@ class ToDoCell: UITableViewCell {
             btnDone.tintColor = UIColor(named: "TextLightColor")
             labelTask.attributedText = NSAttributedString(
                                     string: self.labelTask.text ?? "" ,
-                                    attributes: [NSAttributedString.Key.strikethroughStyle:NSUnderlineStyle.byWord])
+                                    attributes: [NSAttributedString.Key.strikethroughStyle:NSUnderlineStyle.byWord.rawValue])
         }
     }
     
