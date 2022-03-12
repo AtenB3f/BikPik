@@ -43,8 +43,8 @@
 		31B9453F27BE4055007FA566 /* SetProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B9453E27BE4055007FA566 /* SetProfileViewController.swift */; };
 		31C37CFE278FAD3200D8FBB8 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C37CFD278FAD3200D8FBB8 /* Firebase.swift */; };
 		31C37D0227900B1E00D8FBB8 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C37D0127900B1E00D8FBB8 /* LogInViewController.swift */; };
+		31EA37F327DCD85E002986CD /* Pods_BikPik.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B409A4D7E305B7205E8A04 /* Pods_BikPik.framework */; };
 		31F58501271D6D8600DD89A1 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F58500271D6D8600DD89A1 /* SettingViewController.swift */; };
-		ACC189454E0F54C2FCE53B04 /* Pods_BikPik.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B409A4D7E305B7205E8A04 /* Pods_BikPik.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,7 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACC189454E0F54C2FCE53B04 /* Pods_BikPik.framework in Frameworks */,
+				31EA37F327DCD85E002986CD /* Pods_BikPik.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,7 +430,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -491,7 +491,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -519,15 +519,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B9246LVN4T;
 				INFOPLIST_FILE = BikPik/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AtenB.BikPik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -539,15 +543,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B9246LVN4T;
 				INFOPLIST_FILE = BikPik/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AtenB.BikPik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

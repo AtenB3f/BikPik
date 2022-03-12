@@ -151,33 +151,11 @@ class ToDoViewController: UIViewController {
     
     private func setLayoutCalendar(){
         self.view.addSubview(calendarWeek)
-        calendarWeek.snp.makeConstraints { make in
-            make.width.equalTo(280)
-            make.height.equalTo(80)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(viewTop.snp.bottom)
-        }
-        
-        calendarWeek.calendarWeekdayView.snp.makeConstraints { make in
-            make.centerX.width.equalToSuperview()
-            make.top.equalToSuperview()
-            make.height.equalTo(28)
-        }
-        calendarWeek.daysContainer.snp.makeConstraints { make in
-            make.width.centerX.equalToSuperview()
-            make.height.equalTo(40)
-            make.top.equalTo(calendarWeek.calendarWeekdayView.snp.bottom).offset(-5)
-        }
-        calendarWeek.collectionView.snp.makeConstraints { make in
-            make.centerX.width.top.equalToSuperview()
-            make.height.equalTo(40)
-        }
     }
     
     private func setLayoutFastView() {
         self.view.addSubview(viewFast)
         viewFast.snp.makeConstraints { make in
-            //make.top.equalTo(viewTop.snp.bottom)
             make.top.equalTo(calendarWeek.snp.bottom)
             make.centerX.right.left.equalToSuperview()
             make.height.equalTo(40.0)
@@ -480,22 +458,42 @@ extension ToDoViewController: FSCalendarDataSource, FSCalendarDelegate {
             setCalendar()
         }
         mngToDo.changeSelectDate(date: Date.DateForm(data: date, input: .date, output: .fullDate) as! String)
+        updateDate()
     }
     
     func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
-        //self.calendarHeightConstraint.constant = bounds.height
+        if calendar == self.calendarWeek {
+            calendar.snp.updateConstraints { (make) in
+                make.width.equalTo(300)
+                make.height.equalTo(80)
+                make.centerX.equalToSuperview()
+                make.top.equalTo(self.viewTop.snp.bottom)
+            }
+            calendar.calendarWeekdayView.snp.updateConstraints { make in
+                make.centerX.width.equalToSuperview()
+                make.top.equalToSuperview()
+                make.height.equalTo(34)
+            }
+            calendar.daysContainer.snp.updateConstraints { make in
+                make.width.centerX.equalToSuperview()
+                make.height.equalTo(44)
+                make.top.equalTo(calendar.calendarWeekdayView.snp.bottom).offset(-5)
+            }
+            calendar.collectionView.snp.updateConstraints { make in
+                make.centerX.width.top.equalToSuperview()
+                make.height.equalTo(bounds.height)
+            }
+            for view in calendar.daysContainer.subviews {
+                view.snp.updateConstraints { make in
+                    make.height.equalTo(40)
+                    make.top.equalToSuperview()
+                }
+            }
+        }
+        
         self.view.layoutIfNeeded()
     }
-    /*
-    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        //print("did select date \(self.dateFormatter.string(from: date))")
-       // let selectedDates = calendar.selectedDates.map({self.dateFormatter.string(from: $0)})
-        //print("selected dates is \(selectedDates)")
-        if monthPosition == .next || monthPosition == .previous {
-            calendar.setCurrentPage(date, animated: true)
-        }
-    }
-*/
+    
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         //print("\(self.dateFormatter.string(from: calendar.currentPage))")
     }
