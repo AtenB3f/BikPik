@@ -38,7 +38,7 @@ class LogInViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage.init(systemName: "xmark"), for: .normal)
         button.tintColor = UIColor(named: "BikPik Color")
-        button.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+        button.addTarget(LogInViewController.self, action: #selector(closeView), for: .touchUpInside)
         return button
     }()
     private let viewScroll = UIScrollView()
@@ -95,7 +95,7 @@ class LogInViewController: UIViewController {
     private let btnSecure:UIButton = {
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 50 , height: 40))
         btn.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-        btn.addTarget(self, action: #selector(togglePasswordText), for: .touchUpInside)
+        btn.addTarget(LogInViewController.self, action: #selector(togglePasswordText), for: .touchUpInside)
         return btn
     }()
     private let labelError: UILabel = {
@@ -112,7 +112,7 @@ class LogInViewController: UIViewController {
         button.backgroundColor = UIColor(named: "BikPik Color")
         button.layer.cornerRadius = 8.0
         button.setTitleColor(UIColor.white, for: .normal)
-        button.addTarget(self, action: #selector(actionSignIn), for: .touchUpInside)
+        button.addTarget(LogInViewController.self, action: #selector(actionSignIn), for: .touchUpInside)
         return button
     }()
     private let btnSignUp: UIButton = {
@@ -122,7 +122,7 @@ class LogInViewController: UIViewController {
         button.backgroundColor = UIColor(named: "BikPik Color")
         button.layer.cornerRadius = 8.0
         button.setTitleColor(UIColor.white, for: .normal)
-        button.addTarget(self, action: #selector(actionSignUp), for: .touchUpInside)
+        button.addTarget(LogInViewController.self, action: #selector(actionSignUp), for: .touchUpInside)
         return button
     }()
     private let labelLinkedLogin: UILabel = {
@@ -135,7 +135,7 @@ class LogInViewController: UIViewController {
     private let googleButton: GIDSignInButton = {
         let button = GIDSignInButton()
         button.style = .iconOnly
-        button.addTarget(self, action: #selector(handleGoogleLogin), for: .touchUpInside)
+        button.addTarget(LogInViewController.self, action: #selector(handleGoogleLogin), for: .touchUpInside)
         return button
     }()
     
@@ -301,13 +301,11 @@ class LogInViewController: UIViewController {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         
         let config = GIDConfiguration(clientID: clientID)
-        
-        GIDSignIn.sharedInstance.signIn(with: config, presenting: self) { user, error in
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { user, error in
             guard error == nil else { return }
-            guard let authentication = user?.authentication, let idToken = authentication.idToken else { return }
-            guard let user = user else { return }
+            guard let user = user?.user, let idToken = user.idToken else { return }
             
-            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: user.accessToken.tokenString)
             
             Auth.auth().signIn(with: credential) { [self] authResult, error in
                 if error != nil { return }
@@ -315,6 +313,7 @@ class LogInViewController: UIViewController {
                 self.mngFirebase.syncTask(handleSyncData: mngToDo.handleSyncTask(ym:keys:))
                 self.mngFirebase.syncHabit(handleSyncData: mngHabit.handleSyncHabit(keys:))
             }
+            
             self.mngAccount.setAccount(name: user.profile?.name, email: user.profile?.email)
         }
         closeView()

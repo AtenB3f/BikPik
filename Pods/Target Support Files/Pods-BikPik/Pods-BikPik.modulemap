@@ -1,0 +1,6 @@
+framework module Pods_BikPik {
+  umbrella header "Pods-BikPik-umbrella.h"
+
+  export *
+  module * { export * }
+}
